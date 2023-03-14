@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bubble/bubble.dart';
 
 class ChatHomePage extends StatefulWidget {
   const ChatHomePage({Key? key}) : super(key: key);
@@ -16,29 +17,34 @@ class _ChatHomePageState extends State<ChatHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat Home Page'),
+        title: const Text('Chat Home Page'),
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
+              reverse: true, // Show latest message at bottom
               itemCount: _messages.length,
               itemBuilder: (BuildContext context, int index) {
                 final message = _messages[index];
-                return ListTile(
-                  title: Text(message),
+                final isMe = index % 2 == 0; // Alternate between user and other user
+                return Bubble(
+                  alignment: isMe ? Alignment.topRight : Alignment.topLeft,
+                  color: isMe ? Colors.blue : Colors.grey.shade200,
+                  nip: isMe ? BubbleNip.rightTop : BubbleNip.leftTop,
+                  child: Text(message),
                 );
               },
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Enter a message',
                     ),
                   ),
@@ -51,7 +57,7 @@ class _ChatHomePageState extends State<ChatHomePage> {
                       _messageController.clear();
                     });
                   },
-                  child: Text('Send'),
+                  child: const Text('Send'),
                 ),
               ],
             ),
