@@ -128,7 +128,6 @@
 import 'package:final_project_2023/Pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'FireBase/auth_repository.dart';
 import 'Pages/home_page.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -154,14 +153,5 @@ class MyApp extends StatelessWidget {
       ),
       home: const LoginPage(),
     );
-  }
-
-  void createUser(String email, String password) async {
-    AuthRepository authRep = AuthRepository.instance();
-    UserCredential newUser = (await authRep.signUp(email, password))!;
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(newUser.user!.uid)
-        .set({"email": email, "UID": newUser.user!.uid, "Languages": {}});
   }
 }
