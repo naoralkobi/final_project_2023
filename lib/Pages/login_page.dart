@@ -1,79 +1,87 @@
+import 'package:final_project_2023/Pages/home_page.dart';
+import 'package:final_project_2023/Pages/register_page.dart';
+import 'package:final_project_2023/Widgets/reusable_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'chat_page.dart';
+import 'package:final_project_2023/utils/colors.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  TextEditingController _passwordTextController = TextEditingController();
+  TextEditingController _emailTextController = TextEditingController();
 
-  void _login() {
-    if (_formKey.currentState!.validate()) {
-      // TODO: Perform login validation here
-      // If login is successful, navigate to ChatHomePage
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => ChatHomePage()),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login Page'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [
+      hexStringToColor("0077be"),
+      hexStringToColor("00bfff"),
+      hexStringToColor("40e0d0")
+    ], begin: Alignment.topCenter,end: Alignment.bottomCenter)),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).size.height * 0.2, 20, 0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
-                  }
-                  return null;
-                },
+            children: <Widget>[
+              Text("Login"),
+              SizedBox(
+                height:30
               ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
+              reusableTextField("Enter UserName",Icons.person_outline,false,
+              _emailTextController),
+              SizedBox(
+                height: 20,
               ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _login,
-                child: const Text('Login'),
+              reusableTextField("Enter Password", Icons.lock_outline, true,
+                  _passwordTextController),
+              SizedBox(
+                height: 20,
               ),
-            ],
+              signInSignUpButton(context, true, () {
+                FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: _emailTextController.text,
+                    password: _passwordTextController.text).then((value) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MyHomePage()));
+                });
+              }),
+              signUpOption()
+            ]
           ),
-        ),
+        )
       ),
+    ),
+    );
+  }
+
+  Row signUpOption() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("Don't have account? ",
+        style: TextStyle(color: Colors.white70)),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+            MaterialPageRoute(builder: (context) => SignUpPage()));
+          },
+          child: const Text(
+            "Sign Up",
+            style: TextStyle(color:Colors.white, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
     );
   }
 }
