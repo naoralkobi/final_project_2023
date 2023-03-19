@@ -1,100 +1,83 @@
-import 'package:flutter/material.dart';
-import 'chat_page.dart';
 
-class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({Key? key}) : super(key: key);
+import 'package:final_project_2023/Pages/home_page.dart';
+import 'package:final_project_2023/utils/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../Widgets/reusable_widget.dart';
+
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  _RegistrationPageState createState() => _RegistrationPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-  TextEditingController();
+class _SignUpPageState extends State<SignUpPage> {
 
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
+  TextEditingController _passwordTextController = TextEditingController();
+  TextEditingController _emailTextController = TextEditingController();
+  TextEditingController _userNameTextController = TextEditingController();
 
-  void _register() {
-    if (_formKey.currentState!.validate()) {
-      // TODO: Register user with API
-
-      // Navigate to chat home page after successful registration
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => ChatHomePage()),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Registration'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(labelText: 'Username'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a username';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _confirmPasswordController,
-                decoration: InputDecoration(labelText: 'Confirm Password'),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please confirm your password';
-                  }
-                  if (value != _passwordController.text) {
-                    return 'Passwords do not match';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              Center(
-                child: ElevatedButton(
-                  onPressed: _register,
-                  child: Text('Register'),
-                ),
-              ),
-            ],
-          ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          "Sign Up",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height:  MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [
+            hexStringToColor("0077be"),
+            hexStringToColor("00bfff"),
+            hexStringToColor("40e0d0")
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+            child: SingleChildScrollView(
+            child: Padding(
+            padding: EdgeInsets.fromLTRB(20,120, 20, 0),
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(
+                    height:30
+                   ),
+                  reusableTextField("Enter Username",Icons.person_outline,false,
+                    _userNameTextController),
+                  SizedBox(
+                      height: 20,
+                  ),
+                  reusableTextField("Enter Email",Icons.person_outline,false,
+                  _emailTextController),
+                  SizedBox(
+                  height: 20,
+                  ),
+                reusableTextField("Enter Password", Icons.lock_outline, true,
+                  _passwordTextController),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  signInSignUpButton(context, false, () {
+                    //todo - validations!
+                    FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: _emailTextController.text,
+                        password: _passwordTextController.text).then((value) {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => MyHomePage()));
+                    }).onError((error, stackTrace) { print("Error ${error.toString()}");});
+                  })
+                ],
+      ),
+    ))),
     );
   }
 }
-
