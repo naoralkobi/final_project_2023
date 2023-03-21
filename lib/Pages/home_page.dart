@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../Widgets/start_chat.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 import 'package:final_project_2023/screen_size_config.dart';
@@ -234,14 +235,14 @@ class MyHomePage extends StatelessWidget {
             if (pressed) {
               Navigator.of(context).pop();
             } else {
-              // blurController.add([1.5, 1.5]);
-              // showDialog(
-              //     barrierColor: Colors.transparent,
-              //     context: context,
-              //     builder: (BuildContext context) =>
-              //         StartChat(blurController)).then((value) {
-              //   blurController.add([0, 0]);
-              // });
+              blurController.add([1.5, 1.5]);
+              showDialog(
+                  barrierColor: Colors.transparent,
+                  context: context,
+                  builder: (BuildContext context) =>
+                      StartChat(blurController)).then((value) {
+                blurController.add([0, 0]);
+              });
             }
           },
         ),
