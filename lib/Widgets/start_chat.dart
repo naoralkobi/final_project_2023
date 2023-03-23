@@ -46,16 +46,16 @@ class StartChatState extends State<StartChat> {
                 ),
                 onPressed: (){
                   Navigator.pop(context);
-                  // showDialog(
-                  //     barrierColor: Colors.transparent,
-                  //     context: context,
-                  //     builder: (BuildContext context) {
-                  //       widget.blurController.add([1.5,1.5]);
-                  //       return ChooseLanguage(true,{},blurController: widget.blurController,);
-                  //     })
-                  //     .then((value) => {
-                  //   widget.blurController.add([0,0])
-                  // });
+                  showDialog(
+                      barrierColor: Colors.transparent,
+                      context: context,
+                      builder: (BuildContext context) {
+                        widget.blurController.add([1.5,1.5]);
+                        return ChooseLanguage(true,{},blurController: widget.blurController,);
+                      })
+                      .then((value) => {
+                    widget.blurController.add([0,0])
+                  });
                 },
                 child: Text("+ Start chat with random", style: TextStyle(fontSize: 18)),
               ),
@@ -75,16 +75,16 @@ class StartChatState extends State<StartChat> {
                 ),
                 onPressed: (){
                   Navigator.pop(context);
-                  // showDialog(
-                  //     barrierColor: Colors.transparent,
-                  //     context: context,
-                  //     builder: (BuildContext context) {
-                  //       widget.blurController.add([1.5,1.5]);
-                  //       return ChooseLanguage(false,{});
-                  //     })
-                  //     .then((value) => {
-                  //   widget.blurController.add([0,0])
-                  // });
+                  showDialog(
+                      barrierColor: Colors.transparent,
+                      context: context,
+                      builder: (BuildContext context) {
+                        widget.blurController.add([1.5,1.5]);
+                        return ChooseLanguage(false,{});
+                      })
+                      .then((value) => {
+                    widget.blurController.add([0,0])
+                  });
                 },
                 child: Text("+ Start chat with a friend", style: TextStyle( fontSize: 18)),),
             ],
