@@ -216,6 +216,18 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
           ),
+          leading:
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                FirebaseAuth.instance.signOut().then((value) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => loginPage()),
+                  );
+                });
+              },
+            ),
         ),
       ),
       //body: ChatsList(_searchText, snapshot.data!.data()!,blurController)
