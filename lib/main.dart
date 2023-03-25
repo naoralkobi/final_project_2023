@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color(0xFFA66CB7), //or set color with: Color(0xFF0000FF)
+      statusBarColor: Color(0xFF0077be), //or set color with: Color(0xFF0000FF)
     ));
     // AuthRepository.instance().signOut();
     FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           // primaryColor: Colors.deepPurpleAccent,
             appBarTheme: AppBarTheme(
-              color: Color(0xFFA66CB7),
+              color: Color(0xFF0077BE),
             ),
             scaffoldBackgroundColor: const Color(0xFFF8F5F5),
             fontFamily: 'Rockwell',
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
               return MyHomePage();
             }
           }
-          return loginPage();
+          return LoginPage();
         })
     );
   }
