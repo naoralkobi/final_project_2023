@@ -140,4 +140,50 @@ class FirebaseDB {
       });
     });
   }
+
+
+  Future<void> addFriend(String friendUsername, BuildContext context) async{
+    String currentUSerID = AuthRepository.instance().user!.uid;
+    List friendsList = [];
+    await _db
+        .collection("users")
+        .doc(currentUSerID)
+        .get()
+        .then((value) => friendsList = value.data()!["friends"]);
+    friendsList.add(friendUsername);
+    friendsList = friendsList.toSet().toList();
+    await _db
+        .collection('users')
+        .doc(currentUSerID)
+        .update({'friends': friendsList});
+    final snackBar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      content: Text('Friend added successfully'),
+      duration: Duration(milliseconds: 1000),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+
+  Future<void> removeFriend(String friendUsername, BuildContext context) async{
+    String currentUSerID = AuthRepository.instance().user!.uid;
+    List friendsList = [];
+    await _db
+        .collection("users")
+        .doc(currentUSerID)
+        .get()
+        .then((value) => friendsList = value.data()!["friends"]);
+    friendsList.remove(friendUsername);
+    friendsList = friendsList.toSet().toList();
+    _db
+        .collection('users')
+        .doc(currentUSerID)
+        .update({'friends': friendsList});
+    final snackBar = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text('Friend removed successfully'),
+        duration: Duration(milliseconds: 1000)
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }
