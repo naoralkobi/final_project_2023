@@ -10,6 +10,7 @@ import '../FireBase/auth_repository.dart';
 import '../Widgets/custom_pop_up_menu.dart';
 import '../Widgets/start_chat.dart';
 import '../utils/colors.dart';
+import 'friends_list.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 import 'package:final_project_2023/screen_size_config.dart';
@@ -147,51 +148,47 @@ class MyHomePage extends StatelessWidget {
     CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-    // Text(
-    //   snapshot.data!["username"],
-    //   style: TextStyle(
-    //       fontSize:
-    //       SizeConfig.blockSizeHorizontal *
-    //           5,
-    //       fontWeight: FontWeight.w600,
-    //       color: Colors.white),
-    // ),
+    Text(
+      snapshot.data!["username"],
+      style: TextStyle(
+          fontSize:
+          SizeConfig.blockSizeHorizontal *
+              5,
+          fontWeight: FontWeight.w600,
+          color: Colors.white),
+    ),
     SizedBox(
     height: 3,
     ),
-    // Visibility(
-    //   visible: snapshot.data!
-    //       .data()!
-    //       .containsKey('score'),
-    //   child: Row(
-    //     children: [
-    //       ImageIcon(
-    //         AssetImage(
-    //             "assets/images/trophy.png"),
-    //         color: Colors.white,
-    //         size: SizeConfig
-    //             .blockSizeHorizontal *
-    //             4,
-    //       ),
-    //       SizedBox(
-    //         width: 3,
-    //       ),
-    //       snapshot.data!
-    //           .data()!
-    //           .containsKey('score')
-    //           ? Text(
-    //         snapshot.data!["score"]
-    //             .toString(),
-    //         style: TextStyle(
-    //             fontSize: SizeConfig
-    //                 .blockSizeHorizontal *
-    //                 3.3,
-    //             color: Colors.white),
-    //       )
-    //           : Text("")
-    //     ],
-    //   ),
-    // )
+    Visibility(
+      visible: (snapshot.data!.data() as Map<String, dynamic>).containsKey('score'),
+      child: Row(
+        children: [
+          ImageIcon(
+            AssetImage(
+                "assets/images/trophy.png"),
+            color: Colors.white,
+            size: SizeConfig
+                .blockSizeHorizontal *
+                4,
+          ),
+          SizedBox(
+            width: 3,
+          ),
+          (snapshot.data!.data() as Map<String, dynamic>).containsKey('score')
+              ? Text(
+            snapshot.data!["score"]
+                .toString(),
+            style: TextStyle(
+                fontSize: SizeConfig
+                    .blockSizeHorizontal *
+                    3.3,
+                color: Colors.white),
+          )
+              : Text("")
+        ],
+      ),
+    )
     ],
     ),
     SizedBox(
@@ -263,18 +260,6 @@ class MyHomePage extends StatelessWidget {
     ),
     ),
     ),
-    // leading:
-    //   IconButton(
-    //     icon: Icon(Icons.logout),
-    //     onPressed: () {
-    //       FirebaseAuth.instance.signOut().then((value) {
-    //         Navigator.pushReplacement(
-    //           context,
-    //           MaterialPageRoute(builder: (context) => LoginPage()),
-    //         );
-    //       });
-    //     },
-    //   ),
     ),
     ),
     //body: ChatsList(_searchText, snapshot.data!.data()!,blurController)
@@ -335,7 +320,7 @@ class MyHomePage extends StatelessWidget {
     icon: Icon(Icons.people_alt_rounded),
     color: Colors.white,
     onPressed: () {
-    //navigateToFriendsList(context);
+    navigateToFriendsList(context);
     },
     ),
     ),
@@ -357,24 +342,6 @@ class MyHomePage extends StatelessWidget {
     );
     }
     });
-
-
-
-    /// *** old
-    // return Scaffold(
-    //  body: Center(
-    //    child:ElevatedButton(
-    //      child: Text("Log out"),
-    //      onPressed: () {
-    //        FirebaseAuth.instance.signOut().then((value) {
-    //          Navigator.push(context,
-    //              MaterialPageRoute(builder: (context) => LoginPage()));
-    //        });
-    //      },
-    //    )
-    //  ),
-    // );
-    /// ** end of old.
   }
 
 
@@ -405,7 +372,10 @@ class MyHomePage extends StatelessWidget {
     //       ]);
     }
   }
-
+  void navigateToFriendsList(context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => FriendsList(false)));
+  }
   void clearSearch() {
     _filter.text = "";
     isSearching = false;
@@ -415,5 +385,4 @@ class MyHomePage extends StatelessWidget {
       size: 30,
     );
   }
-
 }
