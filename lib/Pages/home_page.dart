@@ -307,8 +307,8 @@ class MyHomePage extends StatelessWidget {
     icon: Icon(Icons.leaderboard_rounded),
     color: Colors.white,
     onPressed: () {
-    // navigateToLeaderboard(
-    //     context, snapshot.data!.data()!);
+     navigateToLeaderboard(
+         context, snapshot.data!.data()! as Map<String, dynamic>);
     },
     ),
     ),
@@ -376,6 +376,12 @@ class MyHomePage extends StatelessWidget {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => FriendsList(false)));
   }
+  
+    void navigateToLeaderboard(context, Map userInfo) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => Leaderboard(userInfo)));
+  }
+
   void clearSearch() {
     _filter.text = "";
     isSearching = false;
