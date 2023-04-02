@@ -8,10 +8,6 @@ import 'dart:io';
 import 'dart:math';
 import '../consts.dart';
 
-const String WAITING_LIST = 'waitingList';
-const String CHATS = 'chats';
-const String MESSAGES_COLLECTION = 'messages';
-
 class FirebaseDB {
   static final FirebaseDB Firebase_db = FirebaseDB._internal();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
