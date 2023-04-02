@@ -11,6 +11,7 @@ import '../Widgets/custom_pop_up_menu.dart';
 import '../Widgets/start_chat.dart';
 import '../utils/colors.dart';
 import 'friends_list.dart';
+import 'leader_board.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 import 'package:final_project_2023/screen_size_config.dart';
