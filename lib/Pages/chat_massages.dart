@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project_2023/Pages/show_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:page_transition/page_transition.dart';
@@ -160,18 +161,18 @@ class _ChatMessagesState extends State<ChatMessages> {
                               side: BorderSide(
                                   color: Colors.grey, width: 0.5)),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    type:
-                                    PageTransitionType.rightToLeftWithFade,
-                                    child:
-                                    // GameSummaryPage(
-                                    GameSummaryPage(
-                                        snapshot[MESSAGE_CONTENT],
-                                        widget.userInfo,
-                                        widget.friendInfo)
-                                ));
+                            // Navigator.push(
+                            //     context,
+                            //     PageTransition(
+                            //         type:
+                            //         PageTransitionType.rightToLeftWithFade,
+                            //         child:
+                            //         // GameSummaryPage(
+                            //         GameSummaryPage(
+                            //             snapshot[MESSAGE_CONTENT],
+                            //             widget.userInfo,
+                            //             widget.friendInfo)
+                            //     ));
                           },
                         ),
                       )
@@ -276,10 +277,10 @@ class _ChatMessagesState extends State<ChatMessages> {
                               side: BorderSide(
                                   color: Colors.grey, width: 0.5)),
                           onPressed: () async {
-                            FirebaseDB.Firebase_db.cancelGameInvite(
-                                widget.userID,
-                                widget.chatID,
-                                snapshot.id);
+                            // FirebaseDB.Firebase_db.cancelGameInvite(
+                            //     widget.userID,
+                            //     widget.chatID,
+                            //     snapshot.id);
                           },
                         )
                             : Row(
@@ -315,12 +316,12 @@ class _ChatMessagesState extends State<ChatMessages> {
                                 }else{
                                   lvl = "Advanced";
                                 }
-                                gameID = await FirebaseDB.Firebase_db
-                                    .makeNewGame(
-                                    widget.userID,
-                                    widget.friendInfo["UID"],
-                                    widget.language,
-                                    lvl);
+                                // gameID = await FirebaseDB.Firebase_db
+                                //     .makeNewGame(
+                                //     widget.userID,
+                                //     widget.friendInfo["UID"],
+                                //     widget.language,
+                                //     lvl);
                                 updateAcceptedGame(widget.chatID,
                                     widget.userID, snapshot.id);
                               },
@@ -343,10 +344,10 @@ class _ChatMessagesState extends State<ChatMessages> {
                                   side: BorderSide(
                                       color: Colors.grey, width: 0.5)),
                               onPressed: () async {
-                                FirebaseDB.Firebase_db.cancelGameInvite(
-                                    widget.userID,
-                                    widget.chatID,
-                                    snapshot.id);
+                                // FirebaseDB.Firebase_db.cancelGameInvite(
+                                //     widget.userID,
+                                //     widget.chatID,
+                                //     snapshot.id);
                               },
                             ),
                           ],
