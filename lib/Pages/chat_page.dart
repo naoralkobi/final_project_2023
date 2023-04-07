@@ -249,7 +249,7 @@ class _ChatPageState extends State<ChatPage> {
                                   color: Colors.white,
                                   size: SizeConfig.blockSizeHorizontal * 7.5,
                                 ),
-                                backgroundColor: Color(0xFFA66CB7),
+                                backgroundColor: Color(0xFF6D94BE),
                                 elevation: 0,
                               ),
                             ),
@@ -276,7 +276,7 @@ class _ChatPageState extends State<ChatPage> {
                             offset: Offset(0, 3), // changes position of shadow
                           ),
                         ],*/
-                        color: MAIN_PURPLE_COLOR,
+                        color: MAIN_BLUE_COLOR,
                         borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(20.0),
                             bottomLeft: Radius.circular(20.0)),
@@ -287,7 +287,7 @@ class _ChatPageState extends State<ChatPage> {
                       width: 0,
                       height: SizeConfig.blockSizeVertical * 8.5,
                       decoration: ShapeDecoration(
-                        color: MAIN_PURPLE_COLOR,
+                        color: MAIN_BLUE_COLOR,
                         shape: AppBarBorder(),
                       ),
                     ),
@@ -296,7 +296,7 @@ class _ChatPageState extends State<ChatPage> {
                       //width: SizeConfig.blockSizeHorizontal,
                       height: SizeConfig.blockSizeVertical * 8.5,
                       decoration: BoxDecoration(
-                        color: MAIN_PURPLE_COLOR,
+                        color: MAIN_BLUE_COLOR,
                         borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(20.0),
                             bottomLeft: Radius.circular(20.0)),

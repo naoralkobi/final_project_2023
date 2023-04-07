@@ -41,8 +41,14 @@ dependencies:
   firebase_storage: ^11.0.16
   cloud_firestore: ^4.4.5
   provider: ^6.0.5
+  cached_network_image: ^3.2.3
   permission_handler: ^10.2.0
   image_picker: ^0.8.7
+  url_launcher: ^6.1.10
+  http: ^0.13.5
+  tuple: ^2.0.1
+
+
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +66,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - assets/images/
+    - assets/SociaLang_logo.png
+    - fonts/google-logo.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
