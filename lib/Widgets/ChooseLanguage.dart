@@ -241,9 +241,8 @@ class ChooseLanguageState extends State<ChooseLanguage> {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          return ChatHomePage();
-          // return ChatPage(
-          //     chatID, currentUserID, friendInfo, language, userInfo);
+          return ChatPage(
+              chatID, currentUserID, friendInfo, language, userInfo);
         },
       ),
     );

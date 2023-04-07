@@ -141,9 +141,8 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
                     snapshot.data == null)
                   return Center(child: CircularProgressIndicator());
                 else
-                  return ChatHomePage();
-                  // return ChatPage(chatID, currentUserID, snapshot.data!.data()!,
-                  //     language, widget.userInfo);
+                  return ChatPage(chatID, currentUserID, snapshot.data!.data()! as Map<String, dynamic>,
+                      language, widget.userInfo);
               });
         },
       ),
