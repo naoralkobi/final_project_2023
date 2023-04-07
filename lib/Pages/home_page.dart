@@ -14,6 +14,7 @@ import 'friends_list.dart';
 import 'leader_board.dart';
 import 'login_page.dart';
 import 'register_page.dart';
+import '../Widgets/chat_list.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -263,7 +264,7 @@ class MyHomePage extends StatelessWidget {
     ),
     ),
     ),
-    //body: ChatsList(_searchText, snapshot.data!.data()!,blurController)
+    body: ChatsList(_searchText, snapshot.data!.data()! as Map<dynamic, dynamic>,blurController),
     floatingActionButtonLocation:
     FloatingActionButtonLocation.centerDocked,
     floatingActionButton: Container(
