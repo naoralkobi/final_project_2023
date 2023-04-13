@@ -1,10 +1,9 @@
+import 'package:final_project_2023/Pages/translate_the_word.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
-
 import 'package:final_project_2023/firebase/auth_repository.dart';
 import 'package:final_project_2023/consts.dart';
-
 import '../screen_size_config.dart';
 
 class AddQuestion extends StatefulWidget {
@@ -369,6 +368,12 @@ class AddQuestionState extends State<AddQuestion> {
   }
 
   void navigateToTranslateTheWord(context) {
+    String? languageLevel = _getLanguageLevel();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                TranslateTheWord(languageId, levelId, languageLevel)));
   }
 
   void navigateToWhatsInThePicture(context) {
