@@ -10,6 +10,7 @@ import '../FireBase/auth_repository.dart';
 import '../Widgets/custom_pop_up_menu.dart';
 import '../Widgets/start_chat.dart';
 import '../utils/colors.dart';
+import 'add_question.dart';
 import 'friends_list.dart';
 import 'leader_board.dart';
 import 'login_page.dart';
@@ -208,7 +209,7 @@ class MyHomePage extends StatelessWidget {
     height: SizeConfig.blockSizeVertical * 3,
     ),
     onPressed: () {
-    //navigateToAddQuestion(context);
+    navigateToAddQuestion(context);
     }),
     IconButton(
     icon: _searchIcon,
@@ -382,6 +383,11 @@ class MyHomePage extends StatelessWidget {
     void navigateToLeaderboard(context, Map userInfo) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => Leaderboard(userInfo)));
+  }
+
+  void navigateToAddQuestion(context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AddQuestion()));
   }
 
   void clearSearch() {
