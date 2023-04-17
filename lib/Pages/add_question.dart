@@ -1,4 +1,5 @@
 import 'package:final_project_2023/Pages/translate_the_word.dart';
+import 'package:final_project_2023/Pages/verb_conjugation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
@@ -383,6 +384,12 @@ class AddQuestionState extends State<AddQuestion> {
   }
 
   void navigateToVerbConjugation(context) {
+    String? languageLevel = _getLanguageLevel();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                VerbConjugation(languageId, levelId, languageLevel)));
   }
 
   String? _getLanguageLevel() {
