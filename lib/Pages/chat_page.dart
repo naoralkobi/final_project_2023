@@ -5,16 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-//import 'package:page_transition/page_transition.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:final_project_2023/Pages/chat_massages.dart';
 import 'package:final_project_2023/Pages/send_image.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/Widgets/custom_chat_bar.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
 import 'package:final_project_2023/firebase/auth_repository.dart';
-
 import '../consts.dart';
-//import 'QuestionsPage.dart';
+import 'questions_page.dart';
 import 'view_user_profile.dart';
 
 class ChatPage extends StatefulWidget {
@@ -450,12 +449,12 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   enterGame(String gameID, int userNumber, String inviteID) {
-    //   Navigator.push(
-    //       context,
-    //       PageTransition(
-    //           type: PageTransitionType.rightToLeftWithFade,
-    //           child: QuestionsPage(
-    //               widget.chatID, gameID, widget.userInfo,widget.friendInfo, 1, userNumber,inviteID)
-    //       ));
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.rightToLeftWithFade,
+              child: QuestionsPage(
+                  widget.chatID, gameID, widget.userInfo,widget.friendInfo, 1, userNumber,inviteID)
+          ));
   }
 }
