@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
@@ -11,7 +9,6 @@ import 'package:final_project_2023/Pages/send_image.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/Widgets/custom_chat_bar.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
-import 'package:final_project_2023/firebase/auth_repository.dart';
 import '../consts.dart';
 import 'questions_page.dart';
 import 'view_user_profile.dart';
@@ -34,7 +31,7 @@ class _ChatPageState extends State<ChatPage> {
   final messageController = TextEditingController();
   StreamController<String> gameController = StreamController.broadcast();
   final picker = ImagePicker();
-  final notImplementedSnackBar = SnackBar(
+  final notImplementedSnackBar = const SnackBar(
     duration: Duration(milliseconds: 1000),
     content: Text('Not implemented yet!'),
     behavior: SnackBarBehavior.floating,
@@ -138,7 +135,7 @@ class _ChatPageState extends State<ChatPage> {
             children: [
               Container(
                 margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 6),
-                color: Color(0xFFF8F5F5),
+                color: const Color(0xFFF8F5F5),
                 child: Stack(
                   children: <Widget>[
                     Padding(
@@ -177,14 +174,14 @@ class _ChatPageState extends State<ChatPage> {
                                 border: Border.all(
                                   color: Colors.grey.shade300,
                                 ),
-                                borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderRadius: const BorderRadius.all(Radius.circular(30)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey.withOpacity(0.5),
                                     spreadRadius: 0,
                                     blurRadius: 4,
                                     offset:
-                                    Offset(3, 4), // changes position of shadow
+                                    const Offset(3, 4), // changes position of shadow
                                   ),
                                 ],
                               ),
@@ -196,7 +193,7 @@ class _ChatPageState extends State<ChatPage> {
                                   Expanded(
                                     child: TextField(
                                       controller: messageController,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                           hintText: TEXT_FIELD_HINT,
                                           hintStyle:
                                           TextStyle(color: Colors.black54),
@@ -209,7 +206,7 @@ class _ChatPageState extends State<ChatPage> {
                                   SizedBox(
                                       width: SizeConfig.blockSizeHorizontal * 5),
                                   IconButton(
-                                    icon: Icon(Icons.add_photo_alternate_outlined,
+                                    icon: const Icon(Icons.add_photo_alternate_outlined,
                                         color: SEND_IMAGE_ICON_COLOR),
                                     onPressed: pickImage,
                                   ),
@@ -227,7 +224,7 @@ class _ChatPageState extends State<ChatPage> {
                                     spreadRadius: 0,
                                     blurRadius: 4,
                                     offset:
-                                    Offset(3, 4), // changes position of shadow
+                                    const Offset(3, 4), // changes position of shadow
                                   ),
                                 ],
                               ),
@@ -243,13 +240,13 @@ class _ChatPageState extends State<ChatPage> {
                                       widget.friendInfo["UID"]);
                                   messageController.clear();
                                 },
+                                backgroundColor: const Color(0xFF6D94BE),
+                                elevation: 0,
                                 child: Icon(
                                   Icons.send_outlined,
                                   color: Colors.white,
                                   size: SizeConfig.blockSizeHorizontal * 7.5,
                                 ),
-                                backgroundColor: Color(0xFF6D94BE),
-                                elevation: 0,
                               ),
                             ),
                           ],
@@ -259,128 +256,126 @@ class _ChatPageState extends State<ChatPage> {
                   ],
                 ),
               ),
-              Container(
-                child: Stack(
-                  children: [
-                    Container(
-                      alignment: Alignment.topCenter,
-                      //width: SizeConfig.blockSizeHorizontal,
-                      height: SizeConfig.blockSizeVertical * 8.5,
-                      decoration: BoxDecoration(
+              Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.topCenter,
+                    //width: SizeConfig.blockSizeHorizontal,
+                    height: SizeConfig.blockSizeVertical * 8.5,
+                    decoration: const BoxDecoration(
 /*                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.4),
-                            spreadRadius: 0.1,
-                            blurRadius: 0.1,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],*/
-                        color: MAIN_BLUE_COLOR,
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(20.0),
-                            bottomLeft: Radius.circular(20.0)),
-                      ),
-                    ),
-                    Container(
-                      //alignment: Alignment.topCenter,
-                      width: 0,
-                      height: SizeConfig.blockSizeVertical * 8.5,
-                      decoration: ShapeDecoration(
-                        color: MAIN_BLUE_COLOR,
-                        shape: AppBarBorder(),
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.topCenter,
-                      //width: SizeConfig.blockSizeHorizontal,
-                      height: SizeConfig.blockSizeVertical * 8.5,
-                      decoration: BoxDecoration(
-                        color: MAIN_BLUE_COLOR,
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(20.0),
-                            bottomLeft: Radius.circular(20.0)),
-                      ),
-                      child: Container(
-                        child: Row(
-                          children: <Widget>[
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              iconSize: SizeConfig.blockSizeHorizontal * 8,
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: Colors.white,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ViewUserProfile(
-                                            widget.friendInfo["UID"])));
-                              },
-                              child: CircleAvatar(
-                                backgroundImage:
-                                NetworkImage(widget.friendInfo["URL"]),
-                                maxRadius: 20,
-                              ),
-                            ),
-                            SizedBox(
-                              width: SizeConfig.blockSizeHorizontal * 4,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    widget.friendInfo["username"],
-                                    style: TextStyle(
-                                        fontSize:
-                                        SizeConfig.blockSizeHorizontal * 5,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: SizeConfig.blockSizeHorizontal * 2,
-                            ),
-                            if (friendsList
-                                .contains(widget.friendInfo["username"]) || widget.isMyFriend)
-                              SizedBox()
-                            else
-                              IconButton(
-                                  icon: Icon(
-                                    Icons.person_add_alt_1_outlined,
-                                    color: Colors.white,
-                                    size: 25,
-                                  ),
-                                  onPressed: () {
-                                    FirebaseDB.Firebase_db.addFriend(
-                                        widget.friendInfo["username"],
-                                        context);
-                                    setState(() {
-                                      widget.isMyFriend = true;
-                                    });
-                                  })
-                            ,
-                            SizedBox(
-                              width: SizeConfig.blockSizeHorizontal * 2,
-                            ),
-                            languageFlag,
-                            SizedBox(
-                              width: SizeConfig.blockSizeHorizontal * 4,
-                            ),
-                          ],
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          spreadRadius: 0.1,
+                          blurRadius: 0.1,
+                          offset: Offset(0, 3), // changes position of shadow
                         ),
+                      ],*/
+                      color: MAIN_BLUE_COLOR,
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0)),
+                    ),
+                  ),
+                  Container(
+                    //alignment: Alignment.topCenter,
+                    width: 0,
+                    height: SizeConfig.blockSizeVertical * 8.5,
+                    decoration: ShapeDecoration(
+                      color: MAIN_BLUE_COLOR,
+                      shape: AppBarBorder(),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.topCenter,
+                    //width: SizeConfig.blockSizeHorizontal,
+                    height: SizeConfig.blockSizeVertical * 8.5,
+                    decoration: const BoxDecoration(
+                      color: MAIN_BLUE_COLOR,
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0)),
+                    ),
+                    child: Container(
+                      child: Row(
+                        children: <Widget>[
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            iconSize: SizeConfig.blockSizeHorizontal * 8,
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ViewUserProfile(
+                                          widget.friendInfo["UID"])));
+                            },
+                            child: CircleAvatar(
+                              backgroundImage:
+                              NetworkImage(widget.friendInfo["URL"]),
+                              maxRadius: 20,
+                            ),
+                          ),
+                          SizedBox(
+                            width: SizeConfig.blockSizeHorizontal * 4,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  widget.friendInfo["username"],
+                                  style: TextStyle(
+                                      fontSize:
+                                      SizeConfig.blockSizeHorizontal * 5,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: SizeConfig.blockSizeHorizontal * 2,
+                          ),
+                          if (friendsList
+                              .contains(widget.friendInfo["username"]) || widget.isMyFriend)
+                            SizedBox()
+                          else
+                            IconButton(
+                                icon: const Icon(
+                                  Icons.person_add_alt_1_outlined,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                                onPressed: () {
+                                  FirebaseDB.Firebase_db.addFriend(
+                                      widget.friendInfo["username"],
+                                      context);
+                                  setState(() {
+                                    widget.isMyFriend = true;
+                                  });
+                                })
+                          ,
+                          SizedBox(
+                            width: SizeConfig.blockSizeHorizontal * 2,
+                          ),
+                          languageFlag,
+                          SizedBox(
+                            width: SizeConfig.blockSizeHorizontal * 4,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Container(
                 //alignment: Alignment.center,
@@ -395,10 +390,10 @@ class _ChatPageState extends State<ChatPage> {
                           "assets/images/joystick_1.png",
                         ),
                         onPressed: () {
-                          // final snackBar = SnackBar(
-                          //   content: Text('start game pressed'),
-                          // );
-                          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          const snackBar = SnackBar(
+                            content: Text('start game pressed'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           _sendGameInvite();
                         },
                         iconSize: SizeConfig.blockSizeHorizontal * 16.2,
@@ -415,8 +410,9 @@ class _ChatPageState extends State<ChatPage> {
     // Clean up the controller when the widget is removed from the
     // widget tree.
     messageController.dispose();
-    if(streamSubscription != null)
+    if(streamSubscription != null) {
       streamSubscription!.cancel();
+    }
     super.dispose();
   }
 
