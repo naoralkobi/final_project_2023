@@ -8,6 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/firebase/auth_repository.dart';
 
+/// This file contains the ProfileTextField widget, which is a custom text field used for profile information.
+/// It allows the user to enter and update various profile fields, such as username and description.
+/// The widget communicates with Firestore to update the user's profile information.
+
+/// Custom text field widget used for profile information.
 class ProfileTextField extends StatefulWidget {
   String hintText;
   final textController;
@@ -23,13 +28,12 @@ class ProfileTextField extends StatefulWidget {
 }
 
 class _ProfileTextFieldState extends State<ProfileTextField> {
-  // final textController = TextEditingController();
   bool firstClick = true;
   bool isUserNameUnique = true;
 
   @override
   Widget build(BuildContext context) {
-    checkUserNameUnique(widget.textController.text);
+    checkUserNameUnique(widget.textController.text); // Check if the username is unique
     return StreamBuilder(
         stream: widget.firebaseController.stream,
         builder: (context, snapshot) {
@@ -75,30 +79,31 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
                   const Radius.circular(10.0),
                 ),
               ),
-              /*contentPadding: widget.hintText == "description" ?
-                EdgeInsets.symmetric(vertical: SizeConfig.blockSizeVertical * 10) : null*/
               hintText: widget.hintText == "description" ? "Tell us about yourself" : null,
-              // prefixIcon: Icon(Icons.vpn_key),
             ),
           );
         });
   }
 
+  /// Updates the corresponding field in Firestore for the current user.
   void updateFirebase() async {
     final user = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance
         .collection('users')
         .doc(user!.uid)
         .update({widget.hintText: widget.textController.text});
-    if (widget.hintText == "username"){
-      widget.firebaseController.add("done");
+
+    if (widget.hintText == "username") {
+      widget.firebaseController.add("done"); // Notify completion for the username field update
     }
   }
 
+  /// Checks if the given username is unique.
   Future<void> checkUserNameUnique(String userName) async {
     setState(() {
       isUserNameUnique = true;
     });
+    // Retrieve the collection of users from Firestore
     await FirebaseFirestore.instance.collection("users").get().then((value) {
       value.docs.forEach((element) {
         if (element.data()["username"] == userName) {
