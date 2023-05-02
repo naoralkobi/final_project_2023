@@ -16,9 +16,13 @@ import 'friends_list.dart';
 import 'show_image.dart';
 import 'createProfilePage.dart';
 
+/// This file contains the implementation of the ViewUserProfile widget,
+/// which is responsible for displaying the profile of a user.
+
 class ViewUserProfile extends StatefulWidget {
-  String userID;
-  var user = AuthRepository.instance().user;
+  String userID; // User ID for the profile being viewed
+  var user = AuthRepository.instance().user; // Current authenticated user
+
 
   ViewUserProfile(this.userID);
 
@@ -29,25 +33,30 @@ class ViewUserProfile extends StatefulWidget {
 class _ViewUserProfileState extends State<ViewUserProfile> {
   @override
   Widget build(BuildContext context) {
+    // Initialize the screen size configuration
     SizeConfig().init(context);
     return StreamBuilder(
+      // Stream data from Firestore collection 'users' with the specified user ID
         stream: FirebaseFirestore.instance
             .collection('users')
             .doc(widget.userID)
             .snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> userInfo) {
+          // Show error message if there is an error in the snapshot
           if (userInfo.hasError) return Text("There has been an error");
-          //if connecting show progressIndicator
+          // Show a progress indicator while connecting to Firestore and waiting for data
           if (userInfo.connectionState == ConnectionState.waiting &&
               userInfo.data == null)
             return Center(child: CircularProgressIndicator());
           else {
+            // Extract user data from the snapshot
             Map<String, dynamic> userData = userInfo.data!.data() as Map<String, dynamic>;
+            // Extract language data from user data
             Map<String, dynamic> languagesData = userData["Languages"] as Map<String, dynamic>;
-            List<String> languagesList = languagesData.keys.toList();
+            List<String> languagesList = languagesData.keys.toList();  // Convert language data to a list
             return Scaffold(
-                resizeToAvoidBottomInset: false,
+                resizeToAvoidBottomInset: false, // Avoid resizing the layout when the keyboard appears
                 body: SingleChildScrollView(
                   physics: ScrollPhysics(),
                   child: Column(
@@ -69,8 +78,10 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                                 ),
                                 iconSize: SizeConfig.blockSizeHorizontal * 8,
                                 onPressed: () {
+                                  // Navigate back to the previous screen
                                   Navigator.pop(context);
                                 }),
+                            // Show the edit button only if the current user is the owner of the profile
                             widget.user!.uid == (userInfo.data!.data() as Map<String, dynamic>)["UID"]
                                 ? IconButton(
                                 icon: Icon(
@@ -81,6 +92,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                                 SizeConfig.blockSizeHorizontal *
                                     6,
                                 onPressed: () {
+                                  // Navigate to the edit profile page
                                   Navigator.of(context).push(
                                       MaterialPageRoute<void>(
                                           builder: (BuildContext
@@ -98,6 +110,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                       // ),
                       GestureDetector(
                         onTap: () {
+                          // Open a page to show the profile image in full screen
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ShowImage(
                                 imageUrl: (userInfo.data!.data() as Map<String, dynamic>)["UID"]
@@ -119,6 +132,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                           fit: BoxFit.scaleDown,
                           child: SizedBox(
                             child: Text(
+                              // Display the username
                             (userInfo.data!.data() as Map<String, dynamic>)["username"]
                           ,
                               style: TextStyle(
@@ -147,16 +161,19 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                                     width: SizeConfig.blockSizeHorizontal * 1,
                                   ),
 
-
+                                  // Check if the user has a score
                                   (userInfo.data!.data() as Map<String, dynamic>).containsKey('score')
                                       ?
                                   (userInfo.data!.data() as Map<String, dynamic>)["score"].toString() != "null" ?
-                                  Text(
+                                  Text( // Display the user's score
                                     (userInfo.data!.data() as Map<String, dynamic>)["score"].toString(),
                                     style: TextStyle(
                                         fontSize: SizeConfig.screenWidth * 0.05),
-                                  ) : Text("0", style: TextStyle(
+                                  )
+                                  // Display a default score of 0
+                                      : Text("0", style: TextStyle(
                                       fontSize: SizeConfig.screenWidth * 0.05))
+                                  // Display an empty text if there is no score
                                       : Text("")
                                 ],
                               ),
@@ -200,7 +217,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                       Padding(
                         padding: const EdgeInsets.only(left: 40),
                         child: Row(children: [
-                          Text(
+                          Text(// Display full name of the user by combining the "first name" and "last name" fields from the data,
                             (userInfo.data!.data() as Map<String, dynamic>)["first name"] +
                                 " " +
                                 (userInfo.data!.data() as Map<String, dynamic>)["last name"],
@@ -227,6 +244,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                         padding: const EdgeInsets.only(left: 40),
                         child: Row(children: [
                           Text(
+                            // Display the gender of the user
                             (userInfo.data!.data() as Map<String, dynamic>)["gender"],
                             style: TextStyle(
                                 fontSize: SizeConfig.screenWidth * 0.035),
@@ -251,6 +269,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                         padding: const EdgeInsets.only(left: 40),
                         child: Row(children: [
                           Text(
+                            // Display the birthdate of the user
                             (userInfo.data!.data() as Map<String, dynamic>)["birthdate"],
                             style: TextStyle(
                                 fontSize: SizeConfig.screenWidth * 0.035),
@@ -275,6 +294,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                         padding: const EdgeInsets.only(left: 40),
                         child: Row(children: [
                           Text(
+                            // Display the country of the user
                             (userInfo.data!.data() as Map<String, dynamic>)["country"],
                             style: TextStyle(
                                 fontSize: SizeConfig.screenWidth * 0.035),
@@ -306,6 +326,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
+                                // Display the user's description
                                   (userInfo.data!.data() as Map<String, dynamic>)["description"],
                                 style: TextStyle(
                                     fontSize: SizeConfig.screenWidth * 0.035),
@@ -347,6 +368,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                           itemCount: (userInfo.data!.data() as Map<String, dynamic>)["Languages"].length,
                           itemBuilder: (context, index) {
                             return LangRow(
+                              // Display each language and its proficiency level
                                 languagesList[index],
                                 (userInfo.data!.data() as Map<String, dynamic>)["Languages"]
                                 [languagesList[index]]);
@@ -362,35 +384,43 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
 
   Widget LangRow(String lang, String lvl) {
     return Padding(
+      // Add left padding of 40 and top padding of 10
       padding: const EdgeInsets.fromLTRB(40, 0, 0, 10),
       child: Row(children: [
         Container(
+          // Set the width of the container based on a fraction of the screen width
           width: SizeConfig.screenWidth * 0.28,
           child: Text(
-            lang,
+            lang, // Display the language parameter
+            // Set the font size based on the screen width
             style: TextStyle(fontSize: SizeConfig.screenWidth * 0.035),
           ),
         ),
         SizedBox(
+          // Add a fixed width-sized box for spacing between the language and level containers
           width: SizeConfig.screenWidth * 0.1,
         ),
         Container(
+          // Set the width of the container based on a fraction of the screen width
           width: SizeConfig.screenWidth * 0.3,
-          constraints:
-          BoxConstraints(minHeight: SizeConfig.blockSizeVertical * 1.2),
+          // Set the minimum height of the container based on the vertical block size
+          constraints: BoxConstraints(minHeight: SizeConfig.blockSizeVertical * 1.2),
           child: Padding(
+            // Add padding inside the container
             padding: const EdgeInsets.all(4.0),
             child: Text(
-              lvl,
-              textAlign: TextAlign.center,
+              lvl, // Display the level parameter
+              textAlign: TextAlign.center, // Center align the level text
+              // Set the font size based on the screen width
               style: TextStyle(fontSize: SizeConfig.screenWidth * 0.035),
             ),
           ),
           decoration: BoxDecoration(
+            // Set a white background color for the container
             color: Colors.white,
             border: Border.all(
               style: BorderStyle.solid,
-              color: Colors.grey,
+              color: Colors.grey, // Set a grey color for the border
             ),
             borderRadius: BorderRadius.all(
               const Radius.circular(16.0),
@@ -400,4 +430,5 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
       ]),
     );
   }
+
 }

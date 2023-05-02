@@ -10,10 +10,15 @@ import 'package:final_project_2023/screen_size_config.dart';
 
 import '../firebase/Question.dart';
 
+/// Purpose of the code:
+/// This class represents a screen that allows users to add verb conjugation questions.
+
+
 class VerbConjugation extends StatefulWidget {
   final String? language;
   final String? level;
   final String? languageLevel;
+  // Constructor to initialize the VerbConjugation widget
   VerbConjugation(this.language, this.level, this.languageLevel);
 
   @override
@@ -21,6 +26,7 @@ class VerbConjugation extends StatefulWidget {
 }
 
 class VerbConjugationState extends State<VerbConjugation> {
+  // Controllers for text fields
   final beginningController = TextEditingController();
   final endController = TextEditingController();
   final answer1Controller = TextEditingController();
@@ -110,6 +116,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                         fontSize: SizeConfig.blockSizeHorizontal * 4, color: Color(0xFF6D94BE)) ),
                   ],
                 ),
+                // Display selected level
                 Row(
                   children: [
                     Text("Level: ",style: TextStyle(
@@ -602,39 +609,48 @@ class VerbConjugationState extends State<VerbConjugation> {
     );
   }
 
+// This method updates the Firebase collection with the current question data
   void _updateFirebase() {
+    // Access the Firestore instance and select the 'questions' collection
     FirebaseFirestore.instance
         .collection('questions')
-        .doc(widget.languageLevel)
+        .doc(widget.languageLevel) // Use the language level as the document ID
         .update({"questions" : FieldValue.arrayUnion([question.toJson()])});
   }
 
+// This method returns the selected language or an empty string if no language is selected
   String _getLanguage(){
     return widget.language == null ? "" : widget.language.toString();
   }
 
+// This method returns the selected level or an empty string if no level is selected
   String _getLevel(){
     return widget.level == null ? "" : widget.level.toString();
   }
 
+// This method navigates to the AddQuestion screen
   void navigateToAddQuestion(context) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => AddQuestion()));
   }
 
+// This method adds a score to the user and displays an AlertDialog
   void _addScore (){
     showDialog<String>(
         context: context,
         barrierDismissible: false,
 
         builder: (BuildContext context) {
+          // Get the current user
           var user = FirebaseAuth.instance.currentUser;
+
+          // Increment the user's score in the Firestore collection
           FirebaseFirestore.instance
               .collection("users")
               .doc(user!.uid)
               .update({"score": FieldValue.increment(1)});
-          return AlertDialog(
 
+          return AlertDialog(
             title: const Text('Your question was added', textAlign: TextAlign.center),
             content: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -651,6 +667,7 @@ class VerbConjugationState extends State<VerbConjugation> {
               borderRadius: BorderRadius.circular(18.0),
             ),
             actions: <Widget>[
+              // Close button
               SizedBox(width: SizeConfig.blockSizeHorizontal * 60.0),
               TextButton(
                 onPressed: () {
@@ -659,20 +676,12 @@ class VerbConjugationState extends State<VerbConjugation> {
                 },
                 child: const Text('Close', style: TextStyle(color: Color(0xFFA66CB7), fontSize: 18.0,)),
               ),
-
-              /*SizedBox(width: SizeConfig.blockSizeHorizontal * 7.0),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'Finish');
-                  navigateToHomePage(context);
-                },
-                child: const Text('Close', style: TextStyle(color: Color(0xFFA66CB7), fontSize: 16.0)),
-              ),
-              SizedBox(width: SizeConfig.blockSizeHorizontal * 1.0),*/
             ],
-          );}
+          );
+        }
     );
   }
+
 }
 
 

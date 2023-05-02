@@ -10,11 +10,13 @@ import 'package:final_project_2023/firebase/auth_repository.dart';
 
 import '../ProfileVars.dart';
 
+/// This is a StatefulWidget that represents a language widget in the profile screen.
 class LanguageWidget extends StatefulWidget {
   String languageName;
-  StreamController<String> firebaseController;
+  StreamController<String> firebaseController; // Stream controller for Firebase events
   Map? userInfo;
 
+  /// Constructs a LanguageWidget instance with the given parameters.
   LanguageWidget(this.languageName, this.firebaseController, this.userInfo);
 
   @override
@@ -22,20 +24,24 @@ class LanguageWidget extends StatefulWidget {
 }
 
 class _LanguageWidgetState extends State<LanguageWidget> {
-  bool isChecked = false;
-  String languageLvl = 'temp';
-  bool firstClick = true;
+  bool isChecked = false; // Indicates whether the checkbox is checked or not
+  String languageLvl = 'temp'; // The selected language level
+  bool firstClick = true; // Indicates whether it's the first click on the language widget
+
 
   @override
   Widget build(BuildContext context) {
-    ProfileVars();
-    SizeConfig().init(context);
+    ProfileVars(); // Initialize the profile variables
+    SizeConfig().init(context); // Initialize the size configuration
     return StreamBuilder(
         stream: widget.firebaseController.stream,
         builder: (context, snapshot) {
+          // Check if the stream has data and the data is 'finish'
           if (snapshot.hasData && snapshot.data == "finish") {
+            // Update Firebase if the stream data is 'finish'
             updateFirebase();
           }
+          // Check if the user information is not empty and the language exists in the user's languages
           if (widget.userInfo!.isNotEmpty &&
               widget.userInfo!["Languages"][widget.languageName] != null &&
               firstClick) {
@@ -53,7 +59,6 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                     style: TextStyle(
                         color: isChecked ? Colors.black : Colors.grey)),
                 controlAffinity: ListTileControlAffinity.leading,
-                //  <-- leading Checkbox
                 value: isChecked,
                 contentPadding: EdgeInsets.fromLTRB(35, 0, 0, 0),
                 activeColor: Color(0xFFA66CB7),
@@ -64,7 +69,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                       ProfileVars.languageNum++;
                     } else {
                       ProfileVars.languageNum--;
-                      if (languageLvl != "temp"){
+                      if (languageLvl != "temp") {
                         ProfileVars.numOfLvls--;
                       }
                     }
@@ -91,8 +96,11 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                   underline: SizedBox.shrink(),
                   value: languageLvl == 'temp' ? null : languageLvl,
                   items: isChecked
-                      ? <String>['Beginner', 'Intermediate', 'Advanced']
-                      .map((String value) {
+                      ? <String>[
+                    'Beginner',
+                    'Intermediate',
+                    'Advanced'
+                  ].map((String value) {
                     return new DropdownMenuItem<String>(
                       value: value,
                       child: new Text(value.toString()),
@@ -101,7 +109,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                       : null,
                   onChanged: (newVal) {
                     setState(() {
-                      if (languageLvl == "temp"){
+                      if (languageLvl == "temp") {
                         ProfileVars.numOfLvls++;
                       }
                       languageLvl = newVal!;
@@ -113,13 +121,16 @@ class _LanguageWidgetState extends State<LanguageWidget> {
         });
   }
 
+  /// Updates the language level in Firebase.
   void updateFirebase() {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser; // Get the current user
     if (isChecked) {
+      // If the checkbox is checked
       FirebaseFirestore.instance
           .collection('users')
-          .doc(user!.uid)
+          .doc(user!.uid) // Get the document for the current user
           .update({'Languages.' + widget.languageName: languageLvl});
+      // Update the language level in the 'Languages' field of the user document
     }
   }
 }
