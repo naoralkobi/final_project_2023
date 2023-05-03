@@ -445,12 +445,12 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   enterGame(String gameID, int userNumber, String inviteID) {
-      Navigator.push(
-          context,
-          PageTransition(
-              type: PageTransitionType.rightToLeftWithFade,
-              child: QuestionsPage(
-                  widget.chatID, gameID, widget.userInfo,widget.friendInfo, 1, userNumber,inviteID)
-          ));
+      // Navigator.push(
+      //     context,
+      //     PageTransition(
+      //         type: PageTransitionType.rightToLeftWithFade,
+      //         child: QuestionsPage(
+      //             widget.chatID, gameID, widget.userInfo,widget.friendInfo, 1, userNumber,inviteID)
+      //     ));
   }
 }

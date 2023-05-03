@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
       statusBarColor: Color(0xFF0077be), //or set color with: Color(0xFF0000FF)
     ));
     // Sign out the user from Firebase authentication
-    AuthRepository.instance().signOut();
+    // AuthRepository.instance().signOut();
     // Disable Firestore persistence
     FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
     return MaterialApp(
