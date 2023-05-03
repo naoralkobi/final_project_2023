@@ -1,5 +1,6 @@
 import 'package:final_project_2023/Pages/home_page.dart';
 import 'package:final_project_2023/Pages/register_page.dart';
+import 'package:final_project_2023/Pages/speech_recognition.dart';
 import 'package:final_project_2023/Widgets/reusable_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,8 @@ class _LoginPageState extends State<LoginPage> {
                           password: _passwordTextController.text).then((value) {
                         // After successful login, navigate to the home page
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => MyHomePage()));
+                            //MaterialPageRoute(builder: (context) => MyHomePage()));
+                            MaterialPageRoute(builder: (context) => SpeechRecognitionScreen()));
                       });
                     }),
                     signUpOption()
