@@ -3,6 +3,11 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter/services.dart' show PlatformException;
 
 class SpeechRecognitionScreen extends StatefulWidget {
+
+  final String selectedLanguage;
+
+  SpeechRecognitionScreen({required this.selectedLanguage});
+
   @override
   _SpeechRecognitionScreenState createState() =>
       _SpeechRecognitionScreenState();
@@ -15,35 +20,53 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
   @override
   void initState() {
     super.initState();
-    _speech = stt.SpeechToText();
-    _speech!.errorListener = (error) {
-      print('Speech recognition error: ${error.errorMsg}');
-    };
+    _initializeSpeechRecognition();
   }
 
-  void _startListening() async {
+  Future<void> _initializeSpeechRecognition() async {
+    _speech = stt.SpeechToText();
     bool isAvailable = await _speech!.initialize();
     if (isAvailable) {
-      _speech!.listen(
-        onResult: (result) {
-          setState(() {
-            _recognizedText = result.recognizedWords;
-          });
-        },
-      );
+      _speech!.errorListener = (error) {
+        print('Speech recognition error: ${error.errorMsg}');
+      };
+      setState(() {
+        _speech!.listen(
+          onResult: (result) {
+            setState(() {
+              _recognizedText = result.recognizedWords;
+            });
+          },
+        );
+      });
     } else {
       print('Speech recognition is not available on this device.');
     }
   }
 
+  void _startListening() async {
+    if (_speech!.isListening) return;
+    setState(() {
+      _recognizedText = '';
+    });
+    await _speech!.listen(
+      onResult: (result) {
+        setState(() {
+          _recognizedText = result.recognizedWords;
+        });
+      },
+    );
+  }
+
   void _stopListening() {
+    if (!_speech!.isListening) return;
     _speech!.stop();
     setState(() {
-      _recognizedText = _speech!.lastRecognizedWords ?? '';
       // Perform analysis on the recorded audio (_recognizedText)
       // Send the recorded audio for further processing or analysis
       // Example: make an API call to process the recorded audio
       analyzeAndScoreSpeech(_recognizedText);
+      _recognizedText = '';
     });
   }
 
@@ -65,8 +88,8 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Recognized Text:',
-              style: TextStyle(fontSize: 18),
+              '${widget.selectedLanguage}: $_recognizedText',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
             Text(
