@@ -42,12 +42,12 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
 
   String _generateRandomWord() {
     final _random = Random();
-    return wordsList[_random.nextInt(wordsList.length)];
+    return wordsList[_random.nextInt(wordsList.length - 1)];
   }
 
   void _updateRandomWord() {
     final _random = Random();
-    randomWord = wordsList[_random.nextInt(wordsList.length)];
+    randomWord = wordsList[_random.nextInt(wordsList.length - 1)];
   }
 
   Future<void> _initializeSpeechRecognition() async {
@@ -170,7 +170,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
   }
 
 
-  void analyzeAndScoreSpeech(String recognizedText) {
+  void  analyzeAndScoreSpeech(String recognizedText) {
     // Perform analysis on the recognized text
     // Evaluate factors like accuracy, fluency, pronunciation, intonation, etc.
 
@@ -179,19 +179,37 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
     // Provide feedback and scoring to the user
     // Display the score and suggestions for improvement
 
-    // Example scoring and feedback:
-    double accuracyScore = calculateAccuracyScore(recognizedText);
-    double fluencyScore = calculateFluencyScore(recognizedText);
-    double pronunciationScore = calculatePronunciationScore(recognizedText);
-    double intonationScore = calculateIntonationScore(recognizedText);
+    // scoring and feedback:
+    double hammingDistance = calculateHammingDistance(recognizedText, randomWord);
+    // double accuracyScore = calculateAccuracyScore(recognizedText);
+    // double fluencyScore = calculateFluencyScore(recognizedText);
+    // double pronunciationScore = calculatePronunciationScore(recognizedText);
+    // double intonationScore = calculateIntonationScore(recognizedText);
+    //
+    // double overallScore = (accuracyScore + fluencyScore + pronunciationScore + intonationScore) / 4;
 
-    double overallScore = (accuracyScore + fluencyScore + pronunciationScore + intonationScore) / 4;
+    String feedback = generateFeedback(hammingDistance);
 
-    String feedback = generateFeedback(overallScore);
+    _showScore(hammingDistance,feedback);
 
-    print('Score: $overallScore');
+    print('Score: $hammingDistance');
     print('Feedback: $feedback');
   }
+
+  double calculateHammingDistance(String recognizedText, String randomWord) {
+
+    int distance = 0;
+    int maxLength = recognizedText.length > randomWord.length ? recognizedText.length : randomWord.length;
+    for (int i = 0; i < maxLength; i++) {
+      if (i >= recognizedText.length || i >= randomWord.length) {
+        distance += 1;
+      } else if (recognizedText[i] != randomWord[i]) {
+        distance += 1;
+      }
+    }
+    return 1 - (distance / maxLength);
+  }
+
 
   double calculateAccuracyScore(String recognizedText) {
     // Implement your logic to calculate accuracy score
@@ -279,4 +297,25 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
       return 'Keep practicing! Work on accuracy, fluency, and pronunciation.';
     }
   }
+
+  Future<void> _showScore(double score, String feedback) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Your score is $score.'),
+          content: Text(feedback),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
