@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter/services.dart' show PlatformException;
@@ -16,11 +19,35 @@ class SpeechRecognitionScreen extends StatefulWidget {
 class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
   stt.SpeechToText? _speech;
   String _recognizedText = '';
-
+  List<String> wordsList = [];
+  late String randomWord;
+  @override
   @override
   void initState() {
     super.initState();
+    FirebaseFirestore.instance
+        .collection('speech_to_text')
+        .doc(widget.selectedLanguage)
+        .get()
+        .then((value) {
+      Map words = value.data()!['words'];
+      setState(() {
+        words.forEach((key, value) {
+          wordsList.add(value);
+        });
+      });
+    });
     _initializeSpeechRecognition();
+  }
+
+  String _generateRandomWord() {
+    final _random = Random();
+    return wordsList[_random.nextInt(wordsList.length)];
+  }
+
+  void _updateRandomWord() {
+    final _random = Random();
+    randomWord = wordsList[_random.nextInt(wordsList.length)];
   }
 
   Future<void> _initializeSpeechRecognition() async {
@@ -79,6 +106,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    randomWord = _generateRandomWord();
     return Scaffold(
       appBar: AppBar(
         title: Text('Speech Recognition'),
@@ -93,6 +121,28 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
             ),
             SizedBox(height: 10),
             Text(
+              // Get a random word from the list
+              randomWord,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            // Expanded(
+            //   child: ListView.builder(
+            //     itemCount: wordsList.length,
+            //     itemBuilder: (context, index) {
+            //       return Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: Text(
+            //           wordsList[index],
+            //           style: TextStyle(
+            //             fontSize: 16,
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            Text(
               _recognizedText,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
@@ -104,6 +154,14 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
             ElevatedButton(
               onPressed: _stopListening,
               child: Text('Stop Listening'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _updateRandomWord();
+                });
+              },
+              child: Icon(Icons.refresh),
             ),
           ],
         ),
