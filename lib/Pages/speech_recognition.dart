@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -21,6 +22,8 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
   String _recognizedText = '';
   List<String> wordsList = [];
   late String randomWord;
+  var isListening = false;
+
   @override
   @override
   void initState() {
@@ -42,12 +45,12 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
 
   String _generateRandomWord() {
     final _random = Random();
-    return wordsList[_random.nextInt(wordsList.length - 1)];
+    return wordsList[_random.nextInt(wordsList.length)];
   }
 
   void _updateRandomWord() {
     final _random = Random();
-    randomWord = wordsList[_random.nextInt(wordsList.length - 1)];
+    randomWord = wordsList[_random.nextInt(wordsList.length)];
   }
 
   Future<void> _initializeSpeechRecognition() async {
@@ -104,71 +107,198 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
     print('Sending audio for analysis: $recordedAudio');
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   randomWord = _generateRandomWord();
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: Text('Speech Recognition'),
+  //     ),
+  //     body: Center(
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           Text(
+  //             '${widget.selectedLanguage}: $_recognizedText',
+  //             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  //           ),
+  //           SizedBox(height: 10),
+  //           Text(
+  //             // Get a random word from the list
+  //             randomWord,
+  //             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  //           ),
+  //           SizedBox(height: 10),
+  //           // Expanded(
+  //           //   child: ListView.builder(
+  //           //     itemCount: wordsList.length,
+  //           //     itemBuilder: (context, index) {
+  //           //       return Padding(
+  //           //         padding: const EdgeInsets.all(8.0),
+  //           //         child: Text(
+  //           //           wordsList[index],
+  //           //           style: TextStyle(
+  //           //             fontSize: 16,
+  //           //           ),
+  //           //         ),
+  //           //       );
+  //           //     },
+  //           //   ),
+  //           // ),
+  //           Text(
+  //             _recognizedText,
+  //             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  //           ),
+  //           SizedBox(height: 20),
+  //           ElevatedButton(
+  //             onPressed: _startListening,
+  //             child: Text('Start Listening'),
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: _stopListening,
+  //             child: Text('Stop Listening'),
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               setState(() {
+  //                 _updateRandomWord();
+  //               });
+  //             },
+  //             child: Icon(Icons.refresh),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+  Color bgColor= Color(0xff00A67E);
   @override
   Widget build(BuildContext context) {
     randomWord = _generateRandomWord();
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: AvatarGlow(
+          endRadius: 75.0,
+          animate: isListening,
+        duration: Duration(milliseconds: 2000),
+        glowColor: Color(0xff00A67E),
+        repeat: true,
+        repeatPauseDuration: Duration(milliseconds: 100),
+        showTwoGlows: true,
+        child: GestureDetector(
+          onTapDown: (details) {
+            setState(() {
+              isListening = true;
+            });
+            _startListening();
+          },
+          onTapUp: (details) {
+            setState(() {
+              isListening = false;
+            });
+            _stopListening();
+          },
+          child:  CircleAvatar(
+          backgroundColor: Color(0xff00A67E),
+          radius: 35,
+          child: Icon(Icons.mic, color: Colors.white),
+        ),
+        )
+      ),
+      backgroundColor: Colors.grey[200], // Set background color
       appBar: AppBar(
         title: Text('Speech Recognition'),
+        centerTitle: true, // Center app bar title
+        backgroundColor: Colors.blue, // Set app bar background color
       ),
-      body: Center(
+      body: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(16.0), // Add some padding
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: 20),
             Text(
               '${widget.selectedLanguage}: $_recognizedText',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              // Get a random word from the list
-              randomWord,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            // Expanded(
-            //   child: ListView.builder(
-            //     itemCount: wordsList.length,
-            //     itemBuilder: (context, index) {
-            //       return Padding(
-            //         padding: const EdgeInsets.all(8.0),
-            //         child: Text(
-            //           wordsList[index],
-            //           style: TextStyle(
-            //             fontSize: 16,
-            //           ),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
-            Text(
-              _recognizedText,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _startListening,
-              child: Text('Start Listening'),
+            Text(
+              randomWord,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
-            ElevatedButton(
-              onPressed: _stopListening,
-              child: Text('Stop Listening'),
+            SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: wordsList.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      wordsList[index],
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _updateRandomWord();
-                });
-              },
-              child: Icon(Icons.refresh),
+            SizedBox(height: 20),
+            Text(
+              _recognizedText,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // ElevatedButton(
+                //   onPressed: _startListening,
+                //   child: Text('Start Listening'),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.green, // Set button background color
+                //   ),
+                // ),
+                // ElevatedButton(
+                //   onPressed: _stopListening,
+                //   child: Text('Stop Listening'),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.red, // Set button background color
+                //   ),
+                // ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _updateRandomWord();
+                    });
+                  },
+                  child: Icon(Icons.refresh),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.grey[300], // Set button background color
+                    padding: EdgeInsets.all(16), // Add some padding
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
-
 
   void  analyzeAndScoreSpeech(String recognizedText) {
     // Perform analysis on the recognized text
