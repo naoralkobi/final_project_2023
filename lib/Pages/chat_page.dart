@@ -116,9 +116,11 @@ class _ChatPageState extends State<ChatPage> {
       if (data["acceptedInviteUID"] != null &&
           data["acceptedInviteUID"] != "") {
         if (data["acceptedInviteUID"] == widget.currentUserID) {
-          enterGame(data["currentGame"], 1, data[INVITE_ID]);
+          if (data["currentGame"] != null)
+            enterGame(data["currentGame"], 1, data[INVITE_ID]);
         } else {
-          enterGame(data["currentGame"], 2, data[INVITE_ID]);
+          if (data["currentGame"] != null)
+            enterGame(data["currentGame"], 2, data[INVITE_ID]);
         }
       }
 

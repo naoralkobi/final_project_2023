@@ -229,14 +229,14 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                          child: Column(
                            children: [
                              // Username Text Field (for new users)
-                             authRep.isNew()
-                                 ? usernameTextField
-                                 : SizedBox(), // Display the username text field only for new users
-                             //todo - maybe need to remove 2 of the usernameTextField. check!
-                             Visibility(
-                               visible: authRep.isNew(), // Set the visibility of the widget based on whether the user is new or not
-                               child: usernameTextField, // Display the username text field if the user is new
-                             ),
+                             // authRep.isNew()
+                             //     ? usernameTextField
+                             //     : SizedBox(), // Display the username text field only for new users
+                             // //todo - maybe need to remove 2 of the usernameTextField. check!
+                             // Visibility(
+                             //   visible: authRep.isNew(), // Set the visibility of the widget based on whether the user is new or not
+                             //   child: usernameTextField, // Display the username text field if the user is new
+                             // ),
                              usernameTextField, // Display the username text field
                              SizedBox(
                                height: SizeConfig.blockSizeVertical * 1.5,
@@ -315,7 +315,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                )
                                    : null,
                              ),
-                             // ProfileDatePicker(firebaseController, widget.userInfo),
+                              ProfileDatePicker(firebaseController, widget.userInfo),
                              SizedBox(
                                height: SizeConfig.blockSizeVertical * 1.5,
                              ),
@@ -725,13 +725,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
       firebaseController.add("finish");
 
-      // Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute<void>(builder: (BuildContext context) {
-      //   return MyHomePage();
-      // }));
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) {
+          return MyHomePage();
+        }),
+            (route) => false,
+      );
 
-      // Navigate to the home page and remove all previous routes from the stack
-      Navigator.of(context).popUntil((route) => route.isFirst);
     } else {
       // If the user is updating an existing profile
       await FirebaseFirestore.instance.collection("users").doc(user!.uid).update({

@@ -220,7 +220,7 @@ class MyHomePage extends StatelessWidget {
     },
     ),
     CustomPopupMenuButton<String>(
-    onSelected: handleClick,
+    onSelected: (value) => handleClick(value, context),
     color: Colors.white,
     shape: RoundedRectangleBorder(
     side: BorderSide(color: Colors.grey, width: 1),
@@ -371,31 +371,39 @@ class MyHomePage extends StatelessWidget {
   }
 
 
-  void handleClick(String value) {
+  void handleClick(String value, BuildContext context) {
     switch (value) {
       case 'Logout':
         AuthRepository.instance().signOut();
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) {
+            return LoginPage();
+          }),
+              (route) => false,
+        );
+
+
         break;
-    // case 'About':
-    //   showAboutDialog(
-    //       context: context,
-    //       applicationName: 'lang',
-    //       applicationVersion: '1.0.0',
-    //       applicationLegalese:
-    //       '© Developed by Naor Alkobi, Ron Harel and Aviv Harel.',
-    //       children: [
-    //         TextButton(
-    //             onPressed: () => launch(
-    //                 'https://github.com/naoralkobi/final_project_2023'),
-    //             child: Text(
-    //               'Privacy Policy',
-    //             )),
-    //         TextButton(
-    //           onPressed: () => launch(
-    //               'https://github.com/naoralkobi/final_project_2023'),
-    //           child: Text('Terms of Service'),
-    //         ),
-    //       ]);
+    case 'About':
+      showAboutDialog(
+          context: context,
+          applicationName: 'lang',
+          applicationVersion: '1.0.0',
+          applicationLegalese:
+          '© Developed by Naor Alkobi, Ron Harel and Aviv Harel.',
+          children: [
+            TextButton(
+                onPressed: () => launch(
+                    'https://github.com/naoralkobi/final_project_2023'),
+                child: Text(
+                  'Privacy Policy',
+                )),
+            TextButton(
+              onPressed: () => launch(
+                  'https://github.com/naoralkobi/final_project_2023'),
+              child: Text('Terms of Service'),
+            ),
+          ]);
     }
   }
   void navigateToFriendsList(context) {
