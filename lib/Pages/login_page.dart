@@ -63,8 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                           password: _passwordTextController.text).then((value) {
                         // After successful login, navigate to the home page
                         Navigator.push(context,
-                            //MaterialPageRoute(builder: (context) => MyHomePage()));
-                            MaterialPageRoute(builder: (context) => ChooseLanguageSpeech()));
+                            MaterialPageRoute(builder: (context) => MyHomePage()));
+                            //MaterialPageRoute(builder: (context) => ChooseLanguageSpeech()));
                       });
                     }),
                     signUpOption()

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:final_project_2023/Pages/select_lang_screen.dart';
 import 'package:final_project_2023/Pages/view_user_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -267,7 +268,7 @@ class MyHomePage extends StatelessWidget {
     ),
     body: ChatsList(_searchText, snapshot.data!.data()! as Map<dynamic, dynamic>,blurController),
     floatingActionButtonLocation:
-    FloatingActionButtonLocation.centerDocked,
+    FloatingActionButtonLocation.startFloat,
     floatingActionButton: Container(
     height: SizeConfig.blockSizeVertical * 10,
     width: SizeConfig.blockSizeHorizontal * 22,
@@ -294,54 +295,76 @@ class MyHomePage extends StatelessWidget {
     },
     ),
     ),
-    bottomNavigationBar: BottomAppBar(
-    shape: CircularNotchedRectangle(),
-    child: Container(
-    height: SizeConfig.blockSizeVertical * 8,
-    child: new Row(
-    mainAxisSize: MainAxisSize.max,
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: <Widget>[
-    Padding(
-    padding: EdgeInsets.only(
-    left: SizeConfig.blockSizeHorizontal * 14),
-    child: IconButton(
-    iconSize: SizeConfig.blockSizeHorizontal * 10,
-    icon: Icon(Icons.leaderboard_rounded),
-    color: Colors.white,
-    onPressed: () {
-     navigateToLeaderboard(
-         context, snapshot.data!.data()! as Map<String, dynamic>);
-    },
-    ),
-    ),
-    Padding(
-    padding: EdgeInsets.only(
-    right: SizeConfig.blockSizeHorizontal * 14),
-    child: IconButton(
-    iconSize: SizeConfig.blockSizeHorizontal * 10,
-    icon: Icon(Icons.people_alt_rounded),
-    color: Colors.white,
-    onPressed: () {
-    navigateToFriendsList(context);
-    },
-    ),
-    ),
-    ],
-    ),
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        child: Container(
+          height: SizeConfig.blockSizeVertical * 8,
+          child: new Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.blockSizeHorizontal * 4),
+                  child: IconButton(
+                    iconSize: SizeConfig.blockSizeHorizontal * 10,
+                    icon: Icon(Icons.leaderboard_rounded),
+                    color: Colors.white,
+                    onPressed: () {
+                      navigateToLeaderboard(
+                          context, snapshot.data!.data()! as Map<String, dynamic>);
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.blockSizeHorizontal * 2,
+                      right: SizeConfig.blockSizeHorizontal * 2),
+                  child: IconButton(
+                    iconSize: SizeConfig.blockSizeHorizontal * 10,
+                    icon: Icon(Icons.mic),
+                    color: Colors.white,
+                    onPressed: () {
+                      navigateToSpeechRecognition(context);
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      right: SizeConfig.blockSizeHorizontal * 4),
+                  child: IconButton(
+                    iconSize: SizeConfig.blockSizeHorizontal * 10,
+                    icon: Icon(Icons.people_alt_rounded),
+                    color: Colors.white,
+                    onPressed: () {
+                      navigateToFriendsList(context);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                hexStringToColor("0077be"),
+                hexStringToColor("00bfff"),
+                hexStringToColor("40e0d0")
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,),
+          ),
+        ),
+      ),
 
-    decoration: BoxDecoration(
-    gradient: LinearGradient(
-    colors: [
-    hexStringToColor("0077be"),
-    hexStringToColor("00bfff"),
-    hexStringToColor("40e0d0")
-    ],
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,),
-    ),
-    ),
-    ),
     );
     }
     });
@@ -389,6 +412,13 @@ class MyHomePage extends StatelessWidget {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => AddQuestion()));
   }
+
+  void navigateToSpeechRecognition(context) {
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => ChooseLanguageSpeech()));
+  }
+
+
 
   void clearSearch() {
     _filter.text = "";
