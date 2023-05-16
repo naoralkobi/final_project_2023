@@ -37,19 +37,39 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
       return match;
     }
     waitingList.forEach((friendInfo) {
-      if (friendInfo["UID"] != userInfo["UID"]) {
-        if ((myAge >= friendInfo["minAge"] && myAge <= friendInfo["maxAge"]) &&
-            (friendInfo["age"] >= userInfo["minAge"] &&
-                friendInfo["age"] <= userInfo["maxAge"])) {
-          if ((friendInfo["preferred gender"] == "Dont Care" ||
-              (friendInfo["preferred gender"] == userInfo["gender"])) &&
-              (userInfo["preferred gender"] == "Dont Care" ||
-                  (userInfo["preferred gender"] == friendInfo["gender"]))) {
-            match = friendInfo["UID"];
+      if (friendInfo is Map && friendInfo.containsKey("UID") && userInfo.containsKey("UID")) {
+        if (friendInfo["UID"] != userInfo["UID"]) {
+
+          if ((myAge >= friendInfo["minAge"] && myAge <= friendInfo["maxAge"]) &&
+              (friendInfo["age"] >= userInfo["minAge"] &&
+                  friendInfo["age"] <= userInfo["maxAge"])) {
+            if ((friendInfo["preferred gender"] == "Dont Care" ||
+                friendInfo["preferred gender"] == userInfo["gender"]) &&
+                (userInfo["preferred gender"] == "Dont Care" ||
+                    userInfo["preferred gender"] == friendInfo["gender"])) {
+              match = friendInfo["UID"];
+            }
           }
         }
       }
     });
+
+
+
+    // waitingList.forEach((friendInfo) {
+    //   if (friendInfo["UID"] != userInfo["UID"]) {
+    //     if ((myAge >= friendInfo["minAge"] && myAge <= friendInfo["maxAge"]) &&
+    //         (friendInfo["age"] >= userInfo["minAge"] &&
+    //             friendInfo["age"] <= userInfo["maxAge"])) {
+    //       if ((friendInfo["preferred gender"] == "Dont Care" ||
+    //           (friendInfo["preferred gender"] == userInfo["gender"])) &&
+    //           (userInfo["preferred gender"] == "Dont Care" ||
+    //               (userInfo["preferred gender"] == friendInfo["gender"]))) {
+    //         match = friendInfo["UID"];
+    //       }
+    //     }
+    //   }
+    // });
     return match;
   }
 
@@ -80,7 +100,7 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
                   widget.userInfo);
             }
             else {
-              List waitingList = (snapshot.data as Map<String, dynamic>)[WAITING_LIST];
+              List waitingList = (snapshot.data!.data() as Map<String, dynamic>)[WAITING_LIST];
               String match = _findMatch(waitingList, widget.userInfo);
               if (match.isEmpty && !isInWaitingList) {
                 FirebaseDB.Firebase_db.addToWaitingList(

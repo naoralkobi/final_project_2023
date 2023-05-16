@@ -98,6 +98,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _listen() async {
+    print("chat id - " + widget.chatID);
     DocumentReference reference =
     FirebaseFirestore.instance.collection(CHATS).doc(widget.chatID);
     streamSubscription = reference.snapshots().listen((querySnapshot) {

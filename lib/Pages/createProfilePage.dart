@@ -59,7 +59,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   void initState() {
     super.initState();
     ProfileVars().init();
-    print("userAvatars/" + user!.uid);
     imageUrl = "";
     // Get the download URL of the user's profile image
     _storage
@@ -183,19 +182,19 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                        ? SizedBox()
                        : Container(
                      width: SizeConfig.screenWidth * 0.7,
-                     child: FittedBox(
-                       fit: BoxFit.scaleDown,
-                       child: SizedBox(
-                         child: widget.userInfo!["username"] == null
-                             ? SizedBox()
-                             : Text(
-                           widget.userInfo!["username"],
-                           style: TextStyle(
-                               fontSize: SizeConfig.screenWidth * 0.12,
-                               fontWeight: FontWeight.bold),
+                       child: FittedBox(
+                         fit: BoxFit.scaleDown,
+                         child: SizedBox(
+                           child: widget.userInfo!["username"] == null
+                               ? Container()
+                               : Text(
+                             widget.userInfo!["username"],
+                             style: TextStyle(
+                                 fontSize: SizeConfig.screenWidth * 0.12,
+                                 fontWeight: FontWeight.bold),
+                           ),
                          ),
                        ),
-                     ),
                    ),
                    // About section
                    SizedBox(
