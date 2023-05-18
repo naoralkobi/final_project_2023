@@ -92,7 +92,7 @@ class _ProfileDatePickerState extends State<ProfileDatePicker> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light(
-              primary: Color(0xFFA66CB7),
+              primary: Colors.blue,
             ),
           ),
           child: child == null ? SizedBox() : child,

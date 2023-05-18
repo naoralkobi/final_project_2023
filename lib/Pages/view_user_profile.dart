@@ -270,7 +270,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                         child: Row(children: [
                           Text(
                             // Display the birthdate of the user
-                            (userInfo.data!.data() as Map<String, dynamic>)["birthdate"],
+                            (userInfo.data!.data() as Map<String, dynamic>)["birthDate"],
                             style: TextStyle(
                                 fontSize: SizeConfig.screenWidth * 0.035),
                           ),

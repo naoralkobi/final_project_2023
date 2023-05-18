@@ -309,6 +309,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                                 }else{
                                   lvl = "Advanced";
                                 }
+                                //print("widget.userID = " + widget.userID + " widget.friendInfo[uid] = " +widget.friendInfo["UID"] + "widget.language = " + widget.language + "lvl = " +lvl);
                                 gameID = await FirebaseDB.Firebase_db
                                     .makeNewGame(
                                     widget.userID,
