@@ -73,15 +73,34 @@ class _WinnerPageState extends State<WinnerPage> {
           //if connecting show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting &&
               snapshot.data == null) return Center(child: SizedBox());
-          List questionsData = snapshot.data!.data()!["questions"];
-          if ((snapshot.data!.data()!["uid1"] as String) == widget.userInfo["UID"]) {
+          List questionsData = (snapshot.data!.data() as Map<dynamic, dynamic>)["questions"] as List<dynamic>;
+          if ((snapshot.data!.data() as Map<dynamic, dynamic>)["uid1"] == widget.userInfo["UID"]) {
             user1Info = widget.userInfo;
             user2Info = widget.opponentInfo;
           } else {
             user2Info = widget.userInfo;
             user1Info = widget.opponentInfo;
           }
-          int winner = getWinner(snapshot.data!.data()!);
+          int winner = getWinner(snapshot.data!.data() as Map<dynamic, dynamic>);
+
+          // List questionsData = (snapshot.data!.data()!["questions"] as List<dynamic>);
+          // if ((snapshot.data!.data()!["uid1"] as String) == widget.userInfo["UID"]) {
+          //   user1Info = widget.userInfo;
+          //   user2Info = widget.opponentInfo;
+          // } else {
+          //   user2Info = widget.userInfo;
+          //   user1Info = widget.opponentInfo;
+          // }
+          // int winner = getWinner(snapshot.data!.data()! as Map<dynamic, dynamic>);
+          // List questionsData = snapshot.data!.data()!["questions"];
+          // if ((snapshot.data!.data()!["uid1"] as String) == widget.userInfo["UID"]) {
+          //   user1Info = widget.userInfo;
+          //   user2Info = widget.opponentInfo;
+          // } else {
+          //   user2Info = widget.userInfo;
+          //   user1Info = widget.opponentInfo;
+          // }
+          // int winner = getWinner(snapshot.data!.data()!);
           return Scaffold(
             body: Column(children: [
               SizedBox(
