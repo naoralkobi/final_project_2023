@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:final_project_2023/Pages/select_lang_screen.dart';
 import 'package:final_project_2023/Pages/view_user_profile.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,10 +20,14 @@ import 'register_page.dart';
 import '../Widgets/chat_list.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
-
   Map userInfo = {};
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   bool pressed = false;
   var user = FirebaseAuth.instance.currentUser;
   final notImplementedSnackBar = SnackBar(
@@ -46,23 +51,64 @@ class MyHomePage extends StatelessWidget {
   StreamController<List<double>> blurController =
   StreamController<List<double>>();
 
-  //todo - need to add initState function, and download firebase messages to yaml.
+  @override
+  void initState() {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((token) {
+      final FirebaseFirestore db = FirebaseFirestore.instance;
+      return db.collection('tokens').where('token', isEqualTo: token)
+          .get().then((snapshot) async {
+        if (snapshot.docs.isEmpty) {
+          print("before adding to db");
+          return db
+              .collection('tokens')
+              .add({'token': token, 'UID': user!.uid})
+              .then((value) => null);
+        }
+      });
+    });
+    super.initState();
+    _filter.addListener(() {
+      if (_filter.text.isEmpty) {
+        setState(() {
+          _searchText = "";
+        });
+      } else {
+        setState(() {
+          _searchText = _filter.text;
+        });
+      }
+    });
+    getUserData();
+  }
 
   @override
+  // Widget build(BuildContext context) {
+  //   SizeConfig().init(context);
+  //   return StreamBuilder(
+  //   stream: FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(user!.uid)
+  //       .snapshots(),
+  //   builder: (BuildContext buildContext,
+  //   AsyncSnapshot<DocumentSnapshot> snapshot) {
+  //   if (snapshot.hasError) return Text("There has been an error");
+  //   //if connecting show progressIndicator
+  //   if (snapshot.connectionState == ConnectionState.waiting &&
+  //   snapshot.data == null)
+  //   return Center(child: SizedBox());
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-        .collection("users")
-        .doc(user!.uid)
-        .snapshots(),
-    builder: (BuildContext buildContext,
-    AsyncSnapshot<DocumentSnapshot> snapshot) {
-    if (snapshot.hasError) return Text("There has been an error");
-    //if connecting show progressIndicator
-    if (snapshot.connectionState == ConnectionState.waiting &&
-    snapshot.data == null)
-    return Center(child: SizedBox());
+            .collection("users")
+            .doc(user?.uid) // Use the null-aware operator here
+            .snapshots(),
+        builder: (BuildContext buildContext, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) return Text("There has been an error");
+          // If connecting, show progressIndicator
+          if (snapshot.connectionState == ConnectionState.waiting && snapshot.data == null)
+            return Center(child: SizedBox());
     else {
       if (!(snapshot.data!.data() as Map<String, dynamic>).containsKey('score')) {
     FirebaseFirestore.instance
@@ -426,6 +472,15 @@ class MyHomePage extends StatelessWidget {
     MaterialPageRoute(builder: (context) => ChooseLanguageSpeech()));
   }
 
+  void getUserData() async {
+    print("in user data");
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) => widget.userInfo = value.data()!);
+    setState(() {});
+  }
 
 
   void clearSearch() {
