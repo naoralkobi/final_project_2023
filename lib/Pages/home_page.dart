@@ -262,7 +262,7 @@ class _MyHomePageState extends State<MyHomePage> {
     icon: _searchIcon,
     iconSize: SizeConfig.blockSizeHorizontal * 7,
     onPressed: () {
-    //_searchPressed();
+    _searchPressed();
     },
     ),
     CustomPopupMenuButton<String>(
@@ -482,6 +482,35 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
+  void _searchPressed() {
+    setState(() {
+      if (!isSearching) {
+        this._searchIcon = new Icon(
+          Icons.close,
+          size: 30,
+          color: Colors.white,
+        );
+        this._appBarTitle = Theme(
+          data: Theme.of(context).copyWith(primaryColor: Colors.white),
+          child: new TextField(
+            controller: _filter,
+            decoration: new InputDecoration(
+                prefixIcon: new Icon(Icons.search), hintText: 'Search...'),
+            cursorColor: Colors.white,
+          ),
+        );
+        isSearching = true;
+      } else {
+        this._searchIcon = new Icon(
+          Icons.search,
+          color: Colors.white,
+          size: 30,
+        );
+        isSearching = false;
+        _filter.clear();
+      }
+    });
+  }
 
   void clearSearch() {
     _filter.text = "";
