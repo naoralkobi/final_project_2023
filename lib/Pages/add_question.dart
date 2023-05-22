@@ -1,11 +1,13 @@
 import 'package:final_project_2023/Pages/translate_the_word.dart';
 import 'package:final_project_2023/Pages/verb_conjugation.dart';
+import 'package:final_project_2023/Pages/whats_in_the_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
 import 'package:final_project_2023/firebase/auth_repository.dart';
 import 'package:final_project_2023/consts.dart';
 import '../screen_size_config.dart';
+import 'complete_the_sentence.dart';
 
 class AddQuestion extends StatefulWidget {
   @override
@@ -378,9 +380,21 @@ class AddQuestionState extends State<AddQuestion> {
   }
 
   void navigateToWhatsInThePicture(context) {
+    String? languageLevel = _getLanguageLevel();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                WhatsInThePicture(languageId, levelId, languageLevel)));
   }
 
   void navigateToCompleteTheSentence(context) {
+    String? languageLevel = _getLanguageLevel();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                CompleteTheSentence(languageId, levelId, languageLevel)));
   }
 
   void navigateToVerbConjugation(context) {

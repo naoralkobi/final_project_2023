@@ -91,7 +91,7 @@ class AuthRepository with ChangeNotifier {
     _status = Status.Unauthenticated;
     isNewStatus = IsNew.Uninitialized;
     notifyListeners();
-   //FirebaseDB.Firebase_db.removeUserToken(userID);
+    FirebaseDB.Firebase_db.removeUserToken(userID);
     return Future.delayed(Duration.zero);
   }
 
