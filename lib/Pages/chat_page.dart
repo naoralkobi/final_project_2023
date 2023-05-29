@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project_2023/Pages/videoCall.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
@@ -9,6 +10,8 @@ import 'package:final_project_2023/Pages/send_image.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/Widgets/custom_chat_bar.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
+import 'package:permission_handler/permission_handler.dart';
+import '../Widgets/CallingDialog.dart';
 import '../consts.dart';
 import 'questions_page.dart';
 import 'view_user_profile.dart';
@@ -20,6 +23,7 @@ class ChatPage extends StatefulWidget {
   final String language;
   final Map userInfo;
   bool isMyFriend = false;
+
   ChatPage(this.chatID, this.currentUserID, this.friendInfo, this.language,
       this.userInfo);
 
@@ -28,6 +32,11 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  StreamSubscription? callRequestSubscription;
+  StreamSubscription? callStatusSubscription;
+  StreamSubscription? missedCallSubscription;
+  BuildContext? dialogContext;
+
   final messageController = TextEditingController();
   StreamController<String> gameController = StreamController.broadcast();
   final picker = ImagePicker();
@@ -95,6 +104,7 @@ class _ChatPageState extends State<ChatPage> {
         break;
     }
     _listen();
+    listenForCallRequests();
   }
 
   void _listen() async {
@@ -370,6 +380,17 @@ class _ChatPageState extends State<ChatPage> {
                           SizedBox(
                             width: SizeConfig.blockSizeHorizontal * 2,
                           ),
+                          SizedBox(
+                            width: SizeConfig.blockSizeHorizontal * 4,
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.video_call),
+                            color: Colors.white,
+                            onPressed: () async {
+                              await _handleCameraAndMic();
+                              startCall();
+                            },
+                          ),
                           languageFlag,
                           SizedBox(
                             width: SizeConfig.blockSizeHorizontal * 4,
@@ -417,6 +438,9 @@ class _ChatPageState extends State<ChatPage> {
       streamSubscription!.cancel();
     }
     super.dispose();
+    callRequestSubscription?.cancel();
+    callStatusSubscription?.cancel();
+    missedCallSubscription?.cancel();
   }
 
   Future pickImage() async {
@@ -456,4 +480,220 @@ class _ChatPageState extends State<ChatPage> {
                   widget.chatID, gameID, widget.userInfo,widget.friendInfo, 1, userNumber,inviteID)
           ));
   }
+
+  Future<void> _handleCameraAndMic() async {
+    await [Permission.camera, Permission.microphone].request();
+  }
+
+  void listenForCallRequests() {
+    callRequestSubscription = FirebaseFirestore.instance
+        .collection('call_requests')
+        .where('calleeId', isEqualTo: widget.currentUserID)
+        .where('status', isEqualTo: 'pending')
+        .snapshots()
+        .listen((querySnapshot) {
+      querySnapshot.docChanges.forEach((change) {
+        if (change.type == DocumentChangeType.added) {
+          // Check if the status is still 'pending'
+          if (change.doc['status'] == 'pending') {
+            // A new call request has come in
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Incoming call'),
+                content: Text('Do you want to accept the call?'),
+                actions: [
+                  TextButton(
+                    child: Text('Accept'),
+                    onPressed: () {
+                      // Update the status of the call request to "accepted"
+                      change.doc.reference.update({'status': 'accepted'});
+                      // Close the dialog
+                      Navigator.of(context).pop();
+                      // Navigate to the VideoCallPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VideoCallPage(
+                            channelName: change.doc['channelName'],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  TextButton(
+                    child: Text('Reject'),
+                    onPressed: () {
+                      // Update the status of the call request to "rejected"
+                      change.doc.reference.update({'status': 'rejected'});
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
+        }
+      });
+    });
+    // Listen for missed calls
+    missedCallSubscription = FirebaseFirestore.instance
+        .collection('call_requests')
+        .where('calleeId', isEqualTo: widget.currentUserID)
+        .where('status', isEqualTo: 'missed')
+        .snapshots()
+        .listen((querySnapshot) {
+      querySnapshot.docChanges.forEach((change) {
+        if (change.type == DocumentChangeType.added) {
+          // A missed call has been detected
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Missed call'),
+              content: Text('You have a missed video call.'),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    // Update the status of the missed call to "notified" or delete the request
+                    // so that the user won't be notified about it again
+                    change.doc.reference.update({'status': 'notified'});
+                    // or you can delete it
+                    // change.doc.reference.delete();
+                  },
+                ),
+              ],
+            ),
+          );
+        }
+      });
+    });
+  }
+
+  void startCall() {
+    String channelId = widget.chatID; // Replace with actual channel id
+    // Create the call request
+    FirebaseFirestore.instance.collection('call_requests').add({
+      'callerId': widget.currentUserID,
+      'calleeId': widget.friendInfo['UID'],
+      'channelName': channelId,
+      'status': 'pending',
+    }).then((docRef) {
+      // Listen for changes in the call request status
+      callStatusSubscription = docRef.snapshots().listen((snapshot) {
+        String status = snapshot.data()?['status'];
+        if (status == 'accepted' || status == 'rejected' || status == 'missed') {
+          if (dialogContext != null) {
+            Navigator.pop(dialogContext!);
+          }
+          callStatusSubscription?.cancel();
+        }
+        // if (status == 'accepted') {
+        //   // The callee has accepted the call, navigate to the VideoCallPage
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => VideoCallPage(
+        //         channelName: channelId,
+        //       ),
+        //     ),
+        //   );
+        // }
+        //
+        if (status == 'accepted') {
+          // The callee has accepted the call, unsubscribe from call requests
+          callRequestSubscription?.cancel();
+          // Navigate to the VideoCallPage and wait for it to finish
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VideoCallPage(
+                channelName: channelId,
+              ),
+            ),
+          ).then((_) {
+            // After the VideoCallPage is done, resubscribe to call requests
+            listenForCallRequests();
+          });
+        }
+        else if (status == 'rejected') {
+          // The callee has rejected the call, handle the rejection
+        }
+      });
+
+      // Set a timeout for the call request
+      Future.delayed(Duration(seconds: 15), () {
+        docRef.get().then((snapshot) {
+          if (snapshot.data()?['status'] == 'pending') {
+            // The call request hasn't been accepted or rejected within the timeout period,
+            // so update it to 'missed'
+            docRef.update({'status': 'missed'});
+          }
+        });
+      });
+    });
+
+    // Show the calling dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        dialogContext = context;
+        return CallingDialog();
+      },
+    );
+  }
+
+// Call this function when the user tries to start a call
+  // void startCall() {
+  //   String channelId = widget.chatID;// Replace with actual channel id
+  //   // Create the call request
+  //   FirebaseFirestore.instance.collection('call_requests').add({
+  //     'callerId': widget.currentUserID,
+  //     'calleeId': widget.friendInfo['UID'],
+  //     'channelName': channelId,
+  //     'status': 'pending',
+  //   }).then((docRef) {
+  //     // Listen for changes in the call request status
+  //     callStatusSubscription = docRef.snapshots().listen((snapshot) {
+  //       if (snapshot.data()?['status'] == 'accepted') {
+  //         // The callee has accepted the call, navigate to the VideoCallPage
+  //         Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) => VideoCallPage(
+  //               channelName: channelId,
+  //             ),
+  //           ),
+  //         );
+  //       } else if (snapshot.data()?['status'] == 'rejected') {
+  //         // The callee has rejected the call, handle the rejection
+  //       }
+  //     });
+  //
+  //     // Set a timeout for the call request
+  //     Future.delayed(Duration(seconds: 15), () {
+  //       docRef.get().then((snapshot) {
+  //         if (snapshot.data()?['status'] == 'pending') {
+  //           // The call request hasn't been accepted or rejected within the timeout period,
+  //           // so update it to 'rejected'
+  //           docRef.update({'status': 'missed'});
+  //         }
+  //       });
+  //     });
+  //   });
+  //
+  //   // Show the calling dialog
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) {
+  //       return CallingDialog();
+  //     },
+  //   );
+  // }
+
+
+
 }
