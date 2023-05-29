@@ -14,6 +14,7 @@ import '../Widgets/start_chat.dart';
 import '../utils/colors.dart';
 import 'add_question.dart';
 import 'friends_list.dart';
+import 'google_translate.dart';
 import 'leader_board.dart';
 import 'login_page.dart';
 import 'register_page.dart';
@@ -265,46 +266,52 @@ class _MyHomePageState extends State<MyHomePage> {
     _searchPressed();
     },
     ),
-    CustomPopupMenuButton<String>(
-    onSelected: (value) => handleClick(value, context),
-    color: Colors.white,
-    shape: RoundedRectangleBorder(
-    side: BorderSide(color: Colors.grey, width: 1),
-    borderRadius: BorderRadius.circular(18.0)),
-    icon: Icon(
-    Icons.more_vert,
-    color: Colors.white,
-    ),
-    itemBuilder: (BuildContext context) {
-    return {'Logout', 'About'}.map((String choice) {
-    return PopupMenuItem<String>(
-    value: choice,
-    child: FittedBox(
-    child: Row(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment:
-    MainAxisAlignment.spaceEvenly,
-    children: [
-    Container(
-    child: Text(choice),
-    width:
-    SizeConfig.blockSizeHorizontal *
-    15,
-    ),
-    SizedBox(
-    width:
-    SizeConfig.blockSizeHorizontal *
-    2,
-    ),
-    Icon(choice == "Logout"
-    ? Icons.logout
-        : Icons.info_outline)
-    ]),
-    ),
-    );
-    }).toList();
-    },
-    ),
+      CustomPopupMenuButton<String>(
+        onSelected: (value) => handleClick(value, context),
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.grey, width: 1),
+            borderRadius: BorderRadius.circular(18.0)),
+        icon: Icon(
+          Icons.more_vert,
+          color: Colors.white,
+        ),
+        itemBuilder: (BuildContext context) {
+          return {'Logout', 'About', 'Translate'}.map((String choice) {
+            Icon icon = Icon(Icons.help); // default icon
+            switch (choice) {
+              case 'Logout':
+                icon = Icon(Icons.logout);
+                break;
+              case 'About':
+                icon = Icon(Icons.info_outline);
+                break;
+              case 'Translate':
+                icon = Icon(Icons.translate);
+                break;
+            }
+            return PopupMenuItem<String>(
+              value: choice,
+              child: FittedBox(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      child: Text(choice),
+                      width: SizeConfig.blockSizeHorizontal * 20,
+                    ),
+                    SizedBox(
+                      width: SizeConfig.blockSizeHorizontal * 2,
+                    ),
+                    icon,
+                  ],
+                ),
+              ),
+            );
+          }).toList();
+        },
+      ),
     ],
     ),
     ),
@@ -429,6 +436,12 @@ class _MyHomePageState extends State<MyHomePage> {
         );
 
 
+        break;
+        case 'Translate':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TranslationScreen()),
+        );
         break;
     case 'About':
       showAboutDialog(

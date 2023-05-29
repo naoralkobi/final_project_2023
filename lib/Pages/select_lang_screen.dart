@@ -20,6 +20,8 @@ class ChooseLanguageSpeechState extends State<ChooseLanguageSpeech> {
   bool isLoadingChat = false;
   String? languageId;
   List<String> languagesList = [];
+  Map<String, String> languageToLevel = {};
+
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class ChooseLanguageSpeechState extends State<ChooseLanguageSpeech> {
         setState(() {
           languages.forEach((key, value) {
             languagesList.add(key);
+            languageToLevel[key] = value;
           });
         });
     });
@@ -145,11 +148,13 @@ class ChooseLanguageSpeechState extends State<ChooseLanguageSpeech> {
   }
 
   void navigateToSpeechReco(context, String language) {
+    String? languageLevel = languageToLevel[language]?.toLowerCase();
+    String langAndLevel = "$language-$languageLevel";
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => SpeechRecognitionScreen(
-              selectedLanguage: language,
+              selectedLanguage: langAndLevel,
             )));
   }
 }

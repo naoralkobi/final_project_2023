@@ -21,25 +21,49 @@ class SpeechRecognitionScreen extends StatefulWidget {
 class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
   stt.SpeechToText? _speech;
   String _recognizedText = '';
-  List<String> wordsList = [];
-  late String randomWord;
+  List<Map<String, String>> wordsList = [];
+  late String randomWord = '';
+  late String translation = '';
   var isListening = false;
+  List<String> parts = [];
+  late String language;
+  late String languageLevel;
+
+  // Mapping of language to locale
+  Map<String, String> languageToLocale = {
+    "English": "en_US",
+    "Arabic": "ar_SA",
+    "French": "fr_FR",
+    "German": "de_DE",
+    "Hebrew": "he_IL"
+  };
 
   @override
   @override
   void initState() {
     super.initState();
-
+    print("selected - " + widget.selectedLanguage);
+    parts = widget.selectedLanguage.split("-");
+    language = parts[0];
+    languageLevel = parts[1];
     FirebaseFirestore.instance
         .collection('speech_to_text')
         .doc(widget.selectedLanguage)
         .get()
         .then((value) {
-      Map words = value.data()!['words'];
+      List<dynamic> wordsData = List<dynamic>.from(value.data()!['words']);
+      print("wordsData");
+      print(wordsData.toString());
+      List<Map<String, String>> words = wordsData
+          .map((word) => Map<String, String>.from(word as Map<dynamic, dynamic>))
+          .toList();
+      print("words:");
+      print(words.toString());
       setState(() {
-        words.forEach((key, value) {
-          wordsList.add(value);
-        });
+        //wordsList = words.map((word) => word.keys.first).toList();
+        wordsList = words;
+        print("wordlist:");
+        print(wordsList.toString());
         randomWord = _generateRandomWord();
       });
     });
@@ -48,28 +72,83 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
 
   String _generateRandomWord() {
     final _random = Random();
-    return wordsList[_random.nextInt(wordsList.length)];
+    int randomIndex = _random.nextInt(wordsList.length);
+    MapEntry<String, String> randomEntry =
+    wordsList[randomIndex].entries.toList()[_random.nextInt(wordsList[randomIndex].length)];
+    setState(() {
+      randomWord = randomEntry.key;
+      translation = randomEntry.value;
+    });
+    return randomWord;
   }
 
-  Future<void> _updateRandomWord() async{
+
+  Future<void> _updateRandomWord() async {
     final _random = Random();
     String currentWord = randomWord;
     while (currentWord == randomWord) {
-      randomWord = wordsList[_random.nextInt(wordsList.length)];
+      int randomIndex = _random.nextInt(wordsList.length);
+      MapEntry<String, String> randomEntry =
+      wordsList[randomIndex].entries.toList()[_random.nextInt(wordsList[randomIndex].length)];
+      randomWord = randomEntry.key;
+      translation = randomEntry.value;
     }
     setState(() {});
     return await Future.delayed(Duration(seconds: 1));
   }
 
+
+  //
+  // Future<void> _updateRandomWord() async{
+  //   final _random = Random();
+  //   String currentWord = randomWord;
+  //   while (currentWord == randomWord) {
+  //     randomWord = wordsList[_random.nextInt(wordsList.length)];
+  //   }
+  //   setState(() {});
+  //   return await Future.delayed(Duration(seconds: 1));
+  // }
+  //
+  // Future<void> _initializeSpeechRecognition() async {
+  //   _speech = stt.SpeechToText();
+  //   bool isAvailable = await _speech!.initialize();
+  //   if (isAvailable) {
+  //     _speech!.errorListener = (error) {
+  //       print('Speech recognition error: ${error.errorMsg}');
+  //     };
+  //     setState(() {
+  //       _speech!.listen(
+  //         onResult: (result) {
+  //           setState(() {
+  //             _recognizedText = result.recognizedWords;
+  //           });
+  //         },
+  //       );
+  //     });
+  //   } else {
+  //     print('Speech recognition is not available on this device.');
+  //   }
+  // }
+
+  /// second try:
   Future<void> _initializeSpeechRecognition() async {
     _speech = stt.SpeechToText();
-    bool isAvailable = await _speech!.initialize();
+    bool isAvailable = await _speech!.initialize(
+        onError: (val) => print('onError: $val'),
+        onStatus: (val) => print('onStatus: $val'),
+        debugLogging: true,
+        finalTimeout: Duration(seconds: 1),
+        // options: stt.SpeechToTextOptions(
+        //     localeId: languageToLocale[widget.selectedLanguage] // using the localeId here
+        //)
+    );
     if (isAvailable) {
       _speech!.errorListener = (error) {
         print('Speech recognition error: ${error.errorMsg}');
       };
       setState(() {
         _speech!.listen(
+          localeId: languageToLocale[widget.selectedLanguage],
           onResult: (result) {
             setState(() {
               _recognizedText = result.recognizedWords;
@@ -81,6 +160,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
       print('Speech recognition is not available on this device.');
     }
   }
+
 
   void _startListening() async {
     if (_speech!.isListening) return;
@@ -115,78 +195,15 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
     print('Sending audio for analysis: $recordedAudio');
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   randomWord = _generateRandomWord();
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('Speech Recognition'),
-  //     ),
-  //     body: Center(
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           Text(
-  //             '${widget.selectedLanguage}: $_recognizedText',
-  //             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  //           ),
-  //           SizedBox(height: 10),
-  //           Text(
-  //             // Get a random word from the list
-  //             randomWord,
-  //             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  //           ),
-  //           SizedBox(height: 10),
-  //           // Expanded(
-  //           //   child: ListView.builder(
-  //           //     itemCount: wordsList.length,
-  //           //     itemBuilder: (context, index) {
-  //           //       return Padding(
-  //           //         padding: const EdgeInsets.all(8.0),
-  //           //         child: Text(
-  //           //           wordsList[index],
-  //           //           style: TextStyle(
-  //           //             fontSize: 16,
-  //           //           ),
-  //           //         ),
-  //           //       );
-  //           //     },
-  //           //   ),
-  //           // ),
-  //           Text(
-  //             _recognizedText,
-  //             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  //           ),
-  //           SizedBox(height: 20),
-  //           ElevatedButton(
-  //             onPressed: _startListening,
-  //             child: Text('Start Listening'),
-  //           ),
-  //           ElevatedButton(
-  //             onPressed: _stopListening,
-  //             child: Text('Stop Listening'),
-  //           ),
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               setState(() {
-  //                 _updateRandomWord();
-  //               });
-  //             },
-  //             child: Icon(Icons.refresh),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-  Color bgColor= Color(0xff00A67E);
+  Color bgColor = Color(0xff00A67E);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: AvatarGlow(
-          endRadius: 75.0,
-          animate: isListening,
+        endRadius: 75.0,
+        animate: isListening,
         duration: Duration(milliseconds: 2000),
         glowColor: Color(0xff00A67E),
         repeat: true,
@@ -205,90 +222,507 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
             });
             _stopListening();
           },
-          child:  CircleAvatar(
-          backgroundColor: Color(0xff00A67E),
-          radius: 35,
-          child: Icon(Icons.mic, color: Colors.white),
+          child: CircleAvatar(
+            backgroundColor: Color(0xff00A67E),
+            radius: 35,
+            child: Icon(Icons.mic, color: Colors.white),
+          ),
         ),
-        )
       ),
-      backgroundColor: Colors.grey[200], // Set background color
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text('Speech Recognition'),
-        centerTitle: true, // Center app bar title
-        backgroundColor: Colors.blue, // Set app bar background color
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
-      body: LiquidPullToRefresh(
-        onRefresh: _updateRandomWord,
-        animSpeedFactor: 2,
-        height: 100,
-        child: ListView(
-          children: [
-            Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Container(
-                    color: Colors.blue,
-                    height: 300,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(16.0), // Add some padding
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Pull to Refresh',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          Expanded(
+            child: LiquidPullToRefresh(
+              onRefresh: _updateRandomWord,
+              animSpeedFactor: 4,
+              height: 100,
+              child: ListView(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(8.0),
+                    color: Colors.grey[300],
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 20),
                         Text(
-                          '${widget.selectedLanguage}: $_recognizedText',
+                          'Language - ${language}',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
+                          textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 4),
                         Text(
-                          randomWord,
+                          'Level - ${languageLevel}',
                           style: TextStyle(
-                            fontSize: 30,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
+                          textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 20),
-                        Expanded(
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 4),
                         Text(
-                          _recognizedText,
+                          'Press and hold the record button and say the text:',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                          ],
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        color: Colors.blue,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 20),
+                            Text(
+                              '$_recognizedText',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              randomWord,
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              height: null,
+                              child: ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                  );
+                                },
+                                itemCount: 1,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              _recognizedText,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Translation:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          translation,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-    ),
+          ),
+        ],
+      ),
     );
   }
+
+
+  // Color bgColor = Color(0xff00A67E);
+  //
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+  //     floatingActionButton: AvatarGlow(
+  //       endRadius: 75.0,
+  //       animate: isListening,
+  //       duration: Duration(milliseconds: 2000),
+  //       glowColor: Color(0xff00A67E),
+  //       repeat: true,
+  //       repeatPauseDuration: Duration(milliseconds: 100),
+  //       showTwoGlows: true,
+  //       child: GestureDetector(
+  //         onTapDown: (details) {
+  //           setState(() {
+  //             isListening = true;
+  //           });
+  //           _startListening();
+  //         },
+  //         onTapUp: (details) {
+  //           setState(() {
+  //             isListening = false;
+  //           });
+  //           _stopListening();
+  //         },
+  //         child: CircleAvatar(
+  //           backgroundColor: Color(0xff00A67E),
+  //           radius: 35,
+  //           child: Icon(Icons.mic, color: Colors.white),
+  //         ),
+  //       ),
+  //     ),
+  //     backgroundColor: Colors.grey[200],
+  //     appBar: AppBar(
+  //       title: Text('Speech Recognition'),
+  //       centerTitle: true,
+  //       backgroundColor: Colors.blue,
+  //     ),
+  //     body: Column(
+  //       children: [
+  //         SizedBox(height: 10), // Add some space here
+  //         Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Text(
+  //             'Pull to Refresh',
+  //             style: TextStyle(
+  //               fontSize: 14,
+  //               color: Colors.grey,
+  //             ),
+  //           ),
+  //         ),
+  //         Container(
+  //           padding: EdgeInsets.all(8.0),
+  //           color: Colors.grey[300],
+  //           child: Column(
+  //             children: [
+  //               Text(
+  //                 'Language - ${language}',
+  //                 style: TextStyle(
+  //                   fontSize: 16,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.black87,
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //               SizedBox(height: 4),
+  //               Text(
+  //                 'Level - ${languageLevel}',
+  //                 style: TextStyle(
+  //                   fontSize: 16,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.black87,
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //               SizedBox(height: 4),
+  //               Text(
+  //                 'Press and hold the record button and say the text:',
+  //                 style: TextStyle(
+  //                   fontSize: 16,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.black87,
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         Expanded(
+  //           child: ListView(
+  //             children: [
+  //               Padding(
+  //                 padding: const EdgeInsets.all(25.0),
+  //                 child: ClipRRect(
+  //                   borderRadius: BorderRadius.circular(15),
+  //                   child: Container(
+  //                     color: Colors.blue,
+  //                     alignment: Alignment.center,
+  //                     padding: const EdgeInsets.all(16.0),
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.center,
+  //                       children: [
+  //                         SizedBox(height: 20),
+  //                         Text(
+  //                           '$_recognizedText',
+  //                           style: TextStyle(
+  //                             fontSize: 24,
+  //                             fontWeight: FontWeight.bold,
+  //                             color: Colors.black87,
+  //                           ),
+  //                         ),
+  //                         SizedBox(height: 20),
+  //                         Text(
+  //                           randomWord,
+  //                           style: TextStyle(
+  //                             fontSize: 30,
+  //                             fontWeight: FontWeight.bold,
+  //                             color: Colors.black87,
+  //                           ),
+  //                         ),
+  //                         SizedBox(height: 20),
+  //                         Container(
+  //                           height: null,
+  //                           child: ListView.builder(
+  //                             physics: NeverScrollableScrollPhysics(),
+  //                             shrinkWrap: true,
+  //                             itemBuilder: (context, index) {
+  //                               return Padding(
+  //                                 padding: const EdgeInsets.all(8.0),
+  //                               );
+  //                             },
+  //                             itemCount: 1,
+  //                           ),
+  //                         ),
+  //                         SizedBox(height: 20),
+  //                         Text(
+  //                           _recognizedText,
+  //                           style: TextStyle(
+  //                             fontSize: 24,
+  //                             fontWeight: FontWeight.bold,
+  //                             color: Colors.black87,
+  //                           ),
+  //                         ),
+  //                         SizedBox(height: 20),
+  //                         Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                           children: [],
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               SizedBox(height: 20),
+  //               Container(
+  //                 margin: EdgeInsets.symmetric(horizontal: 20),
+  //                 child: Column(
+  //                   children: [
+  //                     Text(
+  //                       'Translation:',
+  //                       style: TextStyle(
+  //                         fontSize: 18,
+  //                         fontWeight: FontWeight.bold,
+  //                         color: Colors.black87,
+  //                       ),
+  //                       textAlign: TextAlign.center,
+  //                     ),
+  //                     SizedBox(height: 8),
+  //                     Text(
+  //                       translation,
+  //                       style: TextStyle(
+  //                         fontSize: 18,
+  //                         fontWeight: FontWeight.bold,
+  //                         color: Colors.black87,
+  //                       ),
+  //                       textAlign: TextAlign.center,
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+
+
+  //////*************************************************
+
+  // Color bgColor= Color(0xff00A67E);
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+  //     floatingActionButton: AvatarGlow(
+  //         endRadius: 75.0,
+  //         animate: isListening,
+  //         duration: Duration(milliseconds: 2000),
+  //         glowColor: Color(0xff00A67E),
+  //         repeat: true,
+  //         repeatPauseDuration: Duration(milliseconds: 100),
+  //         showTwoGlows: true,
+  //         child: GestureDetector(
+  //           onTapDown: (details) {
+  //             setState(() {
+  //               isListening = true;
+  //             });
+  //             _startListening();
+  //           },
+  //           onTapUp: (details) {
+  //             setState(() {
+  //               isListening = false;
+  //             });
+  //             _stopListening();
+  //           },
+  //           child:  CircleAvatar(
+  //             backgroundColor: Color(0xff00A67E),
+  //             radius: 35,
+  //             child: Icon(Icons.mic, color: Colors.white),
+  //           ),
+  //         )
+  //     ),
+  //     backgroundColor: Colors.grey[200], // Set background color
+  //     appBar: AppBar(
+  //       title: Text('Speech Recognition'),
+  //       centerTitle: true, // Center app bar title
+  //       backgroundColor: Colors.blue, // Set app bar background color
+  //     ),
+  //     body: LiquidPullToRefresh(
+  //       onRefresh: _updateRandomWord,
+  //       animSpeedFactor: 2,
+  //       height: 100,
+  //       child:
+  //       ListView(
+  //         children: [
+  //           Padding(
+  //             padding: const EdgeInsets.all(25.0),
+  //             child: ClipRRect(
+  //               borderRadius: BorderRadius.circular(15),
+  //               child: Container(
+  //                 color: Colors.blue,
+  //                 height: 300,
+  //                 alignment: Alignment.center,
+  //                 padding: const EdgeInsets.all(16.0), // Add some padding
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.center,
+  //                   children: [
+  //                     SizedBox(height: 20),
+  //                     Text(
+  //                       '${widget.selectedLanguage}: $_recognizedText',
+  //                       style: TextStyle(
+  //                         fontSize: 24,
+  //                         fontWeight: FontWeight.bold,
+  //                         color: Colors.black87,
+  //                       ),
+  //                     ),
+  //                     SizedBox(height: 20),
+  //                     Text(
+  //                       randomWord,
+  //                       style: TextStyle(
+  //                         fontSize: 30,
+  //                         fontWeight: FontWeight.bold,
+  //                         color: Colors.black87,
+  //                       ),
+  //                     ),
+  //                     SizedBox(height: 20),
+  //                     Expanded(
+  //                       child: ListView.builder(
+  //                         itemBuilder: (context, index) {
+  //                           return Padding(
+  //                             padding: const EdgeInsets.all(8.0),
+  //                           );
+  //                         },
+  //                       ),
+  //                     ),
+  //                     SizedBox(height: 20),
+  //                     Text(
+  //                       _recognizedText,
+  //                       style: TextStyle(
+  //                         fontSize: 24,
+  //                         fontWeight: FontWeight.bold,
+  //                         color: Colors.black87,
+  //                       ),
+  //                     ),
+  //                     SizedBox(height: 20),
+  //                     Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                       children: [
+  //                       ],
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(height: 20),
+  //           Container(
+  //             margin: EdgeInsets.symmetric(horizontal: 20),
+  //             child: Column(
+  //               children: [
+  //                 Text(
+  //                   'Translation:',
+  //                   style: TextStyle(
+  //                     fontSize: 18,
+  //                     fontWeight: FontWeight.bold,
+  //                     color: Colors.black87,
+  //                   ),
+  //                   textAlign: TextAlign.center,
+  //                 ),
+  //                 SizedBox(height: 8),
+  //                 Text(
+  //                   translation,
+  //                   style: TextStyle(
+  //                     fontSize: 18,
+  //                     fontWeight: FontWeight.bold,
+  //                     color: Colors.black87,
+  //                   ),
+  //                   textAlign: TextAlign.center,
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //
+  //   );
+  // }
 
   void  analyzeAndScoreSpeech(String recognizedText) {
     // Perform analysis on the recognized text
@@ -300,17 +734,16 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
     // Display the score and suggestions for improvement
 
     // scoring and feedback:
-    double hammingDistance = calculateHammingDistance(recognizedText, randomWord);
-    // double accuracyScore = calculateAccuracyScore(recognizedText);
-    // double fluencyScore = calculateFluencyScore(recognizedText);
-    // double pronunciationScore = calculatePronunciationScore(recognizedText);
-    // double intonationScore = calculateIntonationScore(recognizedText);
-    //
-    // double overallScore = (accuracyScore + fluencyScore + pronunciationScore + intonationScore) / 4;
+     double hammingDistance = calculateHammingDistance(recognizedText, randomWord);
+     double accuracyScore = calculateAccuracyScore(recognizedText);
+     double fluencyScore = calculateFluencyScore(recognizedText);
+     double pronunciationScore = calculatePronunciationScore(recognizedText);
+     double intonationScore = calculateIntonationScore(recognizedText);
+     double overallScore = (accuracyScore + fluencyScore + pronunciationScore + intonationScore + hammingDistance) / 5;
 
-    String feedback = generateFeedback(hammingDistance);
+    String feedback = generateFeedback(overallScore);
 
-    _showScore(hammingDistance,feedback);
+    _showScore(overallScore,feedback);
 
     print('Score: $hammingDistance');
     print('Feedback: $feedback');
@@ -355,7 +788,6 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
   }
 
   double calculateFluencyScore(String recognizedText) {
-    // Implement your logic to calculate fluency score
     // Example: analyze the flow and coherence of the recognized text and calculate a score
 
     // Calculate the average word length in the recognized text
@@ -392,9 +824,6 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
   }
 
   double calculateIntonationScore(String recognizedText) {
-    // Implement your logic to calculate intonation score
-    // Example: analyze the pitch and melody of the recognized text and calculate a score
-
     // Calculate the average length of recognized phrases/sentences
     List<String> recognizedSentences = recognizedText.split('.'); // Assuming sentences end with a period
     double averageSentenceLength = recognizedSentences.fold(0, (sum, sentence) => sum + sentence.length) / recognizedSentences.length;
@@ -404,6 +833,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
 
     return intonationScore;
   }
+
 
 
   String generateFeedback(double overallScore) {
