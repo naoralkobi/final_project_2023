@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project_2023/Pages/winner_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,17 +81,18 @@ class _QuestionsPageState extends State<QuestionsPage>
             .collection("games")
             .doc(widget.gameId)
             .snapshots(),
-        builder: (BuildContext buildContext,
-            AsyncSnapshot<DocumentSnapshot> snapshot) {
+        builder: (BuildContext buildContext, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) return Text("There has been an error");
-          //if connecting show progressIndicator
-          if (snapshot.connectionState == ConnectionState.waiting &&
-              snapshot.data == null) return Center(child: SizedBox());
-          Map? questionData =
-          getQuestionByNum(snapshot.data!.data()! as Map<dynamic, dynamic>, widget.questionNumber);
+
+          if (snapshot.connectionState == ConnectionState.waiting && snapshot.data == null)
+            return Center(child: CircularProgressIndicator());
+
+          Map? questionData = getQuestionByNum(snapshot.data!.data()! as Map<dynamic, dynamic>, widget.questionNumber);
+
           if (answers == null) {
             answers = questionData!["answers"];
           }
+
           if (firstShuffle!) {
             answers = shuffle(answers!);
             firstShuffle = false;
@@ -109,16 +111,11 @@ class _QuestionsPageState extends State<QuestionsPage>
                 automaticallyImplyLeading: false,
                 flexibleSpace: SafeArea(
                   child: Container(
-                    padding: EdgeInsets.only(
-                        right: SizeConfig.blockSizeVertical * 4),
+                    padding: EdgeInsets.only(right: SizeConfig.blockSizeVertical * 4),
                     child: Row(
                       children: <Widget>[
-                        SizedBox(
-                          width: SizeConfig.blockSizeVertical * 0.1,
-                        ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeVertical * 2,
-                        ),
+                        SizedBox(width: SizeConfig.blockSizeVertical * 0.1),
+                        SizedBox(width: SizeConfig.blockSizeVertical * 2),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,14 +124,11 @@ class _QuestionsPageState extends State<QuestionsPage>
                               Text(
                                 "Question " + widget.questionNumber.toString(),
                                 style: TextStyle(
-                                    fontSize:
-                                    SizeConfig.blockSizeVertical * 4.5,
+                                    fontSize: SizeConfig.blockSizeVertical * 4.5,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white),
                               ),
-                              SizedBox(
-                                height: 3,
-                              ),
+                              SizedBox(height: 3),
                             ],
                           ),
                         ),
@@ -146,160 +140,369 @@ class _QuestionsPageState extends State<QuestionsPage>
             ),
             body: Column(
               children: [
-                SizedBox(
-                  height: SizeConfig.blockSizeVertical * 4,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Stack(
-                      children: [
-                        Opacity(
-                            opacity: 0.2,
-                            child: Icon(
-                              Icons.timer_rounded,
-                              size: SizeConfig.blockSizeVertical * 11,
-                            )),
-                        Positioned(
-                          bottom: SizeConfig.blockSizeVertical * 2.5,
-                          right: _start > 9
-                              ? SizeConfig.blockSizeHorizontal * 5.5
-                              : SizeConfig.blockSizeHorizontal * 8.3,
-                          child: Text(
-                            _start.toString(),
-                            style: TextStyle(
-                                fontSize: SizeConfig.blockSizeVertical * 4.7,
-                                fontWeight: FontWeight.bold,
-                                color: _start > 5
-                                    ? Colors.black
-                                    : Colors.red[500]),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: SizeConfig.blockSizeVertical * 2),
-                      child: Container(
-                          height: SizeConfig.blockSizeVertical * 6.5,
-                          width: SizeConfig.blockSizeVertical * 18.5,
-                          // padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14.0),
-                            color: Colors.white,
-                            border: Border.all(
-                                color: Colors.grey,
-                                style: BorderStyle.solid,
-                                width: 0.80),
-                          ),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                CircleAvatar(
-                                    backgroundColor: Colors.grey,
-                                    radius: SizeConfig.blockSizeVertical * 2.1,
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: SizeConfig.blockSizeVertical * 2,
-                                      backgroundImage: NetworkImage(
-                                          widget.opponentInfo["URL"]),
-                                    )),
-                                Center(
-                                  child: questionData[opponentAnswer] == ""
-                                      ? Text(
-                                    "Thinking...",
-                                    style: TextStyle(
-                                        color: Colors.grey[700]),
-                                  )
-                                      : Text("Answered!",
-                                      style: TextStyle(
-                                          color: Colors.grey[700])),
-                                )
-                              ])),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: SizeConfig.blockSizeVertical * 4,
-                ),
+                SizedBox(height: SizeConfig.blockSizeVertical * 4),
                 Container(
-                  width: SizeConfig.screenWidth * 0.7,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: SizedBox(
-                      child: Text(
-                        questionData["type"] + ":",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 4,
-                            fontWeight: FontWeight.bold),
+                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.blockSizeVertical * 2),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${_start} sec",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.blockSizeVertical * 3),
+                          ),
+                        ],
                       ),
-                    ),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: LinearProgressIndicator(
+                          value: (_start) / 10,
+                          backgroundColor: Colors.grey,
+                          valueColor: AlwaysStoppedAnimation<Color>(_start > 5 ? Colors.yellow : Colors.red),
+                          minHeight: 20.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: SizeConfig.blockSizeVertical * 2,
+                SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                Container(
+                  child: questionData[opponentAnswer] == ""
+                      ? Center(
+                    child: Text(
+                      "Your enemy is still Thinking...",
+                      style: TextStyle(color: Colors.grey[700]),
+                    ),
+                  )
+                      : Center(
+                    child: Text("Your enemy Answered!", style: TextStyle(color: Colors.grey[700])),
+                  ),
                 ),
-                getBodyWidget(
-                    questionData["type"], questionData["questionBody"]),
-                SizedBox(
-                  height: SizeConfig.blockSizeVertical * 1,
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: answers!.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          SizeConfig.screenWidth * 0.1,
-                          SizeConfig.blockSizeVertical * 3,
-                          SizeConfig.screenWidth * 0.1,
-                          0),
-                      child: Container(
-                          height: SizeConfig.blockSizeVertical * 7,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14.0),
-                            color: chooseColor(index),
-                            border: Border.all(
-                                color: Colors.grey,
-                                style: BorderStyle.solid,
-                                width: 0.80),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 0.5,
-                                blurRadius: 2,
-                                offset:
-                                Offset(0, 4), // changes position of shadow
-                              ),
-                            ],
+                SizedBox(height: SizeConfig.blockSizeVertical * 4),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[200],
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                        color: Colors.grey[400]!,
+                        style: BorderStyle.solid,
+                        width: 1.0
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: SizeConfig.screenWidth * 0.7,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: SizedBox(
+                            child: Text(
+                              questionData["type"] + ":",
+                              style: TextStyle(
+                                  fontSize: SizeConfig.blockSizeVertical * 4,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          child: RadioListTile(
-                              value: index,
-                              title: Text(
-                                answers![index],
-                                style: TextStyle(
-                                    fontSize:
-                                    SizeConfig.blockSizeVertical * 2.5),
-                              ),
-                              activeColor: Colors.black,
-                              groupValue: groupValue,
-                              onChanged: (int? val) {
-                                if (mounted)
-                                  setState(() {
-                                    groupValue = val!;
-                                    updateFirebase(
-                                        snapshot.data!.data()! as Map<dynamic, dynamic>, answers![val]);
+                        ),
+                      ),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                      getBodyWidget(questionData["type"], questionData["questionBody"]),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: answers!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.fromLTRB(
+                                SizeConfig.screenWidth * 0.1,
+                                SizeConfig.blockSizeVertical * 3,
+                                SizeConfig.screenWidth * 0.1,
+                                0),
+                            child: Container(
+                                height: SizeConfig.blockSizeVertical * 7,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14.0),
+                                  color: chooseColor(index),
+                                  border: Border.all(
+                                      color: Colors.grey,
+                                      style: BorderStyle.solid,
+                                      width: 0.80),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 0.5,
+                                      blurRadius: 2,
+                                      offset:
+                                      Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: RadioListTile(
+                                    value: index,
+                                    title: Text(
+                                      answers![index],
+                                      style: TextStyle(
+                                          fontSize:
+                                          SizeConfig.blockSizeVertical * 2.5),
+                                    ),
+                                    activeColor: Colors.black,
+                                    groupValue: groupValue,
+                                    onChanged: (int? val) {
+                                      if (mounted)
+                                        setState(() {
+                                          groupValue = val!;
+                                          updateFirebase(
+                                              snapshot.data!.data()! as Map<dynamic, dynamic>, answers![val]);
 
-                                  });
-                              })),
-                    );
-                  },
-                )
+                                        });
+                                    })),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           );
         });
   }
+
+  /// original build!
+  // @override
+  // Widget build(BuildContext context) {
+  //   SizeConfig().init(context);
+  //   return StreamBuilder(
+  //       stream: FirebaseFirestore.instance
+  //           .collection("games")
+  //           .doc(widget.gameId)
+  //           .snapshots(),
+  //       builder: (BuildContext buildContext,
+  //           AsyncSnapshot<DocumentSnapshot> snapshot) {
+  //         if (snapshot.hasError) return Text("There has been an error");
+  //         //if connecting show progressIndicator
+  //         if (snapshot.connectionState == ConnectionState.waiting &&
+  //             snapshot.data == null) return Center(child: SizedBox());
+  //         Map? questionData =
+  //         getQuestionByNum(snapshot.data!.data()! as Map<dynamic, dynamic>, widget.questionNumber);
+  //         if (answers == null) {
+  //           answers = questionData!["answers"];
+  //         }
+  //         if (firstShuffle!) {
+  //           answers = shuffle(answers!);
+  //           firstShuffle = false;
+  //         }
+  //         correctAnswer = questionData!["correctAnswer"];
+  //
+  //         return Scaffold(
+  //           appBar: PreferredSize(
+  //             preferredSize: Size.fromHeight(70),
+  //             child: AppBar(
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.vertical(
+  //                   bottom: Radius.circular(18.0),
+  //                 ),
+  //               ),
+  //               automaticallyImplyLeading: false,
+  //               flexibleSpace: SafeArea(
+  //                 child: Container(
+  //                   padding: EdgeInsets.only(
+  //                       right: SizeConfig.blockSizeVertical * 4),
+  //                   child: Row(
+  //                     children: <Widget>[
+  //                       SizedBox(
+  //                         width: SizeConfig.blockSizeVertical * 0.1,
+  //                       ),
+  //                       SizedBox(
+  //                         width: SizeConfig.blockSizeVertical * 2,
+  //                       ),
+  //                       Expanded(
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.center,
+  //                           mainAxisAlignment: MainAxisAlignment.center,
+  //                           children: <Widget>[
+  //                             Text(
+  //                               "Question " + widget.questionNumber.toString(),
+  //                               style: TextStyle(
+  //                                   fontSize:
+  //                                   SizeConfig.blockSizeVertical * 4.5,
+  //                                   fontWeight: FontWeight.w600,
+  //                                   color: Colors.white),
+  //                             ),
+  //                             SizedBox(
+  //                               height: 3,
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           body: Column(
+  //             children: [
+  //               SizedBox(
+  //                 height: SizeConfig.blockSizeVertical * 4,
+  //               ),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                 children: [
+  //                   Stack(
+  //                     children: [
+  //                       Opacity(
+  //                           opacity: 0.2,
+  //                           child: Icon(
+  //                             Icons.timer_rounded,
+  //                             size: SizeConfig.blockSizeVertical * 11,
+  //                           )),
+  //                       Positioned(
+  //                         bottom: SizeConfig.blockSizeVertical * 2.5,
+  //                         right: _start > 9
+  //                             ? SizeConfig.blockSizeHorizontal * 5.5
+  //                             : SizeConfig.blockSizeHorizontal * 8.3,
+  //                         child: Text(
+  //                           _start.toString(),
+  //                           style: TextStyle(
+  //                               fontSize: SizeConfig.blockSizeVertical * 4.7,
+  //                               fontWeight: FontWeight.bold,
+  //                               color: _start > 5
+  //                                   ? Colors.black
+  //                                   : Colors.red[500]),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   Padding(
+  //                     padding: EdgeInsets.only(
+  //                         top: SizeConfig.blockSizeVertical * 2),
+  //                     child: Container(
+  //                         height: SizeConfig.blockSizeVertical * 6.5,
+  //                         width: SizeConfig.blockSizeVertical * 18.5,
+  //                         // padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+  //                         decoration: BoxDecoration(
+  //                           borderRadius: BorderRadius.circular(14.0),
+  //                           color: Colors.white,
+  //                           border: Border.all(
+  //                               color: Colors.grey,
+  //                               style: BorderStyle.solid,
+  //                               width: 0.80),
+  //                         ),
+  //                         child: Row(
+  //                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                             children: [
+  //                               CircleAvatar(
+  //                                   backgroundColor: Colors.grey,
+  //                                   radius: SizeConfig.blockSizeVertical * 2.1,
+  //                                   child: CircleAvatar(
+  //                                     backgroundColor: Colors.white,
+  //                                     radius: SizeConfig.blockSizeVertical * 2,
+  //                                     backgroundImage: NetworkImage(
+  //                                         widget.opponentInfo["URL"]),
+  //                                   )),
+  //                               Center(
+  //                                 child: questionData[opponentAnswer] == ""
+  //                                     ? Text(
+  //                                   "Thinking...",
+  //                                   style: TextStyle(
+  //                                       color: Colors.grey[700]),
+  //                                 )
+  //                                     : Text("Answered!",
+  //                                     style: TextStyle(
+  //                                         color: Colors.grey[700])),
+  //                               )
+  //                             ])),
+  //                   )
+  //                 ],
+  //               ),
+  //               SizedBox(
+  //                 height: SizeConfig.blockSizeVertical * 4,
+  //               ),
+  //               Container(
+  //                 width: SizeConfig.screenWidth * 0.7,
+  //                 child: FittedBox(
+  //                   fit: BoxFit.scaleDown,
+  //                   child: SizedBox(
+  //                     child: Text(
+  //                       questionData["type"] + ":",
+  //                       style: TextStyle(
+  //                           fontSize: SizeConfig.blockSizeVertical * 4,
+  //                           fontWeight: FontWeight.bold),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               SizedBox(
+  //                 height: SizeConfig.blockSizeVertical * 2,
+  //               ),
+  //               getBodyWidget(
+  //                   questionData["type"], questionData["questionBody"]),
+  //               SizedBox(
+  //                 height: SizeConfig.blockSizeVertical * 1,
+  //               ),
+  //               ListView.builder(
+  //                 shrinkWrap: true,
+  //                 itemCount: answers!.length,
+  //                 itemBuilder: (context, index) {
+  //                   return Padding(
+  //                     padding: EdgeInsets.fromLTRB(
+  //                         SizeConfig.screenWidth * 0.1,
+  //                         SizeConfig.blockSizeVertical * 3,
+  //                         SizeConfig.screenWidth * 0.1,
+  //                         0),
+  //                     child: Container(
+  //                         height: SizeConfig.blockSizeVertical * 7,
+  //                         decoration: BoxDecoration(
+  //                           borderRadius: BorderRadius.circular(14.0),
+  //                           color: chooseColor(index),
+  //                           border: Border.all(
+  //                               color: Colors.grey,
+  //                               style: BorderStyle.solid,
+  //                               width: 0.80),
+  //                           boxShadow: [
+  //                             BoxShadow(
+  //                               color: Colors.grey.withOpacity(0.3),
+  //                               spreadRadius: 0.5,
+  //                               blurRadius: 2,
+  //                               offset:
+  //                               Offset(0, 4), // changes position of shadow
+  //                             ),
+  //                           ],
+  //                         ),
+  //                         child: RadioListTile(
+  //                             value: index,
+  //                             title: Text(
+  //                               answers![index],
+  //                               style: TextStyle(
+  //                                   fontSize:
+  //                                   SizeConfig.blockSizeVertical * 2.5),
+  //                             ),
+  //                             activeColor: Colors.black,
+  //                             groupValue: groupValue,
+  //                             onChanged: (int? val) {
+  //                               if (mounted)
+  //                                 setState(() {
+  //                                   groupValue = val!;
+  //                                   updateFirebase(
+  //                                       snapshot.data!.data()! as Map<dynamic, dynamic>, answers![val]);
+  //
+  //                                 });
+  //                             })),
+  //                   );
+  //                 },
+  //               )
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
 
   Color? chooseColor(int index) {
     if (groupValue == index) {
@@ -319,28 +522,28 @@ class _QuestionsPageState extends State<QuestionsPage>
           (Timer? timer) {
         if (!mounted) return;
         if (_start == 0) {
-          // if (widget.questionNumber == 5) {
-          //   finishedGame();
-          //   Navigator.pushReplacement(
-          //       context,
-          //       PageTransition(
-          //           type: PageTransitionType.rightToLeftWithFade,
-          //           child: WinnerPage(
-          //               widget.gameId, widget.userInfo, opponentInfo)));
-          // } else {
-          //   Navigator.pushReplacement(
-          //       context,
-          //       PageTransition(
-          //           type: PageTransitionType.rightToLeftWithFade,
-          //           child: QuestionsPage(
-          //               widget.chatId,
-          //               widget.gameId,
-          //               widget.userInfo,
-          //               opponentInfo,
-          //               widget.questionNumber + 1,
-          //               widget.userNumber,
-          //               widget.inviteID)));
-          // }
+          if (widget.questionNumber == 5) {
+            finishedGame();
+            Navigator.pushReplacement(
+                context,
+                PageTransition(
+                    type: PageTransitionType.rightToLeftWithFade,
+                    child: WinnerPage(
+                        widget.gameId, widget.userInfo, opponentInfo)));
+          } else {
+            Navigator.pushReplacement(
+                context,
+                PageTransition(
+                    type: PageTransitionType.rightToLeftWithFade,
+                    child: QuestionsPage(
+                        widget.chatId,
+                        widget.gameId,
+                        widget.userInfo,
+                        opponentInfo,
+                        widget.questionNumber + 1,
+                        widget.userNumber,
+                        widget.inviteID)));
+          }
           setState(() {
             timer!.cancel();
             timer = null;

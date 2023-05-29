@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project_2023/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -38,7 +39,6 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
     "Hebrew": "he_IL"
   };
 
-  @override
   @override
   void initState() {
     super.initState();
@@ -233,7 +233,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
       appBar: AppBar(
         title: Text('Speech Recognition'),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: MAIN_BLUE_COLOR,
       ),
       body: Column(
         children: [
@@ -247,10 +247,11 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
               ),
             ),
           ),
+          SizedBox(height: 10),
           Expanded(
             child: LiquidPullToRefresh(
               onRefresh: _updateRandomWord,
-              animSpeedFactor: 4,
+              animSpeedFactor: 6,
               height: 100,
               child: ListView(
                 children: [

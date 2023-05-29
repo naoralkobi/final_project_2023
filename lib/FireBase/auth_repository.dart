@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'fireBaseDB.dart';
 
 
@@ -17,6 +18,7 @@ class AuthRepository with ChangeNotifier {
   User? _user;
   Status _status = Status.Uninitialized;
   bool _isSigningIn = false;
+  final googleSignIn = GoogleSignIn();
   IsNew isNewStatus = IsNew.Uninitialized;
 
 
@@ -119,6 +121,39 @@ class AuthRepository with ChangeNotifier {
   set isSigningIn(bool isSigningIn) {
     _isSigningIn = isSigningIn;
     notifyListeners();
+  }
+
+  Future googleLogin() async {
+    isSigningIn = true;
+    final user = await googleSignIn.signIn().catchError((onError) {
+      log("Error $onError");
+    });
+    if (user == null) {
+      isSigningIn = false;
+      return;
+    } else {
+      // _status = Status.Authenticated;
+      // _isNew = false;
+      final googleAuth = await user.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      // final firebaseUser = FirebaseAuth.instance.currentUser;
+
+      //   if (_isNew) {
+      //     FirebaseFirestore.instance
+      //         .collection("users")
+      //         .doc(user.id)
+      //         .set({"email": user.email, "UID": user.id, "Languages": {}});
+      //   }
+      // });
+      // print(isNew.toString() + "%^&%^&%^&%^&%^&%^&%^&%^&%^&%^&");
+      // notifyListeners();
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      isSigningIn = false;
+    }
   }
 
 }
