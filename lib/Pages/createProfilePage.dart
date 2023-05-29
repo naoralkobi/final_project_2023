@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_2023/Pages/show_image.dart';
+import 'package:final_project_2023/consts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -203,15 +204,16 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                    Row(children: [
                      Text(
                        "             ABOUT",
-                       style: TextStyle(
-                         color: Colors.grey,
+                       style:TextStyle(
+                         color: Colors.grey[700],
+                         fontSize: 16,
                        ),
                      ),
                    ]),
                    Divider(
                      indent: 35,
                      endIndent: 35,
-                     thickness: 0.6,
+                     thickness: 0.8,
                    ),
                    SizedBox(
                      height: SizeConfig.blockSizeVertical * 1.5,
@@ -262,7 +264,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                Text(
                                  "   Gender", // Label for the gender selection
                                  style: TextStyle(
-                                   color: Colors.grey,
+                                   color: Colors.grey[700],
+                                   fontSize: 16,
                                  ),
                                ),
                              ]),
@@ -343,14 +346,15 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                          Text(
                            "             CHAT PREFERENCES", // Label for the chat preferences section
                            style: TextStyle(
-                             color: Colors.grey,
+                             color: Colors.grey[700],
+                             fontSize: 16,
                            ),
                          ),
                        ]),
                        Divider(
                          indent: 35,
                          endIndent: 35,
-                         thickness: 0.6,
+                         thickness: 0.8,
                        ),
                        SizedBox(
                          height: SizeConfig.blockSizeVertical * 1.5,
@@ -367,7 +371,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                      0, 0, SizeConfig.blockSizeHorizontal * 2, 0),
                                  child: Text(
                                    "min age:",
-                                   style: TextStyle(color: Colors.grey),
+                                   style: TextStyle(
+                                     color: Colors.grey[700],
+                                     fontSize: 16,
+                                   ),
                                  ),
                                ),
                                AgeDropDown(
@@ -380,7 +387,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                      0),
                                  child: Text(
                                    "max age:",
-                                   style: TextStyle(color: Colors.grey),
+                                   style:TextStyle(
+                                     color: Colors.grey[700],
+                                     fontSize: 16,
+                                   ),
                                  ),
                                ),
                                AgeDropDown(
@@ -417,7 +427,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                          Text(
                            "             Preferred Gender",
                            style: TextStyle(
-                             color: Colors.grey,
+                             color: Colors.grey[700],
+                             fontSize: 16,
                            ),
                          ),
                        ]),
@@ -487,7 +498,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                          Text(
                            "             Languages", // Label for the languages section
                            style: TextStyle(
-                             color: Colors.grey,
+                             color: Colors.grey[700],
+                             fontSize: 16,
                            ),
                          ),
                        ]),
@@ -537,7 +549,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                    Divider(
                      indent: 35,
                      endIndent: 35,
-                     thickness: 0.6,
+                     thickness: 0.8,
                    ),
                    SizedBox(
                      height: 10,
@@ -548,45 +560,35 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                      width: SizeConfig.screenWidth * 0.05,
                      child: Align(
                        child: ElevatedButton(
-                           onPressed: () async {
-                             changeLoadFinish();
-                             if (authRep.isNew()) {
-                               // Check if the username is unique
-                               await checkUserNameUnique(
-                                   userNameController.text);
-                             }
-                             pressedFinish();
-                             if (_formKey.currentState!.validate() &&
-                                 isUserNameUnique &&
-                                 userGender != 'c' &&
-                                 ProfileVars().validate()) {
-                               // Perform the necessary actions to finish the profile creation
-                               finishedCreating(authRep);
-                             } else {
-                               await Future.delayed(
-                                   Duration(milliseconds: 400));
-                               changeLoadFinish();
-                             }
-                           },
-                           child: Text(
-                             // Button text for finishing the profile creation
-                             "Finish",
-                             style:
-                             TextStyle(color: Colors.green, fontSize: 16),
+                         style: ElevatedButton.styleFrom(
+                           primary: MAIN_BLUE_COLOR,
+                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                           textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                           shape: RoundedRectangleBorder(
+                             borderRadius: BorderRadius.circular(30), // if you need to add a border radius
                            ),
-                           style: ButtonStyle(
-                               minimumSize: MaterialStateProperty.all<Size>(
-                                   Size(90, 35)),
-                               backgroundColor:
-                               MaterialStateProperty.all<Color>(
-                                   Colors.white),
-                               shape: MaterialStateProperty.all<
-                                   RoundedRectangleBorder>(
-                                   RoundedRectangleBorder(
-                                     borderRadius: BorderRadius.circular(13.0),
-                                     side: BorderSide(
-                                         color: Colors.black, width: 0.5),
-                                   )))),
+                         ),
+                         onPressed: () async {
+                           changeLoadFinish();
+                           if (authRep.isNew()) {
+                             await checkUserNameUnique(userNameController.text);
+                           }
+                           pressedFinish();
+                           if (_formKey.currentState!.validate() &&
+                               isUserNameUnique &&
+                               userGender != 'c' &&
+                               ProfileVars().validate()) {
+                             finishedCreating(authRep);
+                           } else {
+                             await Future.delayed(Duration(milliseconds: 400));
+                             changeLoadFinish();
+                           }
+                         },
+                         child: Text(
+                           "Finish",
+                           style: TextStyle(color: Colors.white),
+                         ),
+                       ),
                      ),
                    ),
                    SizedBox(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:final_project_2023/Pages/select_lang_screen.dart';
 import 'package:final_project_2023/Pages/view_user_profile.dart';
+import 'package:final_project_2023/consts.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../FireBase/auth_repository.dart';
 import '../Widgets/custom_pop_up_menu.dart';
+import '../Widgets/navBar.dart';
 import '../Widgets/start_chat.dart';
 import '../utils/colors.dart';
 import 'add_question.dart';
@@ -111,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (snapshot.connectionState == ConnectionState.waiting && snapshot.data == null)
             return Center(child: SizedBox());
     else {
-      if (!(snapshot.data!.data() as Map<String, dynamic>).containsKey('score')) {
+      if (snapshot.data?.data() == null || !(snapshot.data?.data() as Map<String, dynamic>).containsKey('score')) {
     FirebaseFirestore.instance
         .collection("users")
         .doc(user!.uid)
@@ -122,10 +124,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     }
     return Scaffold(
-    resizeToAvoidBottomInset: false,
+      drawer: NavBar(snapshot.data!.data()! as Map<String, dynamic>, blurController),
+      resizeToAvoidBottomInset: false,
     appBar: PreferredSize(
     preferredSize: Size.fromHeight(70),
     child: AppBar(
+      automaticallyImplyLeading: false,
     shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.vertical(
     bottom: Radius.circular(18.0),
@@ -133,19 +137,19 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
     backgroundColor: Colors.transparent,
     elevation: 0,
-    automaticallyImplyLeading: false,
     flexibleSpace: Container(
-    decoration: BoxDecoration(
-    gradient: LinearGradient(
-    colors: [
-    hexStringToColor("0077be"),
-    hexStringToColor("00bfff"),
-    hexStringToColor("40e0d0")
-    ],
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter
-    )
-    ),
+      color: MAIN_BLUE_COLOR,
+    // decoration: BoxDecoration(
+    // // gradient: LinearGradient(
+    // // colors: [
+    // // hexStringToColor("0077be"),
+    // // hexStringToColor("00bfff"),
+    // // hexStringToColor("40e0d0")
+    // // ],
+    // // begin: Alignment.topCenter,
+    // // end: Alignment.bottomCenter
+    // // )
+    // ),
     child: SafeArea(
     child: Container(
     padding: EdgeInsets.only(
@@ -155,23 +159,31 @@ class _MyHomePageState extends State<MyHomePage> {
     SizedBox(
     width: 12,
     ),
-    GestureDetector(
-    onTap: () =>
-    {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (context) =>
-    ViewUserProfile(
-        (snapshot.data!.data() as Map<String, dynamic>)["UID"])))
-        .then((value) => clearSearch()),
-    },
-    child: CircleAvatar(
-    backgroundImage:
-    NetworkImage(snapshot.data!['URL']),
-    maxRadius: 20,
-    ),
-    ),
+      Builder(
+        builder: (context) => IconButton(
+          icon: Icon(Icons.menu),
+          color: Colors.white,
+          onPressed: () => Scaffold.of(context).openDrawer()
+        ),
+      )
+    // GestureDetector(
+    // onTap: () =>
+    // {
+    // Navigator.push(
+    // context,
+    // MaterialPageRoute(
+    // builder: (context) =>
+    // ViewUserProfile(
+    //     (snapshot.data!.data() as Map<String, dynamic>)["UID"])))
+    //     .then((value) => clearSearch()),
+    // },
+    // child: CircleAvatar(
+    // backgroundImage:
+    // NetworkImage(snapshot.data!['URL']),
+    // maxRadius: 20,
+    // ),
+    // ),
+      ,
     SizedBox(
     width: 12,
     ),
@@ -194,54 +206,54 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
     )
     else
-    Column(
-    crossAxisAlignment:
-    CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-    Text(
-      snapshot.data!["username"],
-      style: TextStyle(
-          fontSize:
-          SizeConfig.blockSizeHorizontal *
-              5,
-          fontWeight: FontWeight.w600,
-          color: Colors.white),
-    ),
-    SizedBox(
-    height: 3,
-    ),
-    Visibility(
-      visible: (snapshot.data!.data() as Map<String, dynamic>).containsKey('score'),
-      child: Row(
-        children: [
-          ImageIcon(
-            AssetImage(
-                "assets/images/trophy.png"),
-            color: Colors.white,
-            size: SizeConfig
-                .blockSizeHorizontal *
-                4,
-          ),
-          SizedBox(
-            width: 3,
-          ),
-          (snapshot.data!.data() as Map<String, dynamic>).containsKey('score')
-              ? Text(
-            snapshot.data!["score"]
-                .toString(),
-            style: TextStyle(
-                fontSize: SizeConfig
-                    .blockSizeHorizontal *
-                    3.3,
-                color: Colors.white),
-          )
-              : Text("")
-        ],
-      ),
-    )
-    ],
-    ),
+    // Column(
+    // crossAxisAlignment:
+    // CrossAxisAlignment.start,
+    // mainAxisAlignment: MainAxisAlignment.center,
+    // children: [
+    // Text(
+    //   snapshot.data!["username"],
+    //   style: TextStyle(
+    //       fontSize:
+    //       SizeConfig.blockSizeHorizontal *
+    //           5,
+    //       fontWeight: FontWeight.w600,
+    //       color: Colors.white),
+    // ),
+    // SizedBox(
+    // height: 3,
+    // ),
+    // Visibility(
+    //   visible: (snapshot.data!.data() as Map<String, dynamic>).containsKey('score'),
+    //   child: Row(
+    //     children: [
+    //       ImageIcon(
+    //         AssetImage(
+    //             "assets/images/trophy.png"),
+    //         color: Colors.white,
+    //         size: SizeConfig
+    //             .blockSizeHorizontal *
+    //             4,
+    //       ),
+    //       SizedBox(
+    //         width: 3,
+    //       ),
+    //       (snapshot.data!.data() as Map<String, dynamic>).containsKey('score')
+    //           ? Text(
+    //         snapshot.data!["score"]
+    //             .toString(),
+    //         style: TextStyle(
+    //             fontSize: SizeConfig
+    //                 .blockSizeHorizontal *
+    //                 3.3,
+    //             color: Colors.white),
+    //       )
+    //           : Text("")
+    //     ],
+    //   ),
+    // )
+    // ],
+    // ),
     SizedBox(
     height: 3,
     ),
@@ -266,52 +278,14 @@ class _MyHomePageState extends State<MyHomePage> {
     _searchPressed();
     },
     ),
-      CustomPopupMenuButton<String>(
-        onSelected: (value) => handleClick(value, context),
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.grey, width: 1),
-            borderRadius: BorderRadius.circular(18.0)),
-        icon: Icon(
-          Icons.more_vert,
-          color: Colors.white,
-        ),
-        itemBuilder: (BuildContext context) {
-          return {'Logout', 'About', 'Translate'}.map((String choice) {
-            Icon icon = Icon(Icons.help); // default icon
-            switch (choice) {
-              case 'Logout':
-                icon = Icon(Icons.logout);
-                break;
-              case 'About':
-                icon = Icon(Icons.info_outline);
-                break;
-              case 'Translate':
-                icon = Icon(Icons.translate);
-                break;
-            }
-            return PopupMenuItem<String>(
-              value: choice,
-              child: FittedBox(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      child: Text(choice),
-                      width: SizeConfig.blockSizeHorizontal * 20,
-                    ),
-                    SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 2,
-                    ),
-                    icon,
-                  ],
-                ),
-              ),
-            );
-          }).toList();
-        },
-      ),
+      // Builder(
+      //   builder: (context) => IconButton(
+      //     icon: Icon(Icons.menu),
+      //     color: Colors.white,
+      //     onPressed: () => Scaffold.of(context).openEndDrawer(),
+      //     tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+      //   ),
+      // ),
     ],
     ),
     ),
@@ -348,75 +322,77 @@ class _MyHomePageState extends State<MyHomePage> {
     },
     ),
     ),
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        child: Container(
-          height: SizeConfig.blockSizeVertical * 8,
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: SizeConfig.blockSizeHorizontal * 4),
-                  child: IconButton(
-                    iconSize: SizeConfig.blockSizeHorizontal * 10,
-                    icon: Icon(Icons.leaderboard_rounded),
-                    color: Colors.white,
-                    onPressed: () {
-                      navigateToLeaderboard(
-                          context, snapshot.data!.data()! as Map<String, dynamic>);
-                    },
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: SizeConfig.blockSizeHorizontal * 2,
-                      right: SizeConfig.blockSizeHorizontal * 2),
-                  child: IconButton(
-                    iconSize: SizeConfig.blockSizeHorizontal * 10,
-                    icon: Icon(Icons.mic),
-                    color: Colors.white,
-                    onPressed: () {
-                      navigateToSpeechRecognition(context);
-                    },
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      right: SizeConfig.blockSizeHorizontal * 4),
-                  child: IconButton(
-                    iconSize: SizeConfig.blockSizeHorizontal * 10,
-                    icon: Icon(Icons.people_alt_rounded),
-                    color: Colors.white,
-                    onPressed: () {
-                      navigateToFriendsList(context);
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                hexStringToColor("0077be"),
-                hexStringToColor("00bfff"),
-                hexStringToColor("40e0d0")
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,),
-          ),
-        ),
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   shape: CircularNotchedRectangle(),
+      //   child: Container(
+      //     color: MAIN_BLUE_COLOR,
+      //     height: SizeConfig.blockSizeVertical * 8,
+      //     child: new Row(
+      //       mainAxisSize: MainAxisSize.max,
+      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //       children: <Widget>[
+      //         Expanded(
+      //           flex: 1,
+      //           child: Padding(
+      //             padding: EdgeInsets.only(
+      //                 left: SizeConfig.blockSizeHorizontal * 4),
+      //             child: IconButton(
+      //               iconSize: SizeConfig.blockSizeHorizontal * 10,
+      //               icon: Icon(Icons.leaderboard_rounded),
+      //               color: Colors.white,
+      //               onPressed: () {
+      //                 navigateToLeaderboard(
+      //                     context, snapshot.data!.data()! as Map<String, dynamic>);
+      //               },
+      //             ),
+      //           ),
+      //         ),
+      //         Expanded(
+      //           flex: 1,
+      //           child: Padding(
+      //             padding: EdgeInsets.only(
+      //                 left: SizeConfig.blockSizeHorizontal * 2,
+      //                 right: SizeConfig.blockSizeHorizontal * 2),
+      //             child: IconButton(
+      //               iconSize: SizeConfig.blockSizeHorizontal * 10,
+      //               icon: Icon(Icons.mic),
+      //               color: Colors.white,
+      //               // onPressed: () {
+      //               //   navigateToSpeechRecognition(context);
+      //               // },
+      //               onPressed: () => navigateToSpeechRecognition(context),
+      //             ),
+      //           ),
+      //         ),
+      //         Expanded(
+      //           flex: 1,
+      //           child: Padding(
+      //             padding: EdgeInsets.only(
+      //                 right: SizeConfig.blockSizeHorizontal * 4),
+      //             child: IconButton(
+      //               iconSize: SizeConfig.blockSizeHorizontal * 10,
+      //               icon: Icon(Icons.people_alt_rounded),
+      //               color: Colors.white,
+      //               onPressed: () {
+      //                 navigateToFriendsList(context);
+      //               },
+      //             ),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //     // decoration: BoxDecoration(
+      //     //   gradient: LinearGradient(
+      //     //     colors: [
+      //     //       hexStringToColor("0077be"),
+      //     //       hexStringToColor("00bfff"),
+      //     //       hexStringToColor("40e0d0")
+      //     //     ],
+      //     //     begin: Alignment.topCenter,
+      //     //     end: Alignment.bottomCenter,),
+      //     // ),
+      //   ),
+      // ),
 
     );
     }
@@ -481,8 +457,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void navigateToSpeechRecognition(context) {
-    Navigator.push(context,
-    MaterialPageRoute(builder: (context) => ChooseLanguageSpeech()));
+    showDialog(
+      barrierColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        blurController.add([1.5, 1.5]);
+        return ChooseLanguageSpeech(searchQuery: "Speech");
+      },
+    ).then((value) => blurController.add([0, 0]));
   }
 
   void getUserData() async {
