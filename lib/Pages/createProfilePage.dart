@@ -20,7 +20,7 @@ import '../Widgets/languageWidget.dart';
 import '../Widgets/profile_date.dart';
 import '../Widgets/profile_text_field.dart';
 import 'home_page.dart';
-
+import 'package:file_picker/file_picker.dart';
 /// This code file is responsible for the Create Profile Page,
 /// where users can create their profile and set preferences.
 
@@ -638,47 +638,31 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
   uploadImage() async {
     // Function to upload an image selected from the device's gallery
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
 
-    final _picker = ImagePicker();
-    PickedFile? image;
+    if (result != null) {
+      // If an image is selected, create a File object from the selected image's path
+      var file = File(result.files.single.path!);
 
-    // Request permission to access the device's photos
-    await Permission.photos.request();
+      // Upload the file to Firebase Storage using a reference path based on the user's UID
+      TaskSnapshot uploadTask = await _storage
+          .ref()
+          .child("userAvatars/" + user!.uid)
+          .putFile(file);
 
-    // Check the permission status
-    var permissionStatus = await Permission.photos.status;
+      // Retrieve the download URL of the uploaded image
+      String url = await uploadTask.ref.getDownloadURL();
 
-    if (permissionStatus.isGranted) {
-      // If permission is granted, open the device's gallery to select an image
-      image = await _picker.getImage(source: ImageSource.gallery);
-
-      if (image != null) {
-        // If an image is selected, create a File object from the selected image's path
-        var file = File(image.path);
-
-        // Upload the file to Firebase Storage using a reference path based on the user's UID
-        TaskSnapshot uploadTask = await _storage
-            .ref()
-            .child("userAvatars/" + user!.uid)
-            .putFile(file);
-
-        // Retrieve the download URL of the uploaded image
-        String url = await uploadTask.ref.getDownloadURL();
-
-        // Update the state variable with the image URL
-        setState(() {
-          imageUrl = url;
-        });
-      } else {
-        // If no image is selected, display a snackbar with a message
-        final snackBar = SnackBar(
-          content: Text('No image selected'),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
+      // Update the state variable with the image URL
+      setState(() {
+        imageUrl = url;
+      });
     } else {
-      // If permission is not granted, print an error message
-      print("error, permission is not granted!");
+      // If no image is selected, display a snackbar with a message
+      final snackBar = SnackBar(
+        content: Text('No image selected'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
