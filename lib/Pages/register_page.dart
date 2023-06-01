@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../Widgets/reusable_widget.dart';
 import 'createProfilePage.dart';
+import 'email_varify.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -100,33 +101,130 @@ class _SignUpPageState extends State<SignUpPage> {
           obscureText: true,
         ),
         SizedBox(height: 10),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     String password = _passwordTextController.text;
+        //     String confirmPassword = _confirmPasswordTextController.text;
+        //
+        //     if (password != confirmPassword) {
+        //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Passwords do not match")));
+        //     } else if (password.length < 4) {
+        //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password must contain at least 4 characters")));
+        //     } else {
+        //       FirebaseAuth.instance
+        //           .createUserWithEmailAndPassword(
+        //         email: _emailTextController.text,
+        //         password: _passwordTextController.text,
+        //       )
+        //           .then((value) {
+        //         // Navigate to the CreateProfilePage upon successful sign up
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(
+        //             builder: (context) => CreateProfilePage({}),
+        //           ),
+        //         );
+        //       }).onError((error, stackTrace) {
+        //         // Print and handle any errors that occur during the sign-up process
+        //         print("Error ${error.toString()}");
+        //       });
+        //     }
+        //   },
+        //   child: Text(
+        //     "Register",
+        //     style: TextStyle(fontSize: 20),
+        //   ),
+        //   style: ElevatedButton.styleFrom(
+        //     shape: StadiumBorder(),
+        //     padding: EdgeInsets.symmetric(vertical: 16),
+        //   ),
+        // )
+        /// this version is with email verifaction:
         ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             String password = _passwordTextController.text;
             String confirmPassword = _confirmPasswordTextController.text;
 
             if (password != confirmPassword) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Passwords do not match")));
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Error"),
+                  content: Text("Passwords do not match"),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
             } else if (password.length < 4) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password must contain at least 4 characters")));
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Error"),
+                  content: Text("Password must contain at least 4 characters"),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
             } else {
-              FirebaseAuth.instance
-                  .createUserWithEmailAndPassword(
-                email: _emailTextController.text,
-                password: _passwordTextController.text,
-              )
-                  .then((value) {
-                // Navigate to the CreateProfilePage upon successful sign up
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CreateProfilePage({}),
-                  ),
+              try {
+                UserCredential userCredential = await FirebaseAuth.instance
+                    .createUserWithEmailAndPassword(
+                  email: _emailTextController.text,
+                  password: _passwordTextController.text,
                 );
-              }).onError((error, stackTrace) {
-                // Print and handle any errors that occur during the sign-up process
-                print("Error ${error.toString()}");
-              });
+
+                User? user = FirebaseAuth.instance.currentUser;
+
+                if (user != null && !user.emailVerified) {
+                  await user.sendEmailVerification();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EmailVerificationPage(),
+                    ),
+                  );
+                }
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'weak-password') {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Error"),
+                      content: Text("The password provided is too weak."),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if (e.code == 'email-already-in-use') {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Error"),
+                      content: Text("The account already exists for that email."),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              } catch (e) {
+                print(e);
+              }
             }
           },
           child: Text(
@@ -138,6 +236,8 @@ class _SignUpPageState extends State<SignUpPage> {
             padding: EdgeInsets.symmetric(vertical: 16),
           ),
         )
+
+      /// end of email verify version:
       ],
     );
   }
