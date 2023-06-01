@@ -17,6 +17,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
 
@@ -62,13 +64,24 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // _header(context) {
+  //   return Column(
+  //     children: [
+  //       Text(
+  //         "Welcome Back",
+  //         style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+  //       ),
+  //       Text("Enter your credential to login"),
+  //     ],
+  //   );
+  // }
   _header(context) {
     return Column(
       children: [
-        Text(
-          "Welcome Back",
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+        Image.asset(
+          "assets/app_logo.png",
         ),
+        SizedBox(height: 10),
         Text("Enter your credential to login"),
       ],
     );
@@ -104,17 +117,81 @@ class _LoginPageState extends State<LoginPage> {
           obscureText: true,
         ),
         SizedBox(height: 10),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     FirebaseAuth.instance.signInWithEmailAndPassword(
+        //         email: _emailTextController.text,
+        //         password: _passwordTextController.text).then((value) {
+        //       // After successful login, navigate to the home page
+        //       Navigator.push(context,
+        //           //MaterialPageRoute(builder: (context) => YouTubeVideoListPage(searchQuery: 'learning arabic for beginners')));
+        //           MaterialPageRoute(builder: (context) => MyHomePage()));
+        //       //MaterialPageRoute(builder: (context) => ChooseLanguageSpeech()));
+        //     });
+        //   },
+        //   child: Text(
+        //     "Login",
+        //     style: TextStyle(fontSize: 20),
+        //   ),
+        //   style: ElevatedButton.styleFrom(
+        //     shape: StadiumBorder(),
+        //     padding: EdgeInsets.symmetric(vertical: 16),
+        //   ),
+        // ),
+        ///This version of code supports email verify:
         ElevatedButton(
-          onPressed: () {
-            FirebaseAuth.instance.signInWithEmailAndPassword(
-                email: _emailTextController.text,
-                password: _passwordTextController.text).then((value) {
-              // After successful login, navigate to the home page
-              Navigator.push(context,
-                  //MaterialPageRoute(builder: (context) => YouTubeVideoListPage(searchQuery: 'learning arabic for beginners')));
-                  MaterialPageRoute(builder: (context) => MyHomePage()));
-              //MaterialPageRoute(builder: (context) => ChooseLanguageSpeech()));
-            });
+          onPressed: () async {
+            try {
+              UserCredential userCredential = await FirebaseAuth.instance
+                  .signInWithEmailAndPassword(
+                  email: _emailTextController.text,
+                  password: _passwordTextController.text
+              );
+
+              if (!userCredential.user!.emailVerified) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Email not verified'),
+                      content: Text('Please verify your email address.'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else {
+                // After successful login and email verification, navigate to the home page
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyHomePage()));
+              }
+            } on FirebaseAuthException catch (e) {
+              if (e.code == 'user-not-found') {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('User not found'),
+                      content: Text('User does not exist.'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+            }
           },
           child: Text(
             "Login",
@@ -125,6 +202,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: EdgeInsets.symmetric(vertical: 16),
           ),
         ),
+        /// end of email verify version
         SizedBox(height: 10),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
