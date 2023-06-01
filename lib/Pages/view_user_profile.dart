@@ -53,7 +53,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
             // Extract user data from the snapshot
             Map<String, dynamic> userData = userInfo.data!.data() as Map<String, dynamic>;
             // Extract language data from user data
-            Map<String, dynamic> languagesData = userData["Languages"] as Map<String, dynamic>;
+            Map<String, dynamic> languagesData = userData[LANGUAGES] as Map<String, dynamic>;
             List<String> languagesList = languagesData.keys.toList();  // Convert language data to a list
             return Scaffold(
                 resizeToAvoidBottomInset: false, // Avoid resizing the layout when the keyboard appears
@@ -352,7 +352,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                         padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
                         child: Row(children: [
                           Text(
-                            "Languages",
+                            LANGUAGES,
                             style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: SizeConfig.screenWidth * 0.035),
@@ -365,12 +365,12 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           reverse: true,
-                          itemCount: (userInfo.data!.data() as Map<String, dynamic>)["Languages"].length,
+                          itemCount: (userInfo.data!.data() as Map<String, dynamic>)[LANGUAGES].length,
                           itemBuilder: (context, index) {
                             return LangRow(
                               // Display each language and its proficiency level
                                 languagesList[index],
-                                (userInfo.data!.data() as Map<String, dynamic>)["Languages"]
+                                (userInfo.data!.data() as Map<String, dynamic>)[LANGUAGES]
                                 [languagesList[index]]);
                           },
                         ),

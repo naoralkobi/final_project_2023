@@ -53,49 +53,49 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     switch (widget.language) {
-      case "Arabic":
+      case ARABIC:
         languageFlag = Image.asset(
           "assets/images/united-arab-emirates.png",
           width: SizeConfig.blockSizeHorizontal * 7,
           height: SizeConfig.blockSizeVertical * 4,
         );
         break;
-      case "French":
+      case FRENCH:
         languageFlag = Image.asset(
           "assets/images/france.png",
           width: SizeConfig.blockSizeHorizontal * 7,
           height: SizeConfig.blockSizeVertical * 4,
         );
         break;
-      case "German":
+      case GERMAN:
         languageFlag = Image.asset(
           "assets/images/germany.png",
           width: SizeConfig.blockSizeHorizontal * 7,
           height: SizeConfig.blockSizeVertical * 4,
         );
         break;
-      case "Hebrew":
+      case HEBRREW:
         languageFlag = Image.asset(
           "assets/images/israel.png",
           width: SizeConfig.blockSizeHorizontal * 7,
           height: SizeConfig.blockSizeVertical * 4,
         );
         break;
-      case "Italian":
+      case ITALIAN:
         languageFlag = Image.asset(
           "assets/images/italy.png",
           width: SizeConfig.blockSizeHorizontal * 7,
           height: SizeConfig.blockSizeVertical * 4,
         );
         break;
-      case "Portuguese":
+      case PORTUGUESE:
         languageFlag = Image.asset(
           "assets/images/portugal.png",
           width: SizeConfig.blockSizeHorizontal * 7,
           height: SizeConfig.blockSizeVertical * 4,
         );
         break;
-      case "Spanish":
+      case SPANISH:
         languageFlag = Image.asset(
           "assets/images/spain.png",
           width: SizeConfig.blockSizeHorizontal * 7,
@@ -141,7 +141,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    List friendsList = widget.userInfo["friends"];
+    List friendsList = widget.userInfo[FRIENDS];
     return Scaffold(
         body: SafeArea(
           child: Stack(

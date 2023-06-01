@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../consts.dart';
 import 'view_user_profile.dart';
 import '../Widgets/leader_board_list.dart';
 
@@ -212,7 +213,7 @@ class LeaderboardState extends State<Leaderboard> {
             prevScore = doc['score'];
           }
         }
-        if (doc['username'] == username){
+        if (doc[USERNAME] == username){
           userRank = prevRank;
         }
       });

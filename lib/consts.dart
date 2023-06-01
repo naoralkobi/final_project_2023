@@ -20,6 +20,22 @@ const String MESSAGE_TYPE_GAME_CANCELED = 'game canceled';
 const String WAITING_LIST = 'waitingList';
 const String INVITE_ID = "inviteID";
 const String UNREAD_MESSAGES = "unreadMessages";
+const String USERNAME = "username";
+const String EMPTY_TEXT = 'Text is empty';
+const String SEARCH = 'Search';
+const String FRIENDS = 'friends';
+const String LANGUAGES = 'Languages';
+const String BEGINNER = 'Beginner';
+const String INTERMEDIATE = 'Intermediate';
+const String ADVANCED = 'Advanced';
+const String ARABIC = 'Arabic';
+const String ENGLISH = 'English';
+const String FRENCH = 'French';
+const String GERMAN = 'German';
+const String HEBRREW = 'Hebrew';
+const String ITALIAN = 'Italian';
+const String PORTUGUESE = 'Portuguese';
+const String SPANISH = 'Spanish';
 
 ///Chat sizes
 const double APP_BAR_IMAGE_WIDTH = 40.0;

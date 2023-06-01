@@ -50,7 +50,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
             controller: widget.textController,
             validator: (text) {
               if (text == null || text.isEmpty) {
-                return 'Text is empty';
+                return EMPTY_TEXT;
               } else if (widget.hintText == "username" && text.length > 10) {
                 return "Username can't be longer than 10 characters";
               } else if (widget.hintText == "username" && !isUserNameUnique) {

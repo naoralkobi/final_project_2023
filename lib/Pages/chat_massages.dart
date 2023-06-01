@@ -191,9 +191,9 @@ class _ChatMessagesState extends State<ChatMessages> {
   Widget _buildGameInvite(DocumentSnapshot snapshot) {
     String invitedBy = snapshot[MESSAGE_ID_FROM] == widget.userID
         ? "You"
-        : widget.friendInfo["username"];
+        : widget.friendInfo[USERNAME];
     String inviteTo = snapshot[MESSAGE_ID_FROM] == widget.userID
-        ? widget.friendInfo["username"]
+        ? widget.friendInfo[USERNAME]
         : "you";
     return Row(
       mainAxisAlignment: snapshot[MESSAGE_ID_FROM] == widget.userID
@@ -298,16 +298,16 @@ class _ChatMessagesState extends State<ChatMessages> {
                                   side: BorderSide(
                                       color: Colors.grey, width: 0.5)),
                               onPressed: () async {
-                                String lvl = widget.friendInfo["Languages"]
+                                String lvl = widget.friendInfo[LANGUAGES]
                                 [widget.language];
-                                if(widget.friendInfo["Languages"][widget.language] == "Beginner"
-                                    || widget.userInfo["Languages"][widget.language] == "Beginner"){
-                                  lvl = "Beginner";
-                                }else if (widget.friendInfo["Languages"][widget.language] == "Intermediate"
-                                    || widget.userInfo["Languages"][widget.language] == "Intermediate"){
-                                  lvl = "Intermediate";
+                                if(widget.friendInfo[LANGUAGES][widget.language] == BEGINNER
+                                    || widget.userInfo[LANGUAGES][widget.language] == BEGINNER){
+                                  lvl = BEGINNER;
+                                }else if (widget.friendInfo[LANGUAGES][widget.language] == INTERMEDIATE
+                                    || widget.userInfo[LANGUAGES][widget.language] == INTERMEDIATE){
+                                  lvl = INTERMEDIATE;
                                 }else{
-                                  lvl = "Advanced";
+                                  lvl = ADVANCED;
                                 }
                                 //print("widget.userID = " + widget.userID + " widget.friendInfo[uid] = " +widget.friendInfo["UID"] + "widget.language = " + widget.language + "lvl = " +lvl);
                                 gameID = await FirebaseDB.Firebase_db
@@ -371,7 +371,7 @@ class _ChatMessagesState extends State<ChatMessages> {
   Widget _buildGameCanceled(DocumentSnapshot snapshot) {
     String canceledBy = snapshot[MESSAGE_CONTENT] == widget.userID
         ? "You"
-        : widget.friendInfo["username"];
+        : widget.friendInfo[USERNAME];
     String verb =
     snapshot[MESSAGE_ID_FROM] == widget.userID ? "canceled" : "declined";
     return Row(
