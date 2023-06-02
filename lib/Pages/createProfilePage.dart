@@ -1,25 +1,21 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_2023/Pages/show_image.dart';
 import 'package:final_project_2023/consts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
  import 'package:provider/provider.dart';
  import 'package:final_project_2023/screen_size_config.dart';
  import 'dart:io';
- import 'package:final_project_2023/main.dart';
  import '../FireBase/auth_repository.dart';
-import '../ProfileVars.dart';
+import '../profile_vars.dart';
 import '../Widgets/age_drop_down.dart';
 import '../Widgets/languageWidget.dart';
 import '../Widgets/profile_date.dart';
 import '../Widgets/profile_text_field.dart';
 import 'home_page.dart';
+import 'package:final_project_2023/consts.dart';
 import 'package:file_picker/file_picker.dart';
 /// This code file is responsible for the Create Profile Page,
 /// where users can create their profile and set preferences.
@@ -53,7 +49,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   String userGender = 'c'; // Default user gender value
   bool isUserNameValid = true;
   bool loadFinish = false;
-
   bool firstClick = true; // Flag to check if it's the first time clicking
 
   @override
@@ -64,14 +59,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     // Get the download URL of the user's profile image
     _storage
         .ref()
-        .child("userAvatars/" + user!.uid)
+        .child("userAvatars/${user!.uid}")
         .getDownloadURL()
         .then(found, onError: notFound);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -111,7 +105,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                      padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 4),
                      alignment: Alignment.topLeft,
                      child: IconButton(
-                       icon: Icon(Icons.arrow_back),
+                       icon: const Icon(Icons.arrow_back),
                        iconSize: SizeConfig.blockSizeHorizontal * 8,
                        onPressed: () {
                          // If the user is new (creating a new account),
@@ -120,8 +114,9 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                          if (authRep.isNew()) {
                            authRep.signOut();
                            Navigator.of(context).popUntil((route) => route.isFirst);
-                         } else
+                         } else {
                            Navigator.of(context).pop();
+                         }
                        },
                      ),
                    ),
@@ -131,6 +126,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                    // Profile Image
                    Align(
                      child: Stack(
+                       clipBehavior: Clip.none,
                        children: [
                          Hero(
                            tag: "profileImage",
@@ -162,26 +158,25 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                },
                                elevation: 1.0,
                                constraints:
-                               BoxConstraints(maxHeight: 55, maxWidth: 55),
-                               fillColor: Color(0xAFA66CB7),
-                               child: Icon(
+                               const BoxConstraints(maxHeight: 55, maxWidth: 55),
+                               fillColor: const Color(0xAFA66CB7),
+                               padding: const EdgeInsets.all(15.0),
+                               shape: const CircleBorder(),
+                               child: const Icon(
                                  Icons.camera_alt_outlined,
                                  color: Colors.white,
                                  size: 30.0,
                                ),
-                               padding: EdgeInsets.all(15.0),
-                               shape: CircleBorder(),
                              ))
                        ],
-                       clipBehavior: Clip.none,
                      ),
                    ),
                    SizedBox(
                      height: authRep.isNew() ? 0 : SizeConfig.blockSizeVertical * 2,
                    ),
                    authRep.isNew()
-                       ? SizedBox()
-                       : Container(
+                       ? const SizedBox()
+                       : SizedBox(
                      width: SizeConfig.screenWidth * 0.7,
                        child: FittedBox(
                          fit: BoxFit.scaleDown,
@@ -210,7 +205,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                        ),
                      ),
                    ]),
-                   Divider(
+                   const Divider(
                      indent: 35,
                      endIndent: 35,
                      thickness: 0.8,
@@ -276,7 +271,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                  // ),
                                  Radio<String>(
                                    value: 'Male', // Value for the male gender
-                                   activeColor: Color(0xFFA66CB7),
+                                   activeColor: const Color(0xFFA66CB7),
                                    groupValue: userGender, // Currently selected gender
                                    onChanged: (String? value) {
                                      setState(() {
@@ -284,10 +279,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                      });
                                    },
                                  ),
-                                 Text("Male    "),
+                                 const Text("Male    "),
                                  Radio<String>(
                                    value: 'Female', // Value for the female gender
-                                   activeColor: Color(0xFFA66CB7),
+                                   activeColor: const Color(0xFFA66CB7),
                                    groupValue: userGender, // Currently selected gender
                                    onChanged: (String? value) {
                                      setState(() {
@@ -295,7 +290,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                      });
                                    },
                                  ),
-                                 Text("Female    "),
+                                 const Text("Female    "),
                                ],
                              ),
                              SizedBox(
@@ -351,7 +346,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                            ),
                          ),
                        ]),
-                       Divider(
+                       const Divider(
                          indent: 35,
                          endIndent: 35,
                          thickness: 0.8,
@@ -399,7 +394,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                            ),
                          ),
                        ),
-                       SizedBox(
+                       const SizedBox(
                          height: 20,
                        ),
                        Container(
@@ -420,7 +415,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                          )
                              : null,
                        ),
-                       SizedBox(
+                       const SizedBox(
                          height: 20,
                        ),
                        Row(children: [
@@ -434,12 +429,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                        ]),
                        Row(
                          children: <Widget>[
-                           SizedBox(
+                           const SizedBox(
                              width: 30,
                            ),
                            Radio<String>(
                              value: 'Male',
-                             activeColor: Color(0xFFA66CB7),
+                             activeColor: const Color(0xFFA66CB7),
                              groupValue: preferredGenderVal,
                              onChanged: (String? value) {
                                setState(() {
@@ -447,10 +442,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                });
                              },
                            ),
-                           Text("Male"),
+                           const Text("Male"),
                            Radio<String>(
                              value: 'Female',
-                             activeColor: Color(0xFFA66CB7),
+                             activeColor: const Color(0xFFA66CB7),
                              groupValue: preferredGenderVal,
                              onChanged: (String? value) {
                                setState(() {
@@ -458,10 +453,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                });
                              },
                            ),
-                           Text("Female"),
+                           const Text("Female"),
                            Radio<String>(
-                             value: 'Dont Care',
-                             activeColor: Color(0xFFA66CB7),
+                             value: "Don't Care",
+                             activeColor: const Color(0xFFA66CB7),
                              groupValue: preferredGenderVal,
                              onChanged: (String? value) {
                                setState(() {
@@ -469,7 +464,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                });
                              },
                            ),
-                           Text("Dont care"),
+                           const Text("Don't care"),
                          ],
                        ),
                        SizedBox(
@@ -491,7 +486,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                          )
                              : null,
                        ),
-                       SizedBox(
+                       const SizedBox(
                          height: 10,
                        ),
                        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -503,7 +498,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                            ),
                          ),
                        ]),
-                       SizedBox(
+                       const SizedBox(
                          height: 10,
                        ),
                        LanguageWidget("Arabic", firebaseController, widget.userInfo), // Language widget for Arabic
@@ -513,12 +508,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                        LanguageWidget("Italian", firebaseController, widget.userInfo), // Language widget for Italian
                        LanguageWidget("Portuguese", firebaseController, widget.userInfo), // Language widget for Portuguese
                        LanguageWidget("Spanish", firebaseController, widget.userInfo), // Language widget for Spanish
-                       SizedBox(
+                       const SizedBox(
                          height: 5,
                        ),
                      ]),
                    ),
-                   SizedBox(
+                   const SizedBox(
                      height: 10,
                    ),
                    Container(
@@ -546,24 +541,24 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                          : null))
                          : null,
                    ),
-                   Divider(
+                   const Divider(
                      indent: 35,
                      endIndent: 35,
                      thickness: 0.8,
                    ),
-                   SizedBox(
+                   const SizedBox(
                      height: 10,
                    ),
                    loadFinish
-                       ? Center(child: CircularProgressIndicator()) // Display a loading indicator if the 'loadFinish' variable is true
-                       : Container(
+                       ? const Center(child: CircularProgressIndicator()) // Display a loading indicator if the 'loadFinish' variable is true
+                       : SizedBox(
                      width: SizeConfig.screenWidth * 0.05,
                      child: Align(
                        child: ElevatedButton(
                          style: ElevatedButton.styleFrom(
                            primary: MAIN_BLUE_COLOR,
-                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                           textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                           padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                            shape: RoundedRectangleBorder(
                              borderRadius: BorderRadius.circular(30), // if you need to add a border radius
                            ),
@@ -580,18 +575,18 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                ProfileVars().validate()) {
                              finishedCreating(authRep);
                            } else {
-                             await Future.delayed(Duration(milliseconds: 400));
+                             await Future.delayed(const Duration(milliseconds: 400));
                              changeLoadFinish();
                            }
                          },
-                         child: Text(
+                         child: const Text(
                            "Finish",
                            style: TextStyle(color: Colors.white),
                          ),
                        ),
                      ),
                    ),
-                   SizedBox(
+                   const SizedBox(
                      height: 25,
                    ),
                  ],
@@ -746,7 +741,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       Navigator.of(context).pop();
     }
 
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
 
     // Set the user as not new
     authRep.setNotNew();

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/firebase/auth_repository.dart';
 
-import '../ProfileVars.dart';
+import '../profile_vars.dart';
 
 /// This is a StatefulWidget that represents a language widget in the profile screen.
 class LanguageWidget extends StatefulWidget {
