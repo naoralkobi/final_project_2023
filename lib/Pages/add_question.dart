@@ -20,15 +20,15 @@ class AddQuestionState extends State<AddQuestion> {
   String? languageId;
   String? levelId;
   List<String> languagesList = [
-    "Arabic",
-    "French",
-    "German",
-    "Hebrew",
-    "Italian",
-    "Portuguese",
-    "Spanish"
+    ARABIC,
+    FRENCH,
+    GERMAN,
+    HEBRREW,
+    ITALIAN,
+    PORTUGUESE,
+    SPANISH
   ];
-  List<String> levelList = ["Beginner", "Intermediate", "Advanced"];
+  List<String> levelList = [BEGINNER, INTERMEDIATE, ADVANCED];
 
   Widget _appBarTitle = Text(
     "Add a Question",
@@ -113,7 +113,7 @@ class AddQuestionState extends State<AddQuestion> {
                   border: Border.all(color: Colors.grey)),
               child: DropdownButton<String>(
                   isExpanded: true,
-                  hint: Text("Language",
+                  hint: Text(LANGUAGES,
                       style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal*4, fontWeight: FontWeight.w500)),
                   underline: SizedBox.shrink(),
                   value: languageId,

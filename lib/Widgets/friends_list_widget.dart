@@ -113,7 +113,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                             separatorBuilder:
                                 (BuildContext context, int index) {
                                   Map<String, dynamic>? friendData = snapshots.data!.docs[index]?.data() as Map<String, dynamic>?;
-                                  Map<String, dynamic>? friendLanguages = friendData?["Languages"];
+                                  Map<String, dynamic>? friendLanguages = friendData?[LANGUAGES];
                                   if (((widget.isSelectFriendPage &&
                                       (friendLanguages == null || !friendLanguages.containsKey(widget.selectedLanguage))) ||
                                       !friends.contains(friendData?["username"]))) {
@@ -131,7 +131,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                             itemCount: snapshots.data!.size,
                             itemBuilder: (context, index) {
                               Map<String, dynamic>? friendData = snapshots.data!.docs[index]?.data() as Map<String, dynamic>?;
-                              Map<String, dynamic>? friendLanguages = friendData?["Languages"];
+                              Map<String, dynamic>? friendLanguages = friendData?[LANGUAGES];
                               if ((widget.isSelectFriendPage &&
                                   !(friendLanguages?.containsKey(widget.selectedLanguage) ?? false) ||
                                   !friends.contains(friendData?["username"]))) {

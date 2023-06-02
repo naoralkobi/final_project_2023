@@ -95,7 +95,7 @@ class LeaderboardListState extends State<LeaderboardList> {
                                   Container(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        usersDocs[index].data()['username'],
+                                        usersDocs[index].data()[USERNAME],
                                         style: TextStyle(
                                             fontSize:
                                             SizeConfig.blockSizeVertical *
@@ -200,7 +200,7 @@ class LeaderboardListState extends State<LeaderboardList> {
             prevScore = doc['score'];
           }
         }
-        if (doc['username'] == username) {
+        if (doc[USERNAME] == username) {
           indexUser = index;
         }
         if (mounted) {

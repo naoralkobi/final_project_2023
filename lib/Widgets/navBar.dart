@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../Pages/select_lang_screen.dart';
 import '../Pages/videoLearningPage.dart';
 import '../Pages/view_user_profile.dart';
+import '../consts.dart';
 import '../screen_size_config.dart';
 
 class NavBar extends StatelessWidget {
@@ -48,7 +49,7 @@ class NavBar extends StatelessWidget {
           accountName: Row(
             children: [
               Expanded(
-                child: Text(data['username']),
+                child: Text(data[USERNAME]),
               ),
               SizedBox(width: 5),
               Row(

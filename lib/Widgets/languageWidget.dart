@@ -9,6 +9,7 @@ import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/firebase/auth_repository.dart';
 
 import '../ProfileVars.dart';
+import '../consts.dart';
 
 /// This is a StatefulWidget that represents a language widget in the profile screen.
 class LanguageWidget extends StatefulWidget {
@@ -43,10 +44,10 @@ class _LanguageWidgetState extends State<LanguageWidget> {
           }
           // Check if the user information is not empty and the language exists in the user's languages
           if (widget.userInfo!.isNotEmpty &&
-              widget.userInfo!["Languages"][widget.languageName] != null &&
+              widget.userInfo![LANGUAGES][widget.languageName] != null &&
               firstClick) {
             isChecked = true;
-            languageLvl = widget.userInfo!["Languages"][widget.languageName];
+            languageLvl = widget.userInfo![LANGUAGES][widget.languageName];
             ProfileVars.languageNum++;
             ProfileVars.numOfLvls++;
             firstClick = false;

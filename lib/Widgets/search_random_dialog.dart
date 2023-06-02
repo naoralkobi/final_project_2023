@@ -25,7 +25,7 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
   @override
   void initState() {
     super.initState();
-    String languageLevelUpper = widget.userInfo["Languages"][widget.language];
+    String languageLevelUpper = widget.userInfo[LANGUAGES][widget.language];
     level = languageLevelUpper.toLowerCase();
     //FirebaseFirestore.instance.clearPersistence();
   }

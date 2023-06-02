@@ -90,7 +90,7 @@ class ChatsListState extends State<ChatsList> {
                                       return Center(child: SizedBox());
                                     else {
                                       if (widget.searchText != "" &&
-                                          !friendInfo.data!['username']
+                                          !friendInfo.data![USERNAME]
                                               .toLowerCase()
                                               .contains(
                                               widget.searchText.toLowerCase())) {
@@ -116,7 +116,7 @@ class ChatsListState extends State<ChatsList> {
                                                   snapshots.data!.docs[index]
                                                   ['language'],
                                                   friendInfo.data!.data()! as Map<dynamic, dynamic>),
-                                              title: Text(friendInfo.data!['username']),
+                                              title: Text(friendInfo.data![USERNAME]),
                                               subtitle: Row(
                                                 children: [
                                                   Flexible(

@@ -506,13 +506,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                        SizedBox(
                          height: 10,
                        ),
-                       LanguageWidget("Arabic", firebaseController, widget.userInfo), // Language widget for Arabic
-                       LanguageWidget("French", firebaseController, widget.userInfo), // Language widget for French
-                       LanguageWidget("German", firebaseController, widget.userInfo), // Language widget for German
-                       LanguageWidget("Hebrew", firebaseController, widget.userInfo), // Language widget for Hebrew
-                       LanguageWidget("Italian", firebaseController, widget.userInfo), // Language widget for Italian
-                       LanguageWidget("Portuguese", firebaseController, widget.userInfo), // Language widget for Portuguese
-                       LanguageWidget("Spanish", firebaseController, widget.userInfo), // Language widget for Spanish
+                       LanguageWidget(ARABIC, firebaseController, widget.userInfo), // Language widget for Arabic
+                       LanguageWidget(FRENCH, firebaseController, widget.userInfo), // Language widget for French
+                       LanguageWidget(GERMAN, firebaseController, widget.userInfo), // Language widget for German
+                       LanguageWidget(HEBRREW, firebaseController, widget.userInfo), // Language widget for Hebrew
+                       LanguageWidget(ITALIAN, firebaseController, widget.userInfo), // Language widget for Italian
+                       LanguageWidget(PORTUGUESE, firebaseController, widget.userInfo), // Language widget for Portuguese
+                       LanguageWidget(SPANISH, firebaseController, widget.userInfo), // Language widget for Spanish
                        SizedBox(
                          height: 5,
                        ),

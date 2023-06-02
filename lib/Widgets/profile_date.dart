@@ -43,7 +43,7 @@ class _ProfileDatePickerState extends State<ProfileDatePicker> {
           showCursor: true,
           validator: (text) {
             if (text == null || text.isEmpty) {
-              return 'Text is empty';
+              return EMPTY_TEXT;
             }
             return null;
           },

@@ -242,7 +242,7 @@ class FirebaseDB {
   }
 
   Future<List> searchChatWithRandom(Map userInfo, String language) async{
-    String languageLevelUpper = userInfo["Languages"][language];
+    String languageLevelUpper = userInfo[LANGUAGES][language];
     String languageLevel = languageLevelUpper.toLowerCase();
     List list = (await _db
         .collection(WAITING_LIST)
@@ -253,7 +253,7 @@ class FirebaseDB {
   }
 
   Future<void> startChatWithRandom(Map userInfo ,String randomUID, String language, String chatID) async {
-    String languageLevelUpper = userInfo["Languages"][language];
+    String languageLevelUpper = userInfo[LANGUAGES][language];
     String languageLevel = languageLevelUpper.toLowerCase();
     //List UIDS = [userInfo["UID"], randomUID];
     DocumentReference documentReference = _db.collection(WAITING_LIST).doc(language + "-" + languageLevel);
@@ -320,7 +320,7 @@ class FirebaseDB {
   }
 
   void removeChatInvite(Map userInfo, String language){
-    String languageLevelUpper = userInfo["Languages"][language];
+    String languageLevelUpper = userInfo[LANGUAGES][language];
     String languageLevel = languageLevelUpper.toLowerCase();
 
     DocumentReference documentReference = _db.collection(WAITING_LIST).doc(language + "-" + languageLevel);

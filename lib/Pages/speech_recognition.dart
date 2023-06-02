@@ -32,10 +32,10 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
 
   // Mapping of language to locale
   Map<String, String> languageToLocale = {
-    "English": "en_US",
-    "Arabic": "ar_SA",
-    "French": "fr_FR",
-    "German": "de_DE",
+    ENGLISH: "en_US",
+    ARABIC: "ar_SA",
+    FRENCH: "fr_FR",
+    GERMAN: "de_DE",
     "Hebrew": "he_IL"
   };
 
