@@ -38,10 +38,10 @@ class ChooseLanguageState extends State<ChooseLanguage> {
         .doc(AuthRepository.instance().user!.uid)
         .get()
         .then((value) {
-      Map languages = value.data()!['Languages'];
+      Map languages = value.data()![LANGUAGES];
       if (widget.isFromFriendList){
         setState(() {
-          Map friendLanguages = widget.friendInfo["Languages"];
+          Map friendLanguages = widget.friendInfo[LANGUAGES];
           languages.forEach((key, value) {
             if (friendLanguages.containsKey(key))
               languagesList.add(key);

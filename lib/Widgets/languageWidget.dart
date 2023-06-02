@@ -43,10 +43,10 @@ class _LanguageWidgetState extends State<LanguageWidget> {
           }
           // Check if the user information is not empty and the language exists in the user's languages
           if (widget.userInfo!.isNotEmpty &&
-              widget.userInfo!["Languages"][widget.languageName] != null &&
+              widget.userInfo![LANGUAGES][widget.languageName] != null &&
               firstClick) {
             isChecked = true;
-            languageLvl = widget.userInfo!["Languages"][widget.languageName];
+            languageLvl = widget.userInfo![LANGUAGES][widget.languageName];
             ProfileVars.languageNum++;
             ProfileVars.numOfLvls++;
             firstClick = false;

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project_2023/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
@@ -94,7 +95,7 @@ class AddFriendState extends State<AddFriend> {
                   controller: searchUsername,
                   cursorColor: Color(0xFFA66CB7),
                   decoration: InputDecoration(
-                    hintText: 'username',
+                    hintText: USERNAME,
                     alignLabelWithHint: true,
                     filled: true,
                     fillColor: Colors.white,
@@ -126,7 +127,7 @@ class AddFriendState extends State<AddFriend> {
                       setState(() {
                         isNotEmpty = false;
                       });
-                      return 'Text is empty';
+                      return EMPTY_TEXT;
                     }
                     return null;
                   },
@@ -152,7 +153,7 @@ class AddFriendState extends State<AddFriend> {
                 }
               },
               child: Text(
-                "Search",
+                SEARCH,
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
@@ -208,19 +209,19 @@ class AddFriendState extends State<AddFriend> {
   Future<void> getUsers() async {
     final user = FirebaseAuth.instance.currentUser;
     List friendsList = (await FirebaseFirestore.instance
-        .collection("users")
+        .collection(USERS)
         .doc(user!.uid)
         .get())
-        .data()!["friends"];
+        .data()![FRIENDS];
     List tempList = [];
     await FirebaseFirestore.instance
-        .collection("users")
-        .orderBy("username")
+        .collection(USERS)
+        .orderBy(USERNAME)
         .get()
         .then((value) {
       value.docs.forEach((element) {
         if (element.id != user.uid) {
-          if (friendsList.contains(element.data()["username"])) {
+          if (friendsList.contains(element.data()[USERNAME])) {
             tempList.add(Tuple2(element.data(),
                 true)); // item2 here is if this user already friend
           } else
@@ -262,7 +263,7 @@ class AddFriendState extends State<AddFriend> {
             size: 25, color: Color(0xFF6D94BE)),
         onPressed: () async {
           await FirebaseDB.Firebase_db.addFriend(
-              userInfo.item1["username"], context);
+              userInfo.item1[USERNAME], context);
           // await Future.delayed(Duration(milliseconds: 500));
           // await getUsers();
           // setState(() {
@@ -281,7 +282,7 @@ class AddFriendState extends State<AddFriend> {
     List tempList = [];
     for (int i = 0; i < filteredUsers.length; i++) {
       if (filteredUsers[i]
-          .item1["username"]
+          .item1[USERNAME]
           .toLowerCase()
           .contains(searchUsername.text.toLowerCase())) {
         tempList.add(filteredUsers[i]);
