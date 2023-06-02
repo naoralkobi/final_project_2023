@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Pages/view_user_profile.dart';
 
+import '../consts.dart';
 import '../screen_size_config.dart';
 
 class LeaderboardList extends StatefulWidget {

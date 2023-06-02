@@ -1,12 +1,8 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project_2023/screen_size_config.dart';
-import 'package:final_project_2023/firebase/auth_repository.dart';
+import '../consts.dart';
 
 /// This file contains the ProfileTextField widget, which is a custom text field used for profile information.
 /// It allows the user to enter and update various profile fields, such as username and description.

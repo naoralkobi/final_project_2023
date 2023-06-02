@@ -1,14 +1,7 @@
-import 'package:final_project_2023/Pages/home_page.dart';
 import 'package:final_project_2023/Pages/login_page.dart';
-import 'package:final_project_2023/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../Widgets/reusable_widget.dart';
-import 'createProfilePage.dart';
-import 'email_varify.dart';
+import 'email_verify.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -18,16 +11,16 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  TextEditingController _passwordTextController = TextEditingController();
-  TextEditingController _confirmPasswordTextController = TextEditingController();
-  TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _confirmPasswordTextController = TextEditingController();
+  final TextEditingController _emailTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: EdgeInsets.all(24),
+          margin: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -43,7 +36,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   _header(context) {
     return Column(
-      children: [
+      children: const [
         Text(
           "Welcome",
           style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -67,10 +60,10 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
               filled: true,
-              prefixIcon: Icon(Icons.person)
+              prefixIcon: const Icon(Icons.person)
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         TextField(
           controller: _passwordTextController,
           decoration: InputDecoration(
@@ -81,11 +74,11 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
             filled: true,
-            prefixIcon: Icon(Icons.lock_outline),
+            prefixIcon: const Icon(Icons.lock_outline),
           ),
           obscureText: true,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         TextField(
           controller: _confirmPasswordTextController,
           decoration: InputDecoration(
@@ -96,49 +89,11 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
             filled: true,
-            prefixIcon: Icon(Icons.lock_outline),
+            prefixIcon: const Icon(Icons.lock_outline),
           ),
           obscureText: true,
         ),
-        SizedBox(height: 10),
-        // ElevatedButton(
-        //   onPressed: () {
-        //     String password = _passwordTextController.text;
-        //     String confirmPassword = _confirmPasswordTextController.text;
-        //
-        //     if (password != confirmPassword) {
-        //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Passwords do not match")));
-        //     } else if (password.length < 4) {
-        //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password must contain at least 4 characters")));
-        //     } else {
-        //       FirebaseAuth.instance
-        //           .createUserWithEmailAndPassword(
-        //         email: _emailTextController.text,
-        //         password: _passwordTextController.text,
-        //       )
-        //           .then((value) {
-        //         // Navigate to the CreateProfilePage upon successful sign up
-        //         Navigator.push(
-        //           context,
-        //           MaterialPageRoute(
-        //             builder: (context) => CreateProfilePage({}),
-        //           ),
-        //         );
-        //       }).onError((error, stackTrace) {
-        //         // Print and handle any errors that occur during the sign-up process
-        //         print("Error ${error.toString()}");
-        //       });
-        //     }
-        //   },
-        //   child: Text(
-        //     "Register",
-        //     style: TextStyle(fontSize: 20),
-        //   ),
-        //   style: ElevatedButton.styleFrom(
-        //     shape: StadiumBorder(),
-        //     padding: EdgeInsets.symmetric(vertical: 16),
-        //   ),
-        // )
+        const SizedBox(height: 10),
         /// this version is with email verifaction:
         ElevatedButton(
           onPressed: () async {
@@ -149,8 +104,8 @@ class _SignUpPageState extends State<SignUpPage> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text("Error"),
-                  content: Text("Passwords do not match"),
+                  title: const Text("Error"),
+                  content: const Text("Passwords do not match"),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context, 'OK'),
@@ -163,8 +118,8 @@ class _SignUpPageState extends State<SignUpPage> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text("Error"),
-                  content: Text("Password must contain at least 4 characters"),
+                  title: const Text("Error"),
+                  content: const Text("Password must contain at least 4 characters"),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context, 'OK'),
@@ -180,15 +135,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   email: _emailTextController.text,
                   password: _passwordTextController.text,
                 );
-
                 User? user = FirebaseAuth.instance.currentUser;
-
+                // check if user creation success but email not verification.
                 if (user != null && !user.emailVerified) {
                   await user.sendEmailVerification();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => EmailVerificationPage(),
+                      builder: (context) => const EmailVerificationPage(),
                     ),
                   );
                 }
@@ -197,8 +151,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text("Error"),
-                      content: Text("The password provided is too weak."),
+                      title: const Text("Error"),
+                      content: const Text("The password provided is too weak."),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () => Navigator.pop(context, 'OK'),
@@ -211,8 +165,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text("Error"),
-                      content: Text("The account already exists for that email."),
+                      title: const Text("Error"),
+                      content: const Text("The account already exists for that email."),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () => Navigator.pop(context, 'OK'),
@@ -223,17 +177,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   );
                 }
               } catch (e) {
-                print(e);
+                debugPrint(e as String?);
               }
             }
           },
-          child: Text(
+          style: ElevatedButton.styleFrom(
+            shape: const StadiumBorder(),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+          child: const Text(
             "Register",
             style: TextStyle(fontSize: 20),
-          ),
-          style: ElevatedButton.styleFrom(
-            shape: StadiumBorder(),
-            padding: EdgeInsets.symmetric(vertical: 16),
           ),
         )
 
@@ -241,118 +195,19 @@ class _SignUpPageState extends State<SignUpPage> {
       ],
     );
   }
-
-
   _signup(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Already have an account? "),
+        const Text("Already have an account? "),
         TextButton(
             onPressed: () {
               // Navigate to the sign-up page when the user taps on the "Sign Up" link
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+                  MaterialPageRoute(builder: (context) => const LoginPage()));
             },
-            child: Text("Sign In"))
+            child: const Text("Sign In"))
       ],
     );
   }
-
-
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     extendBodyBehindAppBar: true,
-  //     appBar: AppBar(
-  //       backgroundColor: Colors.transparent,
-  //       elevation: 0,
-  //       title: const Text(
-  //         "Sign Up",
-  //         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  //       ),
-  //     ),
-  //     body: Container(
-  //       width: MediaQuery.of(context).size.width,
-  //       height: MediaQuery.of(context).size.height,
-  //       decoration: BoxDecoration(
-  //         gradient: LinearGradient(
-  //           colors: [
-  //             hexStringToColor("0077be"),
-  //             hexStringToColor("00bfff"),
-  //             hexStringToColor("40e0d0")
-  //           ],
-  //           begin: Alignment.topCenter,
-  //           end: Alignment.bottomCenter,
-  //         ),
-  //       ),
-  //       child: SingleChildScrollView(
-  //         child: Padding(
-  //           padding: EdgeInsets.fromLTRB(20, 120, 20, 0),
-  //           child: Column(
-  //             children: <Widget>[
-  //               const SizedBox(
-  //                 height: 30,
-  //               ),
-  //               // Reusable text field for username input
-  //               reusableTextField(
-  //                 "Enter Username",
-  //                 Icons.person_outline,
-  //                 false,
-  //                 _userNameTextController,
-  //               ),
-  //               SizedBox(
-  //                 height: 20,
-  //               ),
-  //               // Reusable text field for email input
-  //               reusableTextField(
-  //                 "Enter Email",
-  //                 Icons.person_outline,
-  //                 false,
-  //                 _emailTextController,
-  //               ),
-  //               SizedBox(
-  //                 height: 20,
-  //               ),
-  //               // Reusable text field for password input
-  //               reusableTextField(
-  //                 "Enter Password",
-  //                 Icons.lock_outline,
-  //                 true,
-  //                 _passwordTextController,
-  //               ),
-  //               SizedBox(
-  //                 height: 20,
-  //               ),
-  //               // Sign Up button
-  //               signInSignUpButton(context, false, () {
-  //                 // Todo - perform validations on input fields!
-  //
-  //                 // Create a user with the provided email and password using FirebaseAuth
-  //                 FirebaseAuth.instance
-  //                     .createUserWithEmailAndPassword(
-  //                   email: _emailTextController.text,
-  //                   password: _passwordTextController.text,
-  //                 )
-  //                     .then((value) {
-  //                   // Navigate to the CreateProfilePage upon successful sign up
-  //                   Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(
-  //                       builder: (context) => CreateProfilePage({}),
-  //                     ),
-  //                   );
-  //                 }).onError((error, stackTrace) {
-  //                   // Print and handle any errors that occur during the sign-up process
-  //                   print("Error ${error.toString()}");
-  //                 });
-  //               }),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
