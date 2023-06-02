@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/firebase/auth_repository.dart';
 
-import '../ProfileVars.dart';
+import '../profile_vars.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 
 class AgeDropDown extends StatefulWidget {

@@ -19,7 +19,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.all(24),
+            margin: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -36,7 +36,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
 _header(context) {
     return Column(
-      children: [
+      children: const [
         Text(
           "Email Verification",
           style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -62,7 +62,7 @@ _header(context) {
   _message(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: const [
         Text(
           "Please check your email and follow the instructions to verify your account. After you've verified your email, press the button below to continue.",
           style: TextStyle(fontSize: 18),
@@ -85,7 +85,7 @@ _header(context) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CreateProfilePage({}),
+                  builder: (context) => CreateProfilePage(const {}),
                 ),
               );
             } else {
@@ -93,11 +93,11 @@ _header(context) {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text("Verification Error"),
-                    content: Text("Email not verified"),
+                    title: const Text("Verification Error"),
+                    content: const Text("Email not verified"),
                     actions: [
                       TextButton(
-                        child: Text("OK"),
+                        child: const Text("OK"),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -108,29 +108,29 @@ _header(context) {
               );
             }
           },
-          child: Text(
+          style: ElevatedButton.styleFrom(
+            shape: const StadiumBorder(),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+          child: const Text(
             "Verify Email",
             style: TextStyle(fontSize: 20),
           ),
-          style: ElevatedButton.styleFrom(
-            shape: StadiumBorder(),
-            padding: EdgeInsets.symmetric(vertical: 16),
-          ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         TextButton(
           onPressed: () async {
             User? user = FirebaseAuth.instance.currentUser;
             user?.sendEmailVerification(); // resend verification email
           },
-          child: Text("Resend Email Link"),
+          child: const Text("Resend Email Link"),
         ),
         TextButton(
           onPressed: () {
             // Redirect to login screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
           },
-          child: Text("Back to login"),
+          child: const Text("Back to login"),
         )
       ],
     );
