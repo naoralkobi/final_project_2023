@@ -127,6 +127,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                     // Profile Image
                     Align(
                       child: Stack(
+                        clipBehavior: Clip.none,
                         children: [
                           Hero(
                             tag: "profileImage",
@@ -158,26 +159,25 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                 },
                                 elevation: 1.0,
                                 constraints:
-                                BoxConstraints(maxHeight: 55, maxWidth: 55),
-                                fillColor: Color(0xAFA66CB7),
-                                child: Icon(
+                                const BoxConstraints(maxHeight: 55, maxWidth: 55),
+                                fillColor: const Color(0xAFA66CB7),
+                                padding: const EdgeInsets.all(15.0),
+                                shape: const CircleBorder(),
+                                child: const Icon(
                                   Icons.camera_alt_outlined,
                                   color: Colors.white,
                                   size: 30.0,
                                 ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
                               ))
                         ],
-                        clipBehavior: Clip.none,
                       ),
                     ),
                     SizedBox(
                       height: authRep.isNew() ? 0 : SizeConfig.blockSizeVertical * 2,
                     ),
                     authRep.isNew()
-                        ? SizedBox()
-                        : Container(
+                        ? const SizedBox()
+                        : SizedBox(
                       width: SizeConfig.screenWidth * 0.7,
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
@@ -206,7 +206,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         ),
                       ),
                     ]),
-                    Divider(
+                    const Divider(
                       indent: 35,
                       endIndent: 35,
                       thickness: 0.8,
@@ -225,15 +225,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                               0),
                           child: Column(
                             children: [
-                              // Username Text Field (for new users)
-                              // authRep.isNew()
-                              //     ? usernameTextField
-                              //     : SizedBox(), // Display the username text field only for new users
-                              // //todo - maybe need to remove 2 of the usernameTextField. check!
-                              // Visibility(
-                              //   visible: authRep.isNew(), // Set the visibility of the widget based on whether the user is new or not
-                              //   child: usernameTextField, // Display the username text field if the user is new
-                              // ),
                               usernameTextField, // Display the username text field
                               SizedBox(
                                 height: SizeConfig.blockSizeVertical * 1.5,
@@ -267,12 +258,9 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                               ]),
                               Row(
                                 children: <Widget>[
-                                  // SizedBox(
-                                  //   width: 30,
-                                  // ),
                                   Radio<String>(
                                     value: 'Male', // Value for the male gender
-                                    activeColor: Color(0xFFA66CB7),
+                                    activeColor: PURPLE_COLOR,
                                     groupValue: userGender, // Currently selected gender
                                     onChanged: (String? value) {
                                       setState(() {
@@ -283,7 +271,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                   Text("Male    "),
                                   Radio<String>(
                                     value: 'Female', // Value for the female gender
-                                    activeColor: Color(0xFFA66CB7),
+                                    activeColor: PURPLE_COLOR,
                                     groupValue: userGender, // Currently selected gender
                                     onChanged: (String? value) {
                                       setState(() {
@@ -291,7 +279,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                       });
                                     },
                                   ),
-                                  Text("Female    "),
+                                  const Text("Female    "),
                                 ],
                               ),
                               SizedBox(
@@ -347,7 +335,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                             ),
                           ),
                         ]),
-                        Divider(
+                        const Divider(
                           indent: 35,
                           endIndent: 35,
                           thickness: 0.8,
@@ -395,7 +383,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Container(
@@ -416,7 +404,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           )
                               : null,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Row(children: [
@@ -430,12 +418,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         ]),
                         Row(
                           children: <Widget>[
-                            SizedBox(
+                            const SizedBox(
                               width: 30,
                             ),
                             Radio<String>(
                               value: 'Male',
-                              activeColor: Color(0xFFA66CB7),
+                              activeColor: PURPLE_COLOR,
                               groupValue: preferredGenderVal,
                               onChanged: (String? value) {
                                 setState(() {
@@ -443,10 +431,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                 });
                               },
                             ),
-                            Text("Male"),
+                            const Text("Male"),
                             Radio<String>(
                               value: 'Female',
-                              activeColor: Color(0xFFA66CB7),
+                              activeColor: PURPLE_COLOR,
                               groupValue: preferredGenderVal,
                               onChanged: (String? value) {
                                 setState(() {
@@ -454,10 +442,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                 });
                               },
                             ),
-                            Text("Female"),
+                            const Text("Female"),
                             Radio<String>(
-                              value: 'Dont Care',
-                              activeColor: Color(0xFFA66CB7),
+                              value: "Don't Care",
+                              activeColor: PURPLE_COLOR,
                               groupValue: preferredGenderVal,
                               onChanged: (String? value) {
                                 setState(() {
@@ -465,7 +453,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                 });
                               },
                             ),
-                            Text("Dont care"),
+                            const Text("Don't care"),
                           ],
                         ),
                         SizedBox(
@@ -487,7 +475,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           )
                               : null,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -499,22 +487,22 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                             ),
                           ),
                         ]),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        LanguageWidget("Arabic", firebaseController, widget.userInfo), // Language widget for Arabic
-                        LanguageWidget("French", firebaseController, widget.userInfo), // Language widget for French
-                        LanguageWidget("German", firebaseController, widget.userInfo), // Language widget for German
-                        LanguageWidget("Hebrew", firebaseController, widget.userInfo), // Language widget for Hebrew
-                        LanguageWidget("Italian", firebaseController, widget.userInfo), // Language widget for Italian
-                        LanguageWidget("Portuguese", firebaseController, widget.userInfo), // Language widget for Portuguese
-                        LanguageWidget("Spanish", firebaseController, widget.userInfo), // Language widget for Spanish
-                        SizedBox(
+                        LanguageWidget(ARABIC, firebaseController, widget.userInfo), // Language widget for Arabic
+                        LanguageWidget(FRENCH, firebaseController, widget.userInfo), // Language widget for French
+                        LanguageWidget(GERMAN, firebaseController, widget.userInfo), // Language widget for German
+                        LanguageWidget(HEBRREW, firebaseController, widget.userInfo), // Language widget for Hebrew
+                        LanguageWidget(ITALIAN, firebaseController, widget.userInfo), // Language widget for Italian
+                        LanguageWidget(PORTUGUESE, firebaseController, widget.userInfo), // Language widget for Portuguese
+                        LanguageWidget(SPANISH, firebaseController, widget.userInfo), // Language widget for Spanish
+                        const SizedBox(
                           height: 5,
                         ),
                       ]),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
@@ -542,24 +530,24 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           : null))
                           : null,
                     ),
-                    Divider(
+                    const Divider(
                       indent: 35,
                       endIndent: 35,
                       thickness: 0.8,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     loadFinish
-                        ? Center(child: CircularProgressIndicator()) // Display a loading indicator if the 'loadFinish' variable is true
+                        ? const Center(child: CircularProgressIndicator()) // Display a loading indicator if the 'loadFinish' variable is true
                         : Container(
                       width: SizeConfig.screenWidth * 0.05,
                       child: Align(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: MAIN_BLUE_COLOR,
-                            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            backgroundColor: MAIN_BLUE_COLOR,
+                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30), // if you need to add a border radius
                             ),
@@ -580,14 +568,14 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                               changeLoadFinish();
                             }
                           },
-                          child: Text(
+                          child: const Text(
                             "Finish",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 25,
                     ),
                   ],
@@ -643,7 +631,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       // Upload the file to Firebase Storage using a reference path based on the user's UID
       TaskSnapshot uploadTask = await _storage
           .ref()
-          .child("userAvatars/" + user!.uid)
+          .child("userAvatars/${user!.uid}")
           .putFile(file);
 
       // Retrieve the download URL of the uploaded image
@@ -655,7 +643,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       });
     } else {
       // If no image is selected, display a snackbar with a message
-      final snackBar = SnackBar(
+      const snackBar = SnackBar(
         content: Text('No image selected'),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

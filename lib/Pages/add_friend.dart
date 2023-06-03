@@ -93,7 +93,7 @@ class AddFriendState extends State<AddFriend> {
                 padding: const EdgeInsets.all(30.0),
                 child: TextFormField(
                   controller: searchUsername,
-                  cursorColor: Color(0xFFA66CB7),
+                  cursorColor: PURPLE_COLOR,
                   decoration: InputDecoration(
                     hintText: USERNAME,
                     alignLabelWithHint: true,
@@ -108,7 +108,7 @@ class AddFriendState extends State<AddFriend> {
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: BorderSide(
-                        color: Color(0xFFA66CB7),
+                        color: PURPLE_COLOR,
                         width: 2.0,
                       ),
                     ),

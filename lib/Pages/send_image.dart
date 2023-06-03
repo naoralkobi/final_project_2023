@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import '../consts.dart';
+
 class SendImage extends StatefulWidget{
   final File imageFile;
   SendImage({required this.imageFile});
@@ -25,7 +27,7 @@ class SendImageState extends State<SendImage>{
       ),
       floatingActionButton:FloatingActionButton(
           child: Icon(Icons.send_outlined,color: Colors.white,size: 22,),
-          backgroundColor: Color(0xFFA66CB7),
+          backgroundColor: PURPLE_COLOR,
           elevation: 0,
           onPressed: () => Navigator.pop(context,[true])
       ),

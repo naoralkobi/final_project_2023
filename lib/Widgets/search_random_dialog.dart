@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/Pages/chat_page.dart';
@@ -183,7 +182,7 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
                 margin:
                 EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 5),
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFA66CB7)),
+                  valueColor: AlwaysStoppedAnimation<Color>(PURPLE_COLOR),
                 ),
               ),
               SizedBox(width: SizeConfig.blockSizeHorizontal * 6.5),

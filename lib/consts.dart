@@ -36,6 +36,7 @@ const String HEBRREW = 'Hebrew';
 const String ITALIAN = 'Italian';
 const String PORTUGUESE = 'Portuguese';
 const String SPANISH = 'Spanish';
+const String TEMP = 'temp';
 
 ///Chat sizes
 const double APP_BAR_IMAGE_WIDTH = 40.0;
@@ -63,6 +64,7 @@ const Color SEND_IMAGE_ICON_COLOR = Color(0xDD808080);
 const Color ACCEPT_GAME_COLOR = Color(0xFF46C48D);
 const Color CANCEL_GAME_COLOR = Color(0xFFFF6961);
 const Color MAIN_BLUE_COLOR = Color(0xFF0077be) ;
+const Color PURPLE_COLOR = Color(0xFFA66CB7) ;
 //Color(0xFF6D94BE);
 
 

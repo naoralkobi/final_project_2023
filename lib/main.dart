@@ -58,19 +58,29 @@ class App extends StatelessWidget {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   bool isNew = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Sign out the user from Firebase authentication
+    AuthRepository.instance().signOut();
+    // Disable Firestore persistence
+    FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
+  }
 
   @override
   Widget build(BuildContext context) {
     // Set the status bar color to blue
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF0077be), //or set color with: Color(0xFF0000FF)
+      statusBarColor: Color(0xFF0077be),
     ));
-    // Sign out the user from Firebase authentication
-    AuthRepository.instance().signOut();
-    // Disable Firestore persistence
-    FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -79,11 +89,11 @@ class MyApp extends StatelessWidget {
               color: Color(0xFF0077BE),
             ),
             // Set the scaffold background color to light gray
-            scaffoldBackgroundColor: const Color(0xFFF8F5F5),
+            scaffoldBackgroundColor: const Color(0xFFFFFFFF),
             // Set the default font family to Rockwell
             fontFamily: 'Rockwell',
             // Set the default text theme to black color
-            textTheme: TextTheme(
+            textTheme: const TextTheme(
                 bodyMedium: TextStyle(color: Colors.black),
                 labelLarge: TextStyle(color: Colors.black))),
         routes: {"/mainPage": (context) => MyApp() },
@@ -91,7 +101,7 @@ class MyApp extends StatelessWidget {
         // Check the authentication state using a Consumer widget
         home:
         Consumer<AuthRepository>(builder: (context, authRep, snapshot) {
-          if (authRep.isAuthenticated) {
+          if (authRep != null && authRep.isAuthenticated) {
             if (authRep.isNewInitialized()) {
               if (authRep.isNew()) {
                 // If the user is new, show the create profile page

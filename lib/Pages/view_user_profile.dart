@@ -1,18 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:final_project_2023/Pages/chat_page.dart';
 import 'package:final_project_2023/screen_size_config.dart';
-import 'package:final_project_2023/Widgets/chat_list.dart';
-import 'package:final_project_2023/Widgets/start_chat.dart';
-
 import 'package:final_project_2023/firebase/auth_repository.dart';
-
 import '../consts.dart';
-import 'friends_list.dart';
 import 'show_image.dart';
 import 'createProfilePage.dart';
 
@@ -86,7 +77,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                                 ? IconButton(
                                 icon: Icon(
                                   Icons.edit,
-                                  color: Color(0xFFA66CB7),
+                                  color: PURPLE_COLOR,
                                 ),
                                 iconSize:
                                 SizeConfig.blockSizeHorizontal *

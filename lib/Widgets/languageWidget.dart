@@ -21,7 +21,7 @@ class LanguageWidget extends StatefulWidget {
 
 class _LanguageWidgetState extends State<LanguageWidget> {
   bool isChecked = false; // Indicates whether the checkbox is checked or not
-  String languageLvl = 'temp'; // The selected language level
+  String languageLvl = TEMP; // The selected language level
   bool firstClick = true; // Indicates whether it's the first click on the language widget
 
 
@@ -56,8 +56,8 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                         color: isChecked ? Colors.black : Colors.grey)),
                 controlAffinity: ListTileControlAffinity.leading,
                 value: isChecked,
-                contentPadding: EdgeInsets.fromLTRB(35, 0, 0, 0),
-                activeColor: Color(0xFFA66CB7),
+                contentPadding: const EdgeInsets.fromLTRB(35, 0, 0, 0),
+                activeColor: PURPLE_COLOR,
                 onChanged: (newValue) {
                   setState(() {
                     isChecked = newValue!;
@@ -65,12 +65,12 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                       ProfileVars.languageNum++;
                     } else {
                       ProfileVars.languageNum--;
-                      if (languageLvl != "temp") {
+                      if (languageLvl != TEMP) {
                         ProfileVars.numOfLvls--;
                       }
                     }
                   });
-                  languageLvl = "temp";
+                  languageLvl = TEMP;
                 },
               ),
             ),
@@ -78,7 +78,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                 ? Container(
               height: 35,
               width: 150,
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
                 color: Colors.white,
@@ -88,31 +88,31 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                     width: 0.80),
               ),
               child: DropdownButton<String>(
-                  hint: Text('Level'),
-                  underline: SizedBox.shrink(),
-                  value: languageLvl == 'temp' ? null : languageLvl,
+                  hint: const Text('Level'),
+                  underline: const SizedBox.shrink(),
+                  value: languageLvl == TEMP ? null : languageLvl,
                   items: isChecked
                       ? <String>[
-                    'Beginner',
-                    'Intermediate',
-                    'Advanced'
+                    BEGINNER,
+                    INTERMEDIATE,
+                    ADVANCED
                   ].map((String value) {
-                    return new DropdownMenuItem<String>(
+                    return DropdownMenuItem<String>(
                       value: value,
-                      child: new Text(value.toString()),
+                      child: Text(value.toString()),
                     );
                   }).toList()
                       : null,
                   onChanged: (newVal) {
                     setState(() {
-                      if (languageLvl == "temp") {
+                      if (languageLvl == TEMP) {
                         ProfileVars.numOfLvls++;
                       }
                       languageLvl = newVal!;
                     });
                   }),
             )
-                : SizedBox(),
+                : const SizedBox(),
           ]);
         });
   }
@@ -125,7 +125,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
       FirebaseFirestore.instance
           .collection('users')
           .doc(user!.uid) // Get the document for the current user
-          .update({'Languages.' + widget.languageName: languageLvl});
+          .update({'Languages.${widget.languageName}': languageLvl});
       // Update the language level in the 'Languages' field of the user document
     }
   }

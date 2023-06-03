@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:final_project_2023/Pages/home_page.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/Pages/add_question.dart';
 import '../FireBase/question.dart';
-import '../screen_size_config.dart';
+import '../consts.dart';
 
 class TranslateTheWord extends StatefulWidget {
   final String? language;
@@ -145,7 +143,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
               height: SizeConfig.blockSizeVertical * 6,
               child: TextFormField(
                 controller: bodyController,
-                cursorColor: Color(0xFFA66CB7),
+                cursorColor: PURPLE_COLOR,
                 decoration: InputDecoration(
                   alignLabelWithHint: true,
                   filled: true,
@@ -159,7 +157,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide(
-                      color: Color(0xFFA66CB7),
+                      color: PURPLE_COLOR,
                       width: 2.0,
                     ),
                   ),
@@ -199,7 +197,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
                     controller: answer1Controller,
-                    cursorColor: Color(0xFFA66CB7),
+                    cursorColor: PURPLE_COLOR,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       filled: true,
@@ -213,7 +211,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                          color: Color(0xFFA66CB7),
+                          color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
@@ -258,7 +256,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
                     controller: answer2Controller,
-                    cursorColor: Color(0xFFA66CB7),
+                    cursorColor: PURPLE_COLOR,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       filled: true,
@@ -272,7 +270,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                          color: Color(0xFFA66CB7),
+                          color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
@@ -309,7 +307,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
                     controller: answer3Controller,
-                    cursorColor: Color(0xFFA66CB7),
+                    cursorColor: PURPLE_COLOR,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       filled: true,
@@ -323,7 +321,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                          color: Color(0xFFA66CB7),
+                          color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
@@ -360,7 +358,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
                     controller: answer4Controller,
-                    cursorColor: Color(0xFFA66CB7),
+                    cursorColor: PURPLE_COLOR,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       filled: true,
@@ -374,7 +372,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                          color: Color(0xFFA66CB7),
+                          color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
@@ -452,7 +450,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                                   actions: <Widget>[
                                     isLoading? SizedBox() : TextButton(
                                       onPressed: () => Navigator.pop(context, 'No'),
-                                      child: const Text('No', style: TextStyle(color: Color(0xFFA66CB7), fontSize: 18.0,)),
+                                      child: const Text('No', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0,)),
                                     ),
                                     //SizedBox(width: SizeConfig.blockSizeHorizontal * 8.0),
                                     isLoading? CircularProgressIndicator() : TextButton(
@@ -472,7 +470,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                                         Navigator.pop(context, 'Yes');
                                         _addScore();
                                       },
-                                      child: const Text('Yes', style: TextStyle(color: Color(0xFFA66CB7), fontSize: 18.0)),
+                                      child: const Text('Yes', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0)),
                                     ),
                                     //SizedBox(width: SizeConfig.blockSizeHorizontal * 15.0),
                                   ],
@@ -548,7 +546,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                   Navigator.pop(context, 'Close');
                   Navigator.pop(context);
                 },
-                child: const Text('Close', style: TextStyle(color: Color(0xFFA66CB7), fontSize: 18.0,)),
+                child: const Text('Close', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0,)),
               ),
 
               /*SizedBox(width: SizeConfig.blockSizeHorizontal * 7.0),
@@ -557,7 +555,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                   Navigator.pop(context, 'Finish');
                   navigateToHomePage(context);
                 },
-                child: const Text('Close', style: TextStyle(color: Color(0xFFA66CB7), fontSize: 16.0)),
+                child: const Text('Close', style: TextStyle(color: PURPLE_COLOR, fontSize: 16.0)),
               ),
               SizedBox(width: SizeConfig.blockSizeHorizontal * 1.0),*/
             ],
