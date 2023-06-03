@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/screen_size_config.dart';
-import '../Widgets/ChooseLanguage.dart';
+import '../Widgets/choose_language.dart';
 
 class StartChat extends StatefulWidget {
   StreamController<List<double>> blurController;
@@ -28,8 +28,7 @@ class StartChatState extends State<StartChat> {
           children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(15),
-                primary: Colors.blueAccent,
+                padding: EdgeInsets.all(15), backgroundColor: Colors.blueAccent,
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: Colors.grey),
                   borderRadius: BorderRadius.circular(15),
@@ -55,8 +54,7 @@ class StartChatState extends State<StartChat> {
             SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(15),
-                primary: Colors.blueAccent,
+                padding: EdgeInsets.all(15), backgroundColor: Colors.blueAccent,
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: Colors.grey),
                   borderRadius: BorderRadius.circular(15),

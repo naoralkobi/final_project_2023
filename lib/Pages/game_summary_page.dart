@@ -1,17 +1,10 @@
-import 'dart:async';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:final_project_2023/Pages/questions_page.dart';
 import 'package:final_project_2023/Widgets/game_summary_row.dart';
 import 'package:final_project_2023/screen_size_config.dart';
-import 'package:final_project_2023/firebase/FirebaseDB.dart';
 import '../consts.dart';
 import 'full_game_summary_page.dart';
-import 'show_image.dart';
 
 class GameSummaryPage extends StatefulWidget {
   String gameId;
@@ -143,7 +136,7 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
                                   fit: BoxFit.scaleDown,
                                   child: SizedBox(
                                     child: Text(
-                                      user1Info["username"],
+                                      user1Info[USERNAME],
                                       style: TextStyle(
                                         fontSize:
                                             SizeConfig.blockSizeHorizontal * 6,
@@ -167,7 +160,7 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
                                   fit: BoxFit.scaleDown,
                                   child: SizedBox(
                                     child: Text(
-                                      user2Info["username"],
+                                      user2Info[USERNAME],
                                       style: TextStyle(
                                         fontSize:
                                             SizeConfig.blockSizeHorizontal * 6,

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/Pages/chat_page.dart';
-import 'package:final_project_2023/Pages/friends_list.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/consts.dart';
 import '../FireBase/fireBaseDB.dart';
@@ -82,14 +81,14 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                      "You and " + widget.friendInfo["username"] + " don't learn a common language",
+                      "You and " + widget.friendInfo[USERNAME] + " don't learn a common language",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
                   ),
                   SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blueAccent,
+                      backgroundColor: Colors.blueAccent,
                       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -150,7 +149,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                       valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFB9D9EB)))
                       : ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blueAccent,
+                      backgroundColor: Colors.blueAccent,
                       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -229,7 +228,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
   //                 mainAxisSize: MainAxisSize.min,
   //                 mainAxisAlignment: MainAxisAlignment.center,
   //                 children: [
-  //                   Text("You and " + widget.friendInfo["username"] + " don't learn a common language",
+  //                   Text("You and " + widget.friendInfo[USERNAME] + " don't learn a common language",
   //                       textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
   //                   SizedBox(height: SizeConfig.blockSizeVertical * 4),
   //                   TextButton(

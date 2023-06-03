@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 
+import '../consts.dart';
+
 class FullGameSummaryPage extends StatefulWidget {
   Map gameData;
   Map user1Info;
@@ -258,7 +260,7 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
                   fit: BoxFit.scaleDown,
                   child: SizedBox(
                     child: Text(
-                      userInfo["username"],
+                      userInfo[USERNAME],
                       style: TextStyle(
                           fontSize: SizeConfig.screenWidth * 0.04,
                           fontWeight: FontWeight.bold),

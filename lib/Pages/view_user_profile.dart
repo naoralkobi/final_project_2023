@@ -124,7 +124,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                           child: SizedBox(
                             child: Text(
                               // Display the username
-                            (userInfo.data!.data() as Map<String, dynamic>)["username"]
+                            (userInfo.data!.data() as Map<String, dynamic>)[USERNAME]
                           ,
                               style: TextStyle(
                                   fontSize: SizeConfig.screenWidth * 0.12,

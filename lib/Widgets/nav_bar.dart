@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Pages/friends_list.dart';
@@ -9,9 +8,7 @@ import '../FireBase/auth_repository.dart';
 import '../Pages/google_translate.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../Pages/select_lang_screen.dart';
-import '../Pages/videoLearningPage.dart';
 import '../Pages/view_user_profile.dart';
 import '../consts.dart';
 import '../screen_size_config.dart';

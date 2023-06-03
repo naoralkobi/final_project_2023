@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project_2023/Pages/videoCall.dart';
+import 'package:final_project_2023/Pages/video_call.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:final_project_2023/Pages/chat_massages.dart';
+import 'package:final_project_2023/Widgets/chat_massages.dart';
 import 'package:final_project_2023/Pages/send_image.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/Widgets/custom_chat_bar.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../Widgets/CallingDialog.dart';
+import '../Widgets/calling_dialog.dart';
 import '../consts.dart';
 import 'questions_page.dart';
 import 'view_user_profile.dart';
@@ -108,7 +108,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _listen() async {
-    print("chat id - " + widget.chatID);
+    debugPrint("chat id - ${widget.chatID}");
     DocumentReference reference =
     FirebaseFirestore.instance.collection(CHATS).doc(widget.chatID);
     streamSubscription = reference.snapshots().listen((querySnapshot) {
@@ -127,11 +127,13 @@ class _ChatPageState extends State<ChatPage> {
       if (data["acceptedInviteUID"] != null &&
           data["acceptedInviteUID"] != "") {
         if (data["acceptedInviteUID"] == widget.currentUserID) {
-          if (data["currentGame"] != null)
+          if (data["currentGame"] != null) {
             enterGame(data["currentGame"], 1, data[INVITE_ID]);
+          }
         } else {
-          if (data["currentGame"] != null)
+          if (data["currentGame"] != null) {
             enterGame(data["currentGame"], 2, data[INVITE_ID]);
+          }
         }
       }
 
@@ -249,7 +251,7 @@ class _ChatPageState extends State<ChatPage> {
                                       messageController.text,
                                       MESSAGE_TYPE_TEXT,
                                       widget.currentUserID,
-                                      widget.userInfo["username"],
+                                      widget.userInfo[USERNAME],
                                       widget.friendInfo["UID"]);
                                   messageController.clear();
                                 },
@@ -345,7 +347,7 @@ class _ChatPageState extends State<ChatPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  widget.friendInfo["username"],
+                                  widget.friendInfo[USERNAME],
                                   style: TextStyle(
                                       fontSize:
                                       SizeConfig.blockSizeHorizontal * 5,
@@ -359,7 +361,7 @@ class _ChatPageState extends State<ChatPage> {
                             width: SizeConfig.blockSizeHorizontal * 2,
                           ),
                           if (friendsList
-                              .contains(widget.friendInfo["username"]) || widget.isMyFriend)
+                              .contains(widget.friendInfo[USERNAME]) || widget.isMyFriend)
                             SizedBox()
                           else
                             IconButton(
@@ -370,7 +372,7 @@ class _ChatPageState extends State<ChatPage> {
                                 ),
                                 onPressed: () {
                                   FirebaseDB.Firebase_db.addFriend(
-                                      widget.friendInfo["username"],
+                                      widget.friendInfo[USERNAME],
                                       context);
                                   setState(() {
                                     widget.isMyFriend = true;
@@ -384,7 +386,7 @@ class _ChatPageState extends State<ChatPage> {
                             width: SizeConfig.blockSizeHorizontal * 4,
                           ),
                           IconButton(
-                            icon: Icon(Icons.video_call),
+                            icon: const Icon(Icons.video_call),
                             color: Colors.white,
                             onPressed: () async {
                               await _handleCameraAndMic();
@@ -460,15 +462,15 @@ class _ChatPageState extends State<ChatPage> {
 
   _sendGameInvite() {
     FirebaseDB.Firebase_db.sendMessage(context, widget.chatID, "🎮",
-        MESSAGE_TYPE_GAME, widget.currentUserID,widget.userInfo["username"],widget.friendInfo["UID"]);
+        MESSAGE_TYPE_GAME, widget.currentUserID,widget.userInfo[USERNAME],widget.friendInfo["UID"]);
   }
 
   _sendImage(PickedFile pickedFile) async {
     var db = FirebaseDB.Firebase_db;
     String imageURL = await db.uploadImage(File(pickedFile.path), widget.chatID,
-        widget.currentUserID + "-" + DateTime.now().toString());
+        "${widget.currentUserID}-${DateTime.now()}");
     db.sendMessage(context, widget.chatID, imageURL, MESSAGE_TYPE_IMAGE,
-        widget.currentUserID,widget.userInfo["username"],widget.friendInfo["UID"]);
+        widget.currentUserID,widget.userInfo[USERNAME],widget.friendInfo["UID"]);
   }
 
   enterGame(String gameID, int userNumber, String inviteID) {
@@ -492,7 +494,7 @@ class _ChatPageState extends State<ChatPage> {
         .where('status', isEqualTo: 'pending')
         .snapshots()
         .listen((querySnapshot) {
-      querySnapshot.docChanges.forEach((change) {
+      for (var change in querySnapshot.docChanges) {
         if (change.type == DocumentChangeType.added) {
           // Check if the status is still 'pending'
           if (change.doc['status'] == 'pending') {
@@ -500,11 +502,11 @@ class _ChatPageState extends State<ChatPage> {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text('Incoming call'),
-                content: Text('Do you want to accept the call?'),
+                title: const Text('Incoming call'),
+                content: const Text('Do you want to accept the call?'),
                 actions: [
                   TextButton(
-                    child: Text('Accept'),
+                    child: const Text('Accept'),
                     onPressed: () {
                       // Update the status of the call request to "accepted"
                       change.doc.reference.update({'status': 'accepted'});
@@ -522,7 +524,7 @@ class _ChatPageState extends State<ChatPage> {
                     },
                   ),
                   TextButton(
-                    child: Text('Reject'),
+                    child: const Text('Reject'),
                     onPressed: () {
                       // Update the status of the call request to "rejected"
                       change.doc.reference.update({'status': 'rejected'});
@@ -534,7 +536,7 @@ class _ChatPageState extends State<ChatPage> {
             );
           }
         }
-      });
+      }
     });
     // Listen for missed calls
     missedCallSubscription = FirebaseFirestore.instance
@@ -543,17 +545,17 @@ class _ChatPageState extends State<ChatPage> {
         .where('status', isEqualTo: 'missed')
         .snapshots()
         .listen((querySnapshot) {
-      querySnapshot.docChanges.forEach((change) {
+      for (var change in querySnapshot.docChanges) {
         if (change.type == DocumentChangeType.added) {
           // A missed call has been detected
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Missed call'),
-              content: Text('You have a missed video call.'),
+              title: const Text('Missed call'),
+              content: const Text('You have a missed video call.'),
               actions: [
                 TextButton(
-                  child: Text('OK'),
+                  child: const Text('OK'),
                   onPressed: () {
                     Navigator.of(context).pop();
                     // Update the status of the missed call to "notified" or delete the request
@@ -567,7 +569,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
           );
         }
-      });
+      }
     });
   }
 
@@ -589,18 +591,6 @@ class _ChatPageState extends State<ChatPage> {
           }
           callStatusSubscription?.cancel();
         }
-        // if (status == 'accepted') {
-        //   // The callee has accepted the call, navigate to the VideoCallPage
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => VideoCallPage(
-        //         channelName: channelId,
-        //       ),
-        //     ),
-        //   );
-        // }
-        //
         if (status == 'accepted') {
           // The callee has accepted the call, unsubscribe from call requests
           callRequestSubscription?.cancel();
@@ -623,7 +613,7 @@ class _ChatPageState extends State<ChatPage> {
       });
 
       // Set a timeout for the call request
-      Future.delayed(Duration(seconds: 15), () {
+      Future.delayed(const Duration(seconds: 15), () {
         docRef.get().then((snapshot) {
           if (snapshot.data()?['status'] == 'pending') {
             // The call request hasn't been accepted or rejected within the timeout period,
@@ -644,56 +634,4 @@ class _ChatPageState extends State<ChatPage> {
       },
     );
   }
-
-// Call this function when the user tries to start a call
-  // void startCall() {
-  //   String channelId = widget.chatID;// Replace with actual channel id
-  //   // Create the call request
-  //   FirebaseFirestore.instance.collection('call_requests').add({
-  //     'callerId': widget.currentUserID,
-  //     'calleeId': widget.friendInfo['UID'],
-  //     'channelName': channelId,
-  //     'status': 'pending',
-  //   }).then((docRef) {
-  //     // Listen for changes in the call request status
-  //     callStatusSubscription = docRef.snapshots().listen((snapshot) {
-  //       if (snapshot.data()?['status'] == 'accepted') {
-  //         // The callee has accepted the call, navigate to the VideoCallPage
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => VideoCallPage(
-  //               channelName: channelId,
-  //             ),
-  //           ),
-  //         );
-  //       } else if (snapshot.data()?['status'] == 'rejected') {
-  //         // The callee has rejected the call, handle the rejection
-  //       }
-  //     });
-  //
-  //     // Set a timeout for the call request
-  //     Future.delayed(Duration(seconds: 15), () {
-  //       docRef.get().then((snapshot) {
-  //         if (snapshot.data()?['status'] == 'pending') {
-  //           // The call request hasn't been accepted or rejected within the timeout period,
-  //           // so update it to 'rejected'
-  //           docRef.update({'status': 'missed'});
-  //         }
-  //       });
-  //     });
-  //   });
-  //
-  //   // Show the calling dialog
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (context) {
-  //       return CallingDialog();
-  //     },
-  //   );
-  // }
-
-
-
 }

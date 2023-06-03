@@ -1,25 +1,20 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:final_project_2023/Pages/select_lang_screen.dart';
-import 'package:final_project_2023/Pages/view_user_profile.dart';
 import 'package:final_project_2023/consts.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../FireBase/auth_repository.dart';
-import '../Widgets/custom_pop_up_menu.dart';
-import '../Widgets/navBar.dart';
+import '../Widgets/nav_bar.dart';
 import '../Widgets/start_chat.dart';
-import '../utils/colors.dart';
 import 'add_question.dart';
 import 'friends_list.dart';
 import 'google_translate.dart';
 import 'leader_board.dart';
 import 'login_page.dart';
-import 'register_page.dart';
 import '../Widgets/chat_list.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 
@@ -212,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // mainAxisAlignment: MainAxisAlignment.center,
     // children: [
     // Text(
-    //   snapshot.data!["username"],
+    //   snapshot.data![USERNAME],
     //   style: TextStyle(
     //       fontSize:
     //       SizeConfig.blockSizeHorizontal *

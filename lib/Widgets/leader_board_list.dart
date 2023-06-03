@@ -169,7 +169,7 @@ class LeaderboardListState extends State<LeaderboardList> {
             prevScore = doc['score'];
           }
         }
-        if (widget.usernames.contains(doc["username"])) {
+        if (widget.usernames.contains(doc[USERNAME])) {
           if (mounted) {
             setState(() {
               usersDocs.add(doc);

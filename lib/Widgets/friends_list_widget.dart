@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/Pages/view_user_profile.dart';
 import 'package:final_project_2023/screen_size_config.dart';
-import 'package:final_project_2023/Widgets/ChooseLanguage.dart';
+import 'package:final_project_2023/Widgets/choose_language.dart';
 import 'package:final_project_2023/consts.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
 import 'package:final_project_2023/Pages/add_friend.dart';
@@ -114,10 +114,10 @@ class ListViewFriendsState extends State<ListViewFriends> {
                                   Map<String, dynamic>? friendLanguages = friendData?[LANGUAGES];
                                   if (((widget.isSelectFriendPage &&
                                       (friendLanguages == null || !friendLanguages.containsKey(widget.selectedLanguage))) ||
-                                      !friends.contains(friendData?["username"]))) {
+                                      !friends.contains(friendData?[USERNAME]))) {
                                     return const SizedBox();
                               } else if (widget.searchText != "" &&
-                                  !friendData?["username"]
+                                  !friendData?[USERNAME]
                                       .toLowerCase()
                                       .contains(
                                       widget.searchText.toLowerCase())) {
@@ -133,10 +133,10 @@ class ListViewFriendsState extends State<ListViewFriends> {
                               Map<String, dynamic>? friendLanguages = friendData?[LANGUAGES];
                               if ((widget.isSelectFriendPage &&
                                   !(friendLanguages?.containsKey(widget.selectedLanguage) ?? false) ||
-                                  !friends.contains(friendData?["username"]))) {
+                                  !friends.contains(friendData?[USERNAME]))) {
                                 return const SizedBox();
                               } else if (widget.searchText != "" &&
-                                  !friendData!["username"]
+                                  !friendData![USERNAME]
                                       .toLowerCase()
                                       .contains(
                                       widget.searchText.toLowerCase())) {
@@ -166,7 +166,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
       dense: true,
       tileColor: const Color(0xFFF8F5F5),
       title: Text(
-        friendInfo["username"],
+        friendInfo[USERNAME],
         style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal * 5),
       ),
       leading: GestureDetector(
@@ -193,7 +193,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                 icon: const Icon(Icons.person_remove_alt_1_outlined,
                     size: 25, color: Color(0xFF6D94BE)),
                 onPressed: () async {
-                  deleteFriend(friendInfo["username"]);
+                  deleteFriend(friendInfo[USERNAME]);
                 },
               ),
             ),

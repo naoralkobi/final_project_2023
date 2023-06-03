@@ -35,9 +35,9 @@ class LeaderboardState extends State<Leaderboard> {
   @override
   void initState() {
     super.initState();
-    _getCurrentRank(widget.userInfo["username"]);
+    _getCurrentRank(widget.userInfo[USERNAME]);
     friendsList = widget.userInfo['friends'];
-    friendsList.add(widget.userInfo["username"]);
+    friendsList.add(widget.userInfo[USERNAME]);
   }
 
   @override
@@ -183,9 +183,9 @@ class LeaderboardState extends State<Leaderboard> {
           ),
           body: TabBarView(
             children: <Widget>[
-              LeaderboardList([], true, false, widget.userInfo["username"]),
-              LeaderboardList([], false, false, widget.userInfo["username"]),
-              LeaderboardList(friendsList, false, true, widget.userInfo["username"]),
+              LeaderboardList([], true, false, widget.userInfo[USERNAME]),
+              LeaderboardList([], false, false, widget.userInfo[USERNAME]),
+              LeaderboardList(friendsList, false, true, widget.userInfo[USERNAME]),
             ],
           )
       ),
