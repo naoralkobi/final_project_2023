@@ -1,21 +1,12 @@
 import 'dart:async';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:final_project_2023/Pages/questions_page.dart';
-import 'package:final_project_2023/Widgets/game_summary_row.dart';
-
 import 'package:final_project_2023/screen_size_config.dart';
-import 'package:final_project_2023/firebase/FirebaseDB.dart';
-
 import '../consts.dart';
 import 'game_summary_page.dart';
-import 'show_image.dart';
 import 'dart:math';
 
 class WinnerPage extends StatefulWidget {
@@ -236,7 +227,7 @@ class _WinnerPageState extends State<WinnerPage> {
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: SizeConfig.blockSizeHorizontal * 18,
-              color: Color(0xFFA66CB7)),
+              color: PURPLE_COLOR),
         ),
       );
     } else {

@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project_2023/Pages/chat_page.dart';
 import 'package:final_project_2023/Pages/view_user_profile.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/Widgets/ChooseLanguage.dart';
 import 'package:final_project_2023/consts.dart';
 import 'package:final_project_2023/firebase/FirebaseDB.dart';
-import 'package:final_project_2023/firebase/auth_repository.dart';
-import 'package:tuple/tuple.dart';
 import 'package:final_project_2023/Pages/add_friend.dart';
 
 class ListViewFriends extends StatefulWidget {
@@ -21,7 +18,7 @@ class ListViewFriends extends StatefulWidget {
 
   @override
   ListViewFriendsState createState() {
-    return new ListViewFriendsState();
+    return ListViewFriendsState();
   }
 }
 
@@ -37,10 +34,10 @@ class ListViewFriendsState extends State<ListViewFriends> {
   @override
   Widget build(BuildContext context) {
     if (isLoadingChat) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFA66CB7)),
+            valueColor: AlwaysStoppedAnimation<Color>(PURPLE_COLOR),
           ),
         ),
       );
@@ -52,28 +49,29 @@ class ListViewFriendsState extends State<ListViewFriends> {
             .snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<DocumentSnapshot> currentUserInfo) {
-          if (currentUserInfo.hasError) return Text("There has been an error");
+          if (currentUserInfo.hasError) return const Text("There has been an error");
           //if connecting show progressIndicator
           if (currentUserInfo.connectionState == ConnectionState.waiting &&
-              currentUserInfo.data == null)
+              currentUserInfo.data == null) {
             return Center(child: CircularProgressIndicator());
-          else
+          } else {
             return Container(
               color: const Color(0xFFF8F5F5),
-              padding: EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10),
               child: StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection('users')
-                      .orderBy("username")
+                      .collection(USERS)
+                      .orderBy(USERNAME)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshots) {
-                    if (snapshots.hasError)
-                      return Text("There has been an error ");
+                    if (snapshots.hasError) {
+                      return const Text("There has been an error ");
+                    }
                     if (snapshots.connectionState == ConnectionState.waiting &&
-                        snapshots.data == null)
-                      return Center(child: CircularProgressIndicator());
-                    else {
+                        snapshots.data == null) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
                       List friends = currentUserInfo.data!["friends"];
                       if (friends.isEmpty) {
                         return Center(
@@ -81,7 +79,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("You don't have any friends 🙁",
+                              Text("Try to add new Friends to your list 😀",
                                   style: TextStyle(
                                       color: Colors.grey,
                                       fontSize:
@@ -100,7 +98,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                                 onPressed: () {
                                   navigateToAddFriend(context);
                                 },
-                                child: Text(
+                                child: const Text(
                                   "Add a friend",
                                   style: TextStyle(fontSize: 18, color: Colors.white),
                                 ),
@@ -108,7 +106,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                             ],
                           ),
                         );
-                      } else
+                      } else {
                         return ListView.separated(
                             separatorBuilder:
                                 (BuildContext context, int index) {
@@ -117,15 +115,16 @@ class ListViewFriendsState extends State<ListViewFriends> {
                                   if (((widget.isSelectFriendPage &&
                                       (friendLanguages == null || !friendLanguages.containsKey(widget.selectedLanguage))) ||
                                       !friends.contains(friendData?["username"]))) {
-                                    return SizedBox();
+                                    return const SizedBox();
                               } else if (widget.searchText != "" &&
                                   !friendData?["username"]
                                       .toLowerCase()
                                       .contains(
                                       widget.searchText.toLowerCase())) {
-                                return SizedBox();
-                              } else
-                                return Divider();
+                                return const SizedBox();
+                              } else {
+                                return const Divider();
+                              }
                             },
                             scrollDirection: Axis.vertical,
                             itemCount: snapshots.data!.size,
@@ -135,22 +134,25 @@ class ListViewFriendsState extends State<ListViewFriends> {
                               if ((widget.isSelectFriendPage &&
                                   !(friendLanguages?.containsKey(widget.selectedLanguage) ?? false) ||
                                   !friends.contains(friendData?["username"]))) {
-                                return SizedBox();
+                                return const SizedBox();
                               } else if (widget.searchText != "" &&
                                   !friendData!["username"]
                                       .toLowerCase()
                                       .contains(
                                       widget.searchText.toLowerCase())) {
-                                return SizedBox();
-                              } else
+                                return const SizedBox();
+                              } else {
                                 Map<String, dynamic>? friendData = snapshots.data!.docs[index]?.data() as Map<String, dynamic>?;
+                              }
                               return createUserListTile(
                                     friendData!,
                                   currentUserInfo.data!.data() as Map<dynamic, dynamic>);
                             });
+                      }
                     }
                   }),
             );
+          }
         });
   }
 
@@ -162,7 +164,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
         }
       },
       dense: true,
-      tileColor: Color(0xFFF8F5F5),
+      tileColor: const Color(0xFFF8F5F5),
       title: Text(
         friendInfo["username"],
         style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal * 5),
@@ -185,10 +187,10 @@ class ListViewFriendsState extends State<ListViewFriends> {
         child: Row(
           children: [
             widget.isSelectFriendPage
-                ? SizedBox()
+                ? const SizedBox()
                 : Flexible(
               child: IconButton(
-                icon: Icon(Icons.person_remove_alt_1_outlined,
+                icon: const Icon(Icons.person_remove_alt_1_outlined,
                     size: 25, color: Color(0xFF6D94BE)),
                 onPressed: () async {
                   deleteFriend(friendInfo["username"]);
@@ -200,7 +202,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                 ? SizedBox()
                 : Flexible(
               child: IconButton(
-                icon: Icon(Icons.chat_outlined,
+                icon: const Icon(Icons.chat_outlined,
                     size: 25, color: Color(0xFF6D94BE)),
                 onPressed: () async {
                   showDialog(
@@ -224,9 +226,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
         builder: (BuildContext context) => AlertDialog(
           title: const Text('Remove a friend', textAlign: TextAlign.center),
           content: Text(
-              "Are you sure you would like to remove " +
-                  friendUsername +
-                  " from your friends?",
+              "Are you sure you would like to remove $friendUsername from your friends?",
               textAlign: TextAlign.center),
           elevation: 24.0,
           shape: RoundedRectangleBorder(
@@ -237,7 +237,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
               onPressed: () => Navigator.pop(context, 'No'),
               child: const Text('No',
                   style: TextStyle(
-                    color: Color(0xFFA66CB7),
+                    color: PURPLE_COLOR,
                     fontSize: 18.0,
                   )),
             ),
@@ -250,34 +250,11 @@ class ListViewFriendsState extends State<ListViewFriends> {
               },
               child: const Text('Yes',
                   style:
-                  TextStyle(color: Color(0xFFA66CB7), fontSize: 18.0)),
+                  TextStyle(color: PURPLE_COLOR, fontSize: 18.0)),
             ),
-            //SizedBox(width: SizeConfig.blockSizeHorizontal * 15.0),
           ],
         ));
   }
-
-  // void _enterChatPage(String language, Map friendInfo, Map userInfo) async {
-  //   String currentUserID = AuthRepository.instance().user!.uid;
-  //   setState(() {
-  //     isLoadingChat = true;
-  //   });
-  //   String chatID = await FirebaseDB.Firebase_db.getChatIdOfFriend(
-  //       currentUserID, friendInfo["UID"], language);
-  //   Navigator.of(context).pop();
-  //   Navigator.of(context).pop();
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute<void>(
-  //       builder: (BuildContext context) {
-  //         return ChatPage(
-  //             chatID, currentUserID, friendInfo, language, userInfo);
-  //       },
-  //     ),
-  //   );
-  //   setState(() {
-  //     isLoadingChat = false;
-  //   });
-  // }
 
   void navigateToAddFriend(context) {
     Navigator.push(

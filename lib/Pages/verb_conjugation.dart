@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:final_project_2023/Pages/add_question.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 
+import '../consts.dart';
 import '../firebase/Question.dart';
 
 /// Purpose of the code:
@@ -154,7 +155,7 @@ class VerbConjugationState extends State<VerbConjugation> {
               child: TextFormField(
                 maxLines: 5,
                 controller: beginningController,
-                cursorColor: Color(0xFFA66CB7),
+                cursorColor: PURPLE_COLOR,
                 decoration: InputDecoration(
                   alignLabelWithHint: true,
                   filled: true,
@@ -168,7 +169,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide(
-                      color: Color(0xFFA66CB7),
+                      color: PURPLE_COLOR,
                       width: 2.0,
                     ),
                   ),
@@ -208,7 +209,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
                     controller: answer1Controller,
-                    cursorColor: Color(0xFFA66CB7),
+                    cursorColor: PURPLE_COLOR,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       filled: true,
@@ -222,7 +223,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                          color: Color(0xFFA66CB7),
+                          color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
@@ -257,7 +258,7 @@ class VerbConjugationState extends State<VerbConjugation> {
               child: TextFormField(
                 maxLines: 5,
                 controller: endController,
-                cursorColor: Color(0xFFA66CB7),
+                cursorColor: PURPLE_COLOR,
                 decoration: InputDecoration(
                   alignLabelWithHint: true,
                   filled: true,
@@ -271,7 +272,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide(
-                      color: Color(0xFFA66CB7),
+                      color: PURPLE_COLOR,
                       width: 2.0,
                     ),
                   ),
@@ -314,7 +315,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
                     controller: answer2Controller,
-                    cursorColor: Color(0xFFA66CB7),
+                    cursorColor: PURPLE_COLOR,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       filled: true,
@@ -328,7 +329,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                          color: Color(0xFFA66CB7),
+                          color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
@@ -365,7 +366,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
                     controller: answer3Controller,
-                    cursorColor: Color(0xFFA66CB7),
+                    cursorColor: PURPLE_COLOR,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       filled: true,
@@ -379,7 +380,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                          color: Color(0xFFA66CB7),
+                          color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
@@ -416,7 +417,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
                     controller: answer4Controller,
-                    cursorColor: Color(0xFFA66CB7),
+                    cursorColor: PURPLE_COLOR,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       filled: true,
@@ -430,7 +431,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                          color: Color(0xFFA66CB7),
+                          color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
@@ -466,7 +467,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                 // ),
                 Radio<String>(
                   value: '1',
-                  activeColor: Color(0xFFA66CB7),
+                  activeColor: PURPLE_COLOR,
                   groupValue: correctAnswer,
                   onChanged: (String? value) {
                     setState(() {
@@ -477,7 +478,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                 Text("1       "),
                 Radio<String>(
                   value: '2',
-                  activeColor: Color(0xFFA66CB7),
+                  activeColor: PURPLE_COLOR,
                   groupValue: correctAnswer,
                   onChanged: (String? value) {
                     setState(() {
@@ -488,7 +489,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                 Text("2       "),
                 Radio<String>(
                   value: '3',
-                  activeColor: Color(0xFFA66CB7),
+                  activeColor: PURPLE_COLOR,
                   groupValue: correctAnswer,
                   onChanged: (String? value) {
                     setState(() {
@@ -499,7 +500,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                 Text("3       "),
                 Radio<String>(
                   value: '4',
-                  activeColor: Color(0xFFA66CB7),
+                  activeColor: PURPLE_COLOR,
                   groupValue: correctAnswer,
                   onChanged: (String? value) {
                     setState(() {
@@ -571,7 +572,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                                       actions: <Widget>[
                                         isLoading? SizedBox(): TextButton(
                                           onPressed: () => Navigator.pop(context, 'No'),
-                                          child: const Text('No', style: TextStyle(color: Color(0xFFA66CB7), fontSize: 18.0,)),
+                                          child: const Text('No', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0,)),
                                         ),
                                         isLoading? CircularProgressIndicator() : TextButton(
                                           onPressed: () {
@@ -589,7 +590,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                                             Navigator.pop(context, 'Yes');
                                             _addScore();
                                           },
-                                          child: const Text('Yes', style: TextStyle(color: Color(0xFFA66CB7), fontSize: 18.0)),
+                                          child: const Text('Yes', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0)),
                                         ),
                                       ],
                                     );
@@ -674,7 +675,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                   Navigator.pop(context, 'Close');
                   Navigator.pop(context);
                 },
-                child: const Text('Close', style: TextStyle(color: Color(0xFFA66CB7), fontSize: 18.0,)),
+                child: const Text('Close', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0,)),
               ),
             ],
           );

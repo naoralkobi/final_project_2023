@@ -3,7 +3,6 @@ import 'package:final_project_2023/Pages/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'forget_password.dart';
 
 class LoginPage extends StatefulWidget {
@@ -35,8 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       idToken: googleAuth.idToken,
     );
     //Sign in the user with the credentials
-    final UserCredential userCredential =
-    await auth.signInWithCredential(credential);
+    final UserCredential userCredential =  await auth.signInWithCredential(credential);
     return null;
   }
 
@@ -46,14 +44,16 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         body: Container(
           margin: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _header(context),
-              _inputField(context),
-              _forgotPassword(context),
-              _signup(context),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _header(context),
+                _inputField(context),
+                _forgotPassword(context),
+                _signup(context),
+              ],
+            ),
           ),
         ),
       ),
