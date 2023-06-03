@@ -11,7 +11,7 @@ import 'package:final_project_2023/screen_size_config.dart';
 import 'dart:io';
 import '../FireBase/auth_repository.dart';
 import '../Widgets/age_drop_down.dart';
-import '../Widgets/languageWidget.dart';
+import '../Widgets/language_widget.dart';
 import '../Widgets/profile_date.dart';
 import '../Widgets/profile_text_field.dart';
 import '../profile_vars.dart';
@@ -86,7 +86,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           return Consumer<AuthRepository>(builder: (context, authRep, snapshot) {
             // Widget for the username text field
             Widget usernameTextField = ProfileTextField(
-              "username", // Placeholder text for the text field
+              USERNAME, // Placeholder text for the text field
               userNameController, // Controller to manage the text field value
               firebaseController, // Stream controller for real-time validation
               isUserNameUnique, // Flag to indicate if the username is unique
@@ -182,10 +182,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: SizedBox(
-                          child: widget.userInfo!["username"] == null
+                          child: widget.userInfo![USERNAME] == null
                               ? Container()
                               : Text(
-                            widget.userInfo!["username"],
+                            widget.userInfo![USERNAME],
                             style: TextStyle(
                                 fontSize: SizeConfig.screenWidth * 0.12,
                                 fontWeight: FontWeight.bold),
@@ -663,8 +663,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     await FirebaseFirestore.instance.collection("users").get().then((value) {
       // Iterate over each document in the query result
       value.docs.forEach((element) {
-        // Check if the "username" field in the document matches the provided username
-        if (element.data()["username"] == userName) {
+        // Check if the USERNAME field in the document matches the provided username
+        if (element.data()[USERNAME] == userName) {
           setState(() {
             // Update the state variable to indicate that the username is not unique
             isUserNameUnique = false;
@@ -721,7 +721,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       });
 
       await FirebaseFirestore.instance.collection("users").doc(user!.uid).update({
-        "username": widget.userInfo!["username"],
+        USERNAME: widget.userInfo![USERNAME],
       });
 
       firebaseController.add("finish");

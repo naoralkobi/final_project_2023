@@ -6,7 +6,7 @@ import 'package:final_project_2023/FireBase/FirebaseDB.dart';
 import 'package:page_transition/page_transition.dart';
 import '../consts.dart';
 import '../screen_size_config.dart';
-import 'game_summary_page.dart';
+import '../Pages/game_summary_page.dart';
 
 
 class ChatMessages extends StatefulWidget {
@@ -54,12 +54,12 @@ class _ChatMessagesState extends State<ChatMessages> {
                     .snapshots(),
                 builder: (BuildContext buildContext,
                     AsyncSnapshot<QuerySnapshot> snapshots) {
-                  if (snapshots.hasError) return Text("There has been an error");
+                  if (snapshots.hasError) return const Text("There has been an error");
                   //if connecting show progressIndicator
                   if (snapshots.connectionState == ConnectionState.waiting &&
-                      snapshots.data == null)
-                    return Center(child: CircularProgressIndicator());
-                  else
+                      snapshots.data == null) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
                     return ListView.builder(
                       reverse: true,
                       itemCount: snapshots.data!.docs.length + 1,
@@ -70,7 +70,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                         } else {
                           if (snapshots.data!.docs[index][MESSAGE_TYPE] ==
                               MESSAGE_TYPE_DATE_DIVIDER) {
-                            return _buildDateSeperator(
+                            return _buildDateSeparator(
                                 snapshots.data!.docs[index][MESSAGE_TIMESTAMP]);
                           } else if (snapshots.data!.docs[index][MESSAGE_TYPE] ==
                               MESSAGE_TYPE_GAME) {
@@ -81,12 +81,14 @@ class _ChatMessagesState extends State<ChatMessages> {
                           } else if (snapshots.data!.docs[index][MESSAGE_TYPE] ==
                               MESSAGE_TYPE_GAME_CANCELED) {
                             return _buildGameCanceled(snapshots.data!.docs[index]);
-                          } else
+                          } else {
                             return _buildMessage(snapshots.data!.docs[index],
                                 widget.userID, widget.chatID);
+                          }
                         }
                       },
                     );
+                  }
                 },
               ),
             )),
@@ -111,10 +113,10 @@ class _ChatMessagesState extends State<ChatMessages> {
                   constraints: BoxConstraints(
                       minWidth: SizeConfig.blockSizeHorizontal * 10,
                       maxWidth: SizeConfig.blockSizeHorizontal * 80),
-                  padding: EdgeInsets.all(MESSAGE_PADDING),
+                  padding: const EdgeInsets.all(MESSAGE_PADDING),
                   margin: snapshot[MESSAGE_ID_FROM] == widget.userID
-                      ? EdgeInsets.fromLTRB(5, 5, 10, 5)
-                      : EdgeInsets.fromLTRB(10, 5, 5, 5),
+                      ? const EdgeInsets.fromLTRB(5, 5, 10, 5)
+                      : const EdgeInsets.fromLTRB(10, 5, 5, 5),
                   decoration: BoxDecoration(
                     color: snapshot[MESSAGE_ID_FROM] == widget.userID
                         ? SENT_MESSAGE_BACKGROUND_COLOR
@@ -126,7 +128,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 0.8,
                         blurRadius: 1.2,
-                        offset: Offset(0, 1), // changes position of shadow
+                        offset: const Offset(0, 1), // changes position of shadow
                       ),
                     ],
                   ),
@@ -144,14 +146,10 @@ class _ChatMessagesState extends State<ChatMessages> {
                         child: RawMaterialButton(
                           elevation: 0,
                           fillColor: GAME_SUMMARY__COLOR,
-                          child: Container(
-                              padding: EdgeInsets.only(left: 16, right: 15),
-                              child: Text("View game summary",
-                                  style: TextStyle(color: Colors.white))),
-                          padding: EdgeInsets.only(right: 5),
+                          padding: const EdgeInsets.only(right: 5),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(
+                              side: const BorderSide(
                                   color: Colors.grey, width: 0.5)),
                           onPressed: () {
                             Navigator.push(
@@ -167,17 +165,21 @@ class _ChatMessagesState extends State<ChatMessages> {
                                         widget.friendInfo)
                                 ));
                           },
+                          child: Container(
+                              padding: const EdgeInsets.only(left: 16, right: 15),
+                              child: const Text("View game summary",
+                                  style: TextStyle(color: Colors.white))),
                         ),
                       )
                     ],
                   )),
               Container(
                 padding: snapshot[MESSAGE_ID_FROM] == widget.userID
-                    ? EdgeInsets.fromLTRB(0, 0, 10, 0)
-                    : EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    ? const EdgeInsets.fromLTRB(0, 0, 10, 0)
+                    : const EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: Text(
                   timeConverter(snapshot[MESSAGE_TIMESTAMP]),
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: MESSAGE_DATE_FONT_SIZE, color: Colors.grey),
                 ),
               )
@@ -210,10 +212,10 @@ class _ChatMessagesState extends State<ChatMessages> {
                   constraints: BoxConstraints(
                       minWidth: SizeConfig.blockSizeHorizontal * 10,
                       maxWidth: SizeConfig.blockSizeHorizontal * 80),
-                  padding: EdgeInsets.all(MESSAGE_PADDING),
+                  padding: const EdgeInsets.all(MESSAGE_PADDING),
                   margin: snapshot[MESSAGE_ID_FROM] == widget.userID
-                      ? EdgeInsets.fromLTRB(5, 5, 10, 5)
-                      : EdgeInsets.fromLTRB(10, 5, 5, 5),
+                      ? const EdgeInsets.fromLTRB(5, 5, 10, 5)
+                      : const EdgeInsets.fromLTRB(10, 5, 5, 5),
                   decoration: BoxDecoration(
                     color: snapshot[MESSAGE_ID_FROM] == widget.userID
                         ? SENT_MESSAGE_BACKGROUND_COLOR
@@ -225,137 +227,129 @@ class _ChatMessagesState extends State<ChatMessages> {
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 0.8,
                         blurRadius: 1.2,
-                        offset: Offset(0, 1), // changes position of shadow
+                        offset: const Offset(0, 1), // changes position of shadow
                       ),
                     ],
                   ),
-                  child: Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Flexible(
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: SizeConfig.blockSizeHorizontal * 4,
-                                right: SizeConfig.blockSizeHorizontal * 4),
-                            child: Text(
-                                invitedBy +
-                                    " invited " +
-                                    inviteTo +
-                                    " to a fun",
-                                style: TextStyle(
-                                    fontSize:
-                                    SizeConfig.blockSizeHorizontal * 4)),
-                          ),
-                        ),
-                        Flexible(
-                          child: Text("language game",
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Flexible(
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              left: SizeConfig.blockSizeHorizontal * 4,
+                              right: SizeConfig.blockSizeHorizontal * 4),
+                          child: Text(
+                              "$invitedBy invited $inviteTo to a fun",
                               style: TextStyle(
                                   fontSize:
                                   SizeConfig.blockSizeHorizontal * 4)),
                         ),
-                        snapshot[MESSAGE_ID_FROM] == widget.userID
-                            ? RawMaterialButton(
-                          elevation: 2,
-                          fillColor: CANCEL_GAME_COLOR,
-                          padding: EdgeInsets.only(
-                              left: SizeConfig.blockSizeHorizontal * 5,
-                              right: SizeConfig.blockSizeHorizontal * 5),
-                          child: Container(
-                              child: Text("Cancel",
-                                  style: TextStyle(color: Colors.white))),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(
-                                  color: Colors.grey, width: 0.5)),
-                          onPressed: () async {
-                            FirebaseDB.Firebase_db.cancelGameInvite(
-                                widget.userID,
-                                widget.chatID,
-                                snapshot.id);
-                          },
-                        )
-                            : Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: [
-                            RawMaterialButton(
-                              elevation: 2,
-                              fillColor: ACCEPT_GAME_COLOR,
-                              padding: EdgeInsets.only(
-                                  left:
-                                  SizeConfig.blockSizeHorizontal * 5,
-                                  right:
-                                  SizeConfig.blockSizeHorizontal * 5),
-                              child: Container(
-                                  child: Text("Accept",
-                                      style: TextStyle(
-                                          color: Colors.white))),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(18.0),
-                                  side: BorderSide(
-                                      color: Colors.grey, width: 0.5)),
-                              onPressed: () async {
-                                String lvl = widget.friendInfo[LANGUAGES]
-                                [widget.language];
-                                if(widget.friendInfo[LANGUAGES][widget.language] == BEGINNER
-                                    || widget.userInfo[LANGUAGES][widget.language] == BEGINNER){
-                                  lvl = BEGINNER;
-                                }else if (widget.friendInfo[LANGUAGES][widget.language] == INTERMEDIATE
-                                    || widget.userInfo[LANGUAGES][widget.language] == INTERMEDIATE){
-                                  lvl = INTERMEDIATE;
-                                }else{
-                                  lvl = ADVANCED;
-                                }
-                                //print("widget.userID = " + widget.userID + " widget.friendInfo[uid] = " +widget.friendInfo["UID"] + "widget.language = " + widget.language + "lvl = " +lvl);
-                                gameID = await FirebaseDB.Firebase_db
-                                    .makeNewGame(
-                                    widget.userID,
-                                    widget.friendInfo["UID"],
-                                    widget.language,
-                                    lvl);
-                                updateAcceptedGame(widget.chatID,
-                                    widget.userID, snapshot.id);
-                              },
-                            ),
-                            RawMaterialButton(
-                              elevation: 2,
-                              fillColor: CANCEL_GAME_COLOR,
-                              padding: EdgeInsets.only(
-                                  left:
-                                  SizeConfig.blockSizeHorizontal * 5,
-                                  right:
-                                  SizeConfig.blockSizeHorizontal * 5),
-                              child: Container(
-                                  child: Text("Decline",
-                                      style: TextStyle(
-                                          color: Colors.white))),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(18.0),
-                                  side: BorderSide(
-                                      color: Colors.grey, width: 0.5)),
-                              onPressed: () async {
-                                FirebaseDB.Firebase_db.cancelGameInvite(
-                                    widget.userID,
-                                    widget.chatID,
-                                    snapshot.id);
-                              },
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                      ),
+                      Flexible(
+                        child: Text("language game",
+                            style: TextStyle(
+                                fontSize:
+                                SizeConfig.blockSizeHorizontal * 4)),
+                      ),
+                      snapshot[MESSAGE_ID_FROM] == widget.userID
+                          ? RawMaterialButton(
+                        elevation: 2,
+                        fillColor: CANCEL_GAME_COLOR,
+                        padding: EdgeInsets.only(
+                            left: SizeConfig.blockSizeHorizontal * 5,
+                            right: SizeConfig.blockSizeHorizontal * 5),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: const BorderSide(
+                                color: Colors.grey, width: 0.5)),
+                        onPressed: () async {
+                          FirebaseDB.Firebase_db.cancelGameInvite(
+                              widget.userID,
+                              widget.chatID,
+                              snapshot.id);
+                        },
+                        child: const Text("Cancel",
+                            style: TextStyle(color: Colors.white)),
+                      )
+                          : Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.spaceEvenly,
+                        children: [
+                          RawMaterialButton(
+                            elevation: 2,
+                            fillColor: ACCEPT_GAME_COLOR,
+                            padding: EdgeInsets.only(
+                                left:
+                                SizeConfig.blockSizeHorizontal * 5,
+                                right:
+                                SizeConfig.blockSizeHorizontal * 5),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(18.0),
+                                side: const BorderSide(
+                                    color: Colors.grey, width: 0.5)),
+                            onPressed: () async {
+                              String lvl = widget.friendInfo[LANGUAGES]
+                              [widget.language];
+                              if(widget.friendInfo[LANGUAGES][widget.language] == BEGINNER
+                                  || widget.userInfo[LANGUAGES][widget.language] == BEGINNER){
+                                lvl = BEGINNER;
+                              }else if (widget.friendInfo[LANGUAGES][widget.language] == INTERMEDIATE
+                                  || widget.userInfo[LANGUAGES][widget.language] == INTERMEDIATE){
+                                lvl = INTERMEDIATE;
+                              }else{
+                                lvl = ADVANCED;
+                              }
+                              //print("widget.userID = " + widget.userID + " widget.friendInfo[uid] = " +widget.friendInfo["UID"] + "widget.language = " + widget.language + "lvl = " +lvl);
+                              gameID = await FirebaseDB.Firebase_db
+                                  .makeNewGame(
+                                  widget.userID,
+                                  widget.friendInfo["UID"],
+                                  widget.language,
+                                  lvl);
+                              updateAcceptedGame(widget.chatID,
+                                  widget.userID, snapshot.id);
+                            },
+                            child: const Text("Accept",
+                                style: TextStyle(
+                                    color: Colors.white)),
+                          ),
+                          RawMaterialButton(
+                            elevation: 2,
+                            fillColor: CANCEL_GAME_COLOR,
+                            padding: EdgeInsets.only(
+                                left:
+                                SizeConfig.blockSizeHorizontal * 5,
+                                right:
+                                SizeConfig.blockSizeHorizontal * 5),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(18.0),
+                                side: const BorderSide(
+                                    color: Colors.grey, width: 0.5)),
+                            onPressed: () async {
+                              FirebaseDB.Firebase_db.cancelGameInvite(
+                                  widget.userID,
+                                  widget.chatID,
+                                  snapshot.id);
+                            },
+                            child: const Text("Decline",
+                                style: TextStyle(
+                                    color: Colors.white)),
+                          ),
+                        ],
+                      )
+                    ],
                   )),
               Container(
                 padding: snapshot[MESSAGE_ID_FROM] == widget.userID
-                    ? EdgeInsets.fromLTRB(0, 0, 10, 0)
-                    : EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    ? const EdgeInsets.fromLTRB(0, 0, 10, 0)
+                    : const EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: Text(
                   timeConverter(snapshot[MESSAGE_TIMESTAMP]),
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: MESSAGE_DATE_FONT_SIZE, color: Colors.grey),
                 ),
               )
@@ -389,10 +383,10 @@ class _ChatMessagesState extends State<ChatMessages> {
                   constraints: BoxConstraints(
                       minWidth: SizeConfig.blockSizeHorizontal * 10,
                       maxWidth: SizeConfig.blockSizeHorizontal * 80),
-                  padding: EdgeInsets.all(MESSAGE_PADDING),
+                  padding: const EdgeInsets.all(MESSAGE_PADDING),
                   margin: snapshot[MESSAGE_ID_FROM] == widget.userID
-                      ? EdgeInsets.fromLTRB(5, 5, 10, 5)
-                      : EdgeInsets.fromLTRB(10, 5, 5, 5),
+                      ? const EdgeInsets.fromLTRB(5, 5, 10, 5)
+                      : const EdgeInsets.fromLTRB(10, 5, 5, 5),
                   decoration: BoxDecoration(
                     color: snapshot[MESSAGE_ID_FROM] == widget.userID
                         ? SENT_MESSAGE_BACKGROUND_COLOR
@@ -404,7 +398,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 0.8,
                         blurRadius: 1.2,
-                        offset: Offset(0, 1), // changes position of shadow
+                        offset: const Offset(0, 1), // changes position of shadow
                       ),
                     ],
                   ),
@@ -416,7 +410,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                       children: <Widget>[
                         Flexible(
                           child: Text(
-                              canceledBy + " " + verb + " the game",
+                              "$canceledBy $verb the game",
                               style: TextStyle(
                                   fontSize:
                                   SizeConfig.blockSizeHorizontal * 5)),
@@ -432,11 +426,11 @@ class _ChatMessagesState extends State<ChatMessages> {
                   )),
               Container(
                 padding: snapshot[MESSAGE_ID_FROM] == widget.userID
-                    ? EdgeInsets.fromLTRB(0, 0, 10, 0)
-                    : EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    ? const EdgeInsets.fromLTRB(0, 0, 10, 0)
+                    : const EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: Text(
                   timeConverter(snapshot[MESSAGE_TIMESTAMP]),
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: MESSAGE_DATE_FONT_SIZE, color: Colors.grey),
                 ),
               )
@@ -447,15 +441,15 @@ class _ChatMessagesState extends State<ChatMessages> {
     );
   }
 
-  Widget _buildDateSeperator(Timestamp timestamp) {
+  Widget _buildDateSeparator(Timestamp timestamp) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
             alignment: Alignment.center,
             //width: DATE_DIVIDER_WIDTH,
-            padding: EdgeInsets.all(MESSAGE_PADDING),
-            margin: EdgeInsets.all(MESSAGE_MARGIN),
+            padding: const EdgeInsets.all(MESSAGE_PADDING),
+            margin: const EdgeInsets.all(MESSAGE_MARGIN),
             decoration: BoxDecoration(
               color: DATE_DIVIDER_COLOR,
               borderRadius: BorderRadius.circular(MESSAGE_RADIUS),
@@ -464,7 +458,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 0.8,
                   blurRadius: 1.2,
-                  offset: Offset(0, 1), // changes position of shadow
+                  offset: const Offset(0, 1), // changes position of shadow
                 ),
               ],
             ),
@@ -496,11 +490,11 @@ class _ChatMessagesState extends State<ChatMessages> {
                     //width: MESSAGE_WIDTH,
                     //height: snapshot[MESSAGE_TYPE] == MESSAGE_TYPE_IMAGE ? SizeConfig.blockSizeVertical * 40 :null,
                     padding: snapshot[MESSAGE_TYPE] == MESSAGE_TYPE_IMAGE
-                        ? EdgeInsets.all(4)
-                        : EdgeInsets.all(MESSAGE_PADDING),
+                        ? const EdgeInsets.all(4)
+                        : const EdgeInsets.all(MESSAGE_PADDING),
                     margin: snapshot[MESSAGE_ID_FROM] == userID
-                        ? EdgeInsets.fromLTRB(5, 5, 10, 5)
-                        : EdgeInsets.fromLTRB(10, 5, 5, 5),
+                        ? const EdgeInsets.fromLTRB(5, 5, 10, 5)
+                        : const EdgeInsets.fromLTRB(10, 5, 5, 5),
                     decoration: BoxDecoration(
                       color: snapshot[MESSAGE_ID_FROM] == userID
                           ? SENT_MESSAGE_BACKGROUND_COLOR
@@ -511,7 +505,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 0.8,
                           blurRadius: 1.2,
-                          offset: Offset(0, 1), // changes position of shadow
+                          offset: const Offset(0, 1), // changes position of shadow
                         ),
                       ],
                     ),
@@ -542,7 +536,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                             const EdgeInsets.fromLTRB(8, 0, 8, 0),
                             child: Text(
                               snapshot[MESSAGE_CONTENT],
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                             ),
                           ),
                         ),
@@ -550,12 +544,12 @@ class _ChatMessagesState extends State<ChatMessages> {
                     )),
                 Container(
                   padding: snapshot[MESSAGE_ID_FROM] == userID
-                      ? EdgeInsets.fromLTRB(0, 0, 10, 0)
-                      : EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      ? const EdgeInsets.fromLTRB(0, 0, 10, 0)
+                      : const EdgeInsets.fromLTRB(10, 0, 0, 0),
                   //alignment: Alignment.bottomRight,
                   child: Text(
                     timeConverter(snapshot[MESSAGE_TIMESTAMP]),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: MESSAGE_DATE_FONT_SIZE, color: Colors.grey),
                   ),
                 )
@@ -575,12 +569,12 @@ class _ChatMessagesState extends State<ChatMessages> {
     String hour = date.hour.toString();
     String minutes = date.minute.toString();
     if (date.hour < 10) {
-      hour = '0' + hour;
+      hour = '0$hour';
     }
     if (date.minute < 10) {
-      minutes = '0' + minutes;
+      minutes = '0$minutes';
     }
-    return hour + ":" + minutes;
+    return "$hour:$minutes";
   }
 
   _showImage(String imageUrl, Timestamp tag) {

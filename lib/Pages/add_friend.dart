@@ -240,7 +240,7 @@ class AddFriendState extends State<AddFriend> {
       dense: true,
       tileColor: Color(0xFFF8F5F5),
       title: Text(
-        userInfo.item1["username"],
+        userInfo.item1[USERNAME],
         style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal * 5),
       ),
       leading: GestureDetector(

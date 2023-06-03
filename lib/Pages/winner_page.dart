@@ -250,7 +250,7 @@ class _WinnerPageState extends State<WinnerPage> {
             fit: BoxFit.scaleDown,
             child: SizedBox(
               child: Text(
-                winnerInfo["username"],
+                winnerInfo[USERNAME],
                 style: TextStyle(
                     fontSize: SizeConfig.screenWidth * 0.12,
                     fontWeight: FontWeight.bold),

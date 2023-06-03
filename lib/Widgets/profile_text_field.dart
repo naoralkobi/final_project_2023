@@ -47,9 +47,9 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
             validator: (text) {
               if (text == null || text.isEmpty) {
                 return EMPTY_TEXT;
-              } else if (widget.hintText == "username" && text.length > 10) {
+              } else if (widget.hintText == USERNAME && text.length > 10) {
                 return "Username can't be longer than 10 characters";
-              } else if (widget.hintText == "username" && !isUserNameUnique) {
+              } else if (widget.hintText == USERNAME && !isUserNameUnique) {
                 return "This username is taken";
               }
               return null;
@@ -89,7 +89,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
         .doc(user!.uid)
         .update({widget.hintText: widget.textController.text});
 
-    if (widget.hintText == "username") {
+    if (widget.hintText == USERNAME) {
       widget.firebaseController.add("done"); // Notify completion for the username field update
     }
   }
@@ -102,7 +102,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
     // Retrieve the collection of users from Firestore
     await FirebaseFirestore.instance.collection("users").get().then((value) {
       value.docs.forEach((element) {
-        if (element.data()["username"] == userName) {
+        if (element.data()[USERNAME] == userName) {
           setState(() {
             isUserNameUnique = false;
           });
