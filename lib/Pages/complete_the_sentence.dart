@@ -568,9 +568,9 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
         builder: (BuildContext context) {
           var user = FirebaseAuth.instance.currentUser;
           FirebaseFirestore.instance
-              .collection("users")
+              .collection(USERS)
               .doc(user!.uid)
-              .update({"score": FieldValue.increment(1)});
+              .update({SCORE: FieldValue.increment(1)});
           return AlertDialog(
 
             title: const Text('Your question was added', textAlign: TextAlign.center),

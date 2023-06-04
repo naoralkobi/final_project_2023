@@ -123,7 +123,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
     if (isChecked) {
       // If the checkbox is checked
       FirebaseFirestore.instance
-          .collection('users')
+          .collection(USERS)
           .doc(user!.uid) // Get the document for the current user
           .update({'Languages.${widget.languageName}': languageLvl});
       // Update the language level in the 'Languages' field of the user document

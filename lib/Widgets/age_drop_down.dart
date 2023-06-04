@@ -1,12 +1,8 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project_2023/firebase/auth_repository.dart';
-
+import '../consts.dart';
 import '../profile_vars.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 
@@ -80,7 +76,7 @@ class _AgeDropDownState extends State<AgeDropDown> {
   void updateFirebase(){
     final user = FirebaseAuth.instance.currentUser;
     FirebaseFirestore.instance
-        .collection('users')
+        .collection(USERS)
         .doc(user!.uid)
         .update({widget.rangeType: ageVal});
   }

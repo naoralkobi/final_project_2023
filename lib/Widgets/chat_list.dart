@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/Pages/chat_page.dart';
-import 'package:final_project_2023/firebase/FirebaseDB.dart';
 import 'package:final_project_2023/firebase/auth_repository.dart';
 import '../screen_size_config.dart';
 import '../consts.dart';
@@ -39,7 +37,7 @@ class ChatsListState extends State<ChatsList> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-            if (snapshots.hasError) return const Text("There has been an error");
+            if (snapshots.hasError) return const Text(ERROR_MESSAGE);
             //if connecting show progressIndicator
             if (snapshots.connectionState == ConnectionState.waiting &&
                 snapshots.data == null) {
@@ -57,7 +55,7 @@ class ChatsListState extends State<ChatsList> {
                     builder: (context, blurSnapshot) {
                       double sigmaX = 0;
                       double sigmaY = 0;
-                      if (blurSnapshot.hasError) return Text("There has been an error");
+                      if (blurSnapshot.hasError) return Text(ERROR_MESSAGE);
                       if (blurSnapshot.data != null){
                         sigmaX = blurSnapshot.data![0];
                         sigmaY = blurSnapshot.data![1];
@@ -78,11 +76,11 @@ class ChatsListState extends State<ChatsList> {
                               }
                               return StreamBuilder(
                                   stream:
-                                  _db.collection("users").doc(friendID).snapshots(),
+                                  _db.collection(USERS).doc(friendID).snapshots(),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<DocumentSnapshot> friendInfo) {
                                     if (friendInfo.hasError)
-                                      return Text("There has been an error");
+                                      return Text(ERROR_MESSAGE);
                                     //if connecting show progressIndicator
                                     if (friendInfo.connectionState ==
                                         ConnectionState.waiting &&

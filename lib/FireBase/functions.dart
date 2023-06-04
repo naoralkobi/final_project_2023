@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../consts.dart';
+
 Future<void> addUser(String name, String email, String password) {
-  return FirebaseFirestore.instance.collection('users').add({
+  return FirebaseFirestore.instance.collection(USERS).add({
     'name': name,
-    'email': email,
+    EMAIL: email,
     'password': password,
   })
       .then((value) => print("User added"))

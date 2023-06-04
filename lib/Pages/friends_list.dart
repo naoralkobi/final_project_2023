@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/Widgets/friends_list_widget.dart';
@@ -19,12 +17,12 @@ class FriendsListState extends State<FriendsList> {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
   bool isSelectFriendPage = true;
-  Icon _searchIcon = Icon(
+  Icon _searchIcon = const Icon(
     Icons.search,
     color: Colors.white,
     size: 30,
   );
-  Widget _appBarTitle = Text(
+  Widget _appBarTitle = const Text(
     "Friends List",
     style: TextStyle(
         fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
@@ -44,13 +42,13 @@ class FriendsListState extends State<FriendsList> {
       }
     });
     if (isSelectFriendPage) {
-      this._appBarTitle = Text(
+      _appBarTitle = const Text(
         "Select a Friend",
         style: TextStyle(
             fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
       );
     } else {
-      this._appBarTitle = Text(
+      _appBarTitle = const Text(
         "Friends List",
         style: TextStyle(
             fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
@@ -62,11 +60,11 @@ class FriendsListState extends State<FriendsList> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Color(0xFFF8F5F5),
+      backgroundColor: const Color(0xFFF8F5F5),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: const Size.fromHeight(70),
         child: AppBar(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(18.0),
             ),
@@ -74,14 +72,14 @@ class FriendsListState extends State<FriendsList> {
           automaticallyImplyLeading: false,
           flexibleSpace: SafeArea(
             child: Container(
-              padding: EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: 16),
               child: Row(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     width: 2,
                   ),
                   IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_rounded,
                         color: Colors.white,
                       ),
@@ -89,7 +87,7 @@ class FriendsListState extends State<FriendsList> {
                       onPressed: () {
                         Navigator.pop(context);
                       }),
-                  SizedBox(
+                  const SizedBox(
                     width: 12,
                   ),
                   Expanded(
@@ -98,16 +96,16 @@ class FriendsListState extends State<FriendsList> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         _appBarTitle,
-                        SizedBox(
+                        const SizedBox(
                           height: 3,
                         ),
                       ],
                     ),
                   ),
-                  widget.isSelectFriendPage || this._searchIcon.icon == Icons.close
-                      ? SizedBox()
+                  widget.isSelectFriendPage || _searchIcon.icon == Icons.close
+                      ? const SizedBox()
                       : IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.person_add_alt_1_rounded,
                         color: Colors.white,
                         size: 30,
@@ -138,36 +136,36 @@ class FriendsListState extends State<FriendsList> {
 
   void _searchPressed() {
     setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(
+      if (_searchIcon.icon == Icons.search) {
+        _searchIcon = const Icon(
           Icons.close,
           size: 30,
           color: Colors.white,
         );
-        this._appBarTitle = Theme(
+        _appBarTitle = Theme(
           data: Theme.of(context).copyWith(primaryColor: Colors.white),
-          child: new TextField(
+          child: TextField(
             autofocus: true,
             controller: _filter,
-            decoration: new InputDecoration(
-                prefixIcon: new Icon(Icons.search), hintText: 'Search...'),
+            decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.search), hintText: 'Search...'),
             cursorColor: Colors.white,
           ),
         );
       } else {
-        this._searchIcon = new Icon(
+        _searchIcon = const Icon(
           Icons.search,
           color: Colors.white,
           size: 30,
         );
         if (widget.isSelectFriendPage) {
-          this._appBarTitle = Text(
+          _appBarTitle = const Text(
             "Select a Friend",
             style: TextStyle(
                 fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
           );
         } else {
-          this._appBarTitle = Text(
+          _appBarTitle = const Text(
             "Friends List",
             style: TextStyle(
                 fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),

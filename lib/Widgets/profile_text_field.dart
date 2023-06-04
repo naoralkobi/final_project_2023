@@ -85,7 +85,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
   void updateFirebase() async {
     final user = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance
-        .collection('users')
+        .collection(USERS)
         .doc(user!.uid)
         .update({widget.hintText: widget.textController.text});
 
@@ -100,7 +100,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
       isUserNameUnique = true;
     });
     // Retrieve the collection of users from Firestore
-    await FirebaseFirestore.instance.collection("users").get().then((value) {
+    await FirebaseFirestore.instance.collection(USERS).get().then((value) {
       value.docs.forEach((element) {
         if (element.data()[USERNAME] == userName) {
           setState(() {

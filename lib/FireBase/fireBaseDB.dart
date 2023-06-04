@@ -201,14 +201,14 @@ class FirebaseDB {
     String currentUSerID = AuthRepository.instance().user!.uid;
     List friendsList = [];
     await _db
-        .collection("users")
+        .collection(USERS)
         .doc(currentUSerID)
         .get()
         .then((value) => friendsList = value.data()!["friends"]);
     friendsList.add(friendUsername);
     friendsList = friendsList.toSet().toList();
     await _db
-        .collection('users')
+        .collection(USERS)
         .doc(currentUSerID)
         .update({'friends': friendsList});
     final snackBar = SnackBar(
@@ -223,14 +223,14 @@ class FirebaseDB {
     String currentUSerID = AuthRepository.instance().user!.uid;
     List friendsList = [];
     await _db
-        .collection("users")
+        .collection(USERS)
         .doc(currentUSerID)
         .get()
         .then((value) => friendsList = value.data()!["friends"]);
     friendsList.remove(friendUsername);
     friendsList = friendsList.toSet().toList();
     _db
-        .collection('users')
+        .collection(USERS)
         .doc(currentUSerID)
         .update({'friends': friendsList});
     final snackBar = SnackBar(

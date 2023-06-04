@@ -23,17 +23,17 @@ class NavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
-        .collection('users')
+        .collection(USERS)
         .doc(currentUser!.uid)
         .snapshots(),
     builder:
     (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
     if (snapshot.hasError) {
-    return Text('Something went wrong');
+    return const Text('Something went wrong');
     }
 
     if (snapshot.connectionState == ConnectionState.waiting) {
-    return CircularProgressIndicator();
+    return const CircularProgressIndicator();
     }
 
     Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -48,29 +48,29 @@ class NavBar extends StatelessWidget {
               Expanded(
                 child: Text(data[USERNAME]),
               ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Row(
                 children: [
                   ImageIcon(
-                    AssetImage("assets/images/trophy.png"),
+                    const AssetImage("assets/images/trophy.png"),
                     color: Colors.white,
                     size: SizeConfig.blockSizeHorizontal * 4,
                   ),
-                  SizedBox(width: 3),
-                  (snapshot.data!.data() as Map<String, dynamic>).containsKey('score')
+                  const SizedBox(width: 3),
+                  (snapshot.data!.data() as Map<String, dynamic>).containsKey(SCORE)
                       ? Text(
-                    snapshot.data!["score"].toString(),
+                    snapshot.data![SCORE].toString(),
                     style: TextStyle(
                       fontSize: SizeConfig.blockSizeHorizontal * 3.3,
                       color: Colors.white,
                     ),
                   )
-                      : Text(""),
+                      : const Text(""),
                 ],
               ),
             ],
           ),
-        accountEmail: Text(data['email']),
+        accountEmail: Text(data[EMAIL]),
           currentAccountPicture: GestureDetector(
             onTap: () {
               Navigator.push(
@@ -91,7 +91,7 @@ class NavBar extends StatelessWidget {
               ),
             ),
           ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
                   fit: BoxFit.fill,
@@ -100,37 +100,37 @@ class NavBar extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Friends'),
+            leading: const Icon(Icons.person),
+            title: const Text('Friends'),
             onTap: () {
               navigateToFriendsList(context);
             },
           ),
           ListTile(
-            leading: Icon(Icons.leaderboard),
-            title: Text('Leaderboard'),
+            leading: const Icon(Icons.leaderboard),
+            title: const Text('Leaderboard'),
             onTap: () {
               navigateToLeaderboard(context, userInfo);
             },
           ),
 
           ListTile(
-            leading: Icon(Icons.mic),
-            title: Text('Learn to speak'),
+            leading: const Icon(Icons.mic),
+            title: const Text('Learn to speak'),
             onTap: () {
               navigateToSpeechRecognition(context);
             },
           ),
           ListTile(
-            leading: Icon(Icons.play_arrow_outlined),
-            title: Text('Learn with videos'),
+            leading: const Icon(Icons.play_arrow_outlined),
+            title: const Text('Learn with videos'),
             onTap: () {
               navigateToYoutube(context);
             },
           ),
           ListTile(
-            leading: Icon(Icons.translate),
-            title: Text('Translate'),
+            leading: const Icon(Icons.translate),
+            title: const Text('Translate'),
             onTap: () =>
             {
             Navigator.push(
@@ -139,14 +139,14 @@ class NavBar extends StatelessWidget {
             )
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.description),
-            title: Text('About'),
+            leading: const Icon(Icons.description),
+            title: const Text('About'),
             onTap: () => {
               showAboutDialog(
               context: context,
-              applicationName: 'lang',
+              applicationName: 'EasyLang',
               applicationVersion: '1.0.0',
               applicationLegalese:
               '© Developed by Naor Alkobi, Ron Harel and Aviv Harel.',
@@ -154,26 +154,26 @@ class NavBar extends StatelessWidget {
               TextButton(
               onPressed: () => launch(
               'https://github.com/naoralkobi/final_project_2023'),
-              child: Text(
+              child: const Text(
               'Privacy Policy',
               )),
               TextButton(
               onPressed: () => launch(
               'https://github.com/naoralkobi/final_project_2023'),
-              child: Text('Terms of Service'),
+              child: const Text('Terms of Service'),
               ),
               ])
               },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            title: Text('Logout'),
-            leading: Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
+            leading: const Icon(Icons.exit_to_app),
             onTap: () {
               AuthRepository.instance().signOut();
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (BuildContext context) {
-                  return LoginPage();
+                  return const LoginPage();
                 }),
                     (route) => false,
               );
@@ -206,7 +206,6 @@ class NavBar extends StatelessWidget {
     },
     ).then((value) => blurController.add([0, 0]));
   }
-
 
   void navigateToYoutube(context) {
     showDialog(

@@ -37,6 +37,9 @@ const String ITALIAN = 'Italian';
 const String PORTUGUESE = 'Portuguese';
 const String SPANISH = 'Spanish';
 const String TEMP = 'temp';
+const String SCORE = 'score';
+const String EMAIL = 'email';
+const String ERROR_MESSAGE = 'There has been an error';
 
 ///Chat sizes
 const double APP_BAR_IMAGE_WIDTH = 40.0;
