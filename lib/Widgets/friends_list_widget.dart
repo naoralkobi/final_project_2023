@@ -42,6 +42,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
         ),
       );
     }
+    // StreamBuilder to fetch current user's information
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection(USERS)
@@ -49,7 +50,10 @@ class ListViewFriendsState extends State<ListViewFriends> {
             .snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<DocumentSnapshot> currentUserInfo) {
-          if (currentUserInfo.hasError) return const Text(ERROR_MESSAGE);
+          if (currentUserInfo.hasError) {
+            // Show an error message if there is an error retrieving user information
+            return const Text(ERROR_MESSAGE);
+          }
           //if connecting show progressIndicator
           if (currentUserInfo.connectionState == ConnectionState.waiting &&
               currentUserInfo.data == null) {
@@ -66,6 +70,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshots) {
                     if (snapshots.hasError) {
+                      // Show an error message if there is an error retrieving friend list
                       return const Text(ERROR_MESSAGE);
                     }
                     if (snapshots.connectionState == ConnectionState.waiting &&
@@ -74,6 +79,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                     } else {
                       List friends = currentUserInfo.data![FRIENDS];
                       if (friends.isEmpty) {
+                        // If the friends list is empty, display a message to add friends
                         return Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -121,6 +127,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                                     // If it's the select friend page and the friend doesn't have the selected language
                                     // or the friend is not in the friends list, hide the separator
                                     return const SizedBox();
+                                    // check if text box is not empty and if the user is not exist.
                               } else if (widget.searchText != "" &&
                                   !friendData?[USERNAME]
                                       .toLowerCase()
@@ -136,7 +143,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                             scrollDirection: Axis.vertical,
                             itemCount: snapshots.data!.size,
                             itemBuilder: (context, index) {
-                              Map<String, dynamic>? friendData = snapshots.data!.docs[index]?.data() as Map<String, dynamic>?;
+                              Map<String, dynamic>? friendData = snapshots.data!.docs[index].data() as Map<String, dynamic>?;
                               Map<String, dynamic>? friendLanguages = friendData?[LANGUAGES];
                               if ((widget.isSelectFriendPage &&
                                   !(friendLanguages?.containsKey(widget.selectedLanguage) ?? false) ||
@@ -149,7 +156,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
                                       widget.searchText.toLowerCase())) {
                                 return const SizedBox();
                               } else {
-                                Map<String, dynamic>? friendData = snapshots.data!.docs[index]?.data() as Map<String, dynamic>?;
+                                Map<String, dynamic>? friendData = snapshots.data!.docs[index].data() as Map<String, dynamic>?;
                               }
                               return createUserListTile(
                                     friendData!,
@@ -206,7 +213,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
             ),
             SizedBox(width: SizeConfig.blockSizeHorizontal * 8),
             widget.isSelectFriendPage
-                ? SizedBox()
+                ? const SizedBox()
                 : Flexible(
               child: IconButton(
                 icon: const Icon(Icons.chat_outlined,
