@@ -81,7 +81,7 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
             .snapshots(),
         builder: (BuildContext buildContext,
             AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text("There has been an error");
+          if (snapshot.hasError) return Text(ERROR_MESSAGE);
           //if connecting show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting ||
               snapshot.data == null)
@@ -149,12 +149,12 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
         builder: (BuildContext context) {
           return FutureBuilder(
               future: FirebaseFirestore.instance
-                  .collection('users')
+                  .collection(USERS)
                   .doc(friendID)
                   .get(),
               builder: (BuildContext buildContext,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.hasError) return Text("There has been an error");
+                if (snapshot.hasError) return Text(ERROR_MESSAGE);
                 //if connecting show progressIndicator
                 if (snapshot.connectionState == ConnectionState.waiting &&
                     snapshot.data == null)

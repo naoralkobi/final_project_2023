@@ -118,7 +118,7 @@ class LeaderboardState extends State<Leaderboard> {
                             ),
                             Visibility(
                               visible: widget.userInfo
-                                  .containsKey('score'),
+                                  .containsKey(SCORE),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment
                                     .center,
@@ -132,8 +132,8 @@ class LeaderboardState extends State<Leaderboard> {
                                         .blockSizeHorizontal * 7,),
                                   SizedBox(width: 3,),
                                   widget.userInfo.containsKey(
-                                      'score') ? Text(
-                                    widget.userInfo["score"].toString(),
+                                      SCORE) ? Text(
+                                    widget.userInfo[SCORE].toString(),
                                     style: TextStyle(
                                         fontSize: SizeConfig
                                             .blockSizeHorizontal * 4,
@@ -198,19 +198,19 @@ class LeaderboardState extends State<Leaderboard> {
     int userRank = 0;
 
     await FirebaseFirestore.instance
-        .collection('users')
-        .orderBy('score', descending: true)
+        .collection(USERS)
+        .orderBy(SCORE, descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         if (prevScore == -1){
           prevRank = 1;
-          prevScore = doc['score'];
+          prevScore = doc[SCORE];
         }
         else{
-          if (prevScore > doc['score']){
+          if (prevScore > doc[SCORE]){
             prevRank += 1;
-            prevScore = doc['score'];
+            prevScore = doc[SCORE];
           }
         }
         if (doc[USERNAME] == username){

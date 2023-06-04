@@ -27,15 +27,15 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
     // Initialize the screen size configuration
     SizeConfig().init(context);
     return StreamBuilder(
-      // Stream data from Firestore collection 'users' with the specified user ID
+      // Stream data from Firestore collection USERS with the specified user ID
         stream: FirebaseFirestore.instance
-            .collection('users')
+            .collection(USERS)
             .doc(widget.userID)
             .snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> userInfo) {
           // Show error message if there is an error in the snapshot
-          if (userInfo.hasError) return Text("There has been an error");
+          if (userInfo.hasError) return Text(ERROR_MESSAGE);
           // Show a progress indicator while connecting to Firestore and waiting for data
           if (userInfo.connectionState == ConnectionState.waiting &&
               userInfo.data == null)
@@ -137,7 +137,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                         height: SizeConfig.blockSizeVertical * 1,
                       ),
                       Visibility(
-                        visible: (userInfo.data!.data() as Map<String, dynamic>).containsKey('score'),
+                        visible: (userInfo.data!.data() as Map<String, dynamic>).containsKey(SCORE),
                         child: Container(
                           width: SizeConfig.screenWidth * 0.7,
                           child: FittedBox(
@@ -153,11 +153,11 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                                   ),
 
                                   // Check if the user has a score
-                                  (userInfo.data!.data() as Map<String, dynamic>).containsKey('score')
+                                  (userInfo.data!.data() as Map<String, dynamic>).containsKey(SCORE)
                                       ?
-                                  (userInfo.data!.data() as Map<String, dynamic>)["score"].toString() != "null" ?
+                                  (userInfo.data!.data() as Map<String, dynamic>)[SCORE].toString() != "null" ?
                                   Text( // Display the user's score
-                                    (userInfo.data!.data() as Map<String, dynamic>)["score"].toString(),
+                                    (userInfo.data!.data() as Map<String, dynamic>)[SCORE].toString(),
                                     style: TextStyle(
                                         fontSize: SizeConfig.screenWidth * 0.05),
                                   )

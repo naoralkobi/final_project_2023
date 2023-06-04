@@ -2,18 +2,9 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_2023/Pages/winner_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-// import 'package:final_project_2023/Pages/WinnerPage.dart';
-import 'package:final_project_2023/Pages/createProfilePage.dart';
-import 'package:final_project_2023/Pages/register_page.dart';
 import 'package:final_project_2023/screen_size_config.dart';
-import 'package:final_project_2023/firebase/auth_repository.dart';
 import '../consts.dart';
-// import 'GameSummaryPage.dart';
-import 'package:final_project_2023/Pages/home_page.dart';
 import 'dart:async';
 import 'package:page_transition/page_transition.dart';
 
@@ -82,7 +73,7 @@ class _QuestionsPageState extends State<QuestionsPage>
             .doc(widget.gameId)
             .snapshots(),
         builder: (BuildContext buildContext, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text("There has been an error");
+          if (snapshot.hasError) return Text(ERROR_MESSAGE);
 
           if (snapshot.connectionState == ConnectionState.waiting && snapshot.data == null)
             return Center(child: CircularProgressIndicator());
@@ -285,7 +276,7 @@ class _QuestionsPageState extends State<QuestionsPage>
   //           .snapshots(),
   //       builder: (BuildContext buildContext,
   //           AsyncSnapshot<DocumentSnapshot> snapshot) {
-  //         if (snapshot.hasError) return Text("There has been an error");
+  //         if (snapshot.hasError) return Text(ERROR_MESSAGE);
   //         //if connecting show progressIndicator
   //         if (snapshot.connectionState == ConnectionState.waiting &&
   //             snapshot.data == null) return Center(child: SizedBox());

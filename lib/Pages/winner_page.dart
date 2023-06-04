@@ -60,7 +60,7 @@ class _WinnerPageState extends State<WinnerPage> {
             .snapshots(),
         builder: (BuildContext buildContext,
             AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text("There has been an error");
+          if (snapshot.hasError) return Text(ERROR_MESSAGE);
           //if connecting show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting &&
               snapshot.data == null) return Center(child: SizedBox());
@@ -296,9 +296,9 @@ class _WinnerPageState extends State<WinnerPage> {
   void addScore(String uid){
     if (firstWin && uid == widget.userInfo["UID"]){
       FirebaseFirestore.instance
-          .collection("users")
+          .collection(USERS)
           .doc(uid)
-          .update({"score": FieldValue.increment(2)});
+          .update({SCORE: FieldValue.increment(2)});
       firstWin = false;
     }
   }

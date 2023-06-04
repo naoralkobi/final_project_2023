@@ -659,8 +659,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       isUserNameUnique = true;
     });
 
-    // Query the Firestore collection "users" to retrieve all documents
-    await FirebaseFirestore.instance.collection("users").get().then((value) {
+    // Query the Firestore collection USERS to retrieve all documents
+    await FirebaseFirestore.instance.collection(USERS).get().then((value) {
       // Iterate over each document in the query result
       value.docs.forEach((element) {
         // Check if the USERNAME field in the document matches the provided username
@@ -680,16 +680,16 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
     if (authRep.isNew()) {
       // If the user is new and creating a profile for the first time
-      await FirebaseFirestore.instance.collection("users").doc(user!.uid).set({
-        // Set the user data in the "users" collection in Firestore
-        "email": user!.email,
+      await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).set({
+        // Set the user data in the USERS collection in Firestore
+        EMAIL: user!.email,
         "UID": user!.uid,
         "URL": imageUrl,
         "Languages": {},
         "friends": [],
         "gender": userGender,
         "preferred gender": preferredGenderVal,
-        "score": 0,
+        SCORE: 0,
       });
 
       firebaseController.add("finish");
@@ -703,24 +703,24 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
     } else {
       // If the user is updating an existing profile
-      await FirebaseFirestore.instance.collection("users").doc(user!.uid).update({
-        // Update the user data in the "users" collection in Firestore
+      await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).update({
+        // Update the user data in the USERS collection in Firestore
         "Languages": {},
       });
 
-      await FirebaseFirestore.instance.collection("users").doc(user!.uid).update({
+      await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).update({
         "URL": imageUrl,
       });
 
-      await FirebaseFirestore.instance.collection("users").doc(user!.uid).update({
+      await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).update({
         "gender": userGender,
       });
 
-      await FirebaseFirestore.instance.collection("users").doc(user!.uid).update({
+      await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).update({
         "preferred gender": preferredGenderVal,
       });
 
-      await FirebaseFirestore.instance.collection("users").doc(user!.uid).update({
+      await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).update({
         USERNAME: widget.userInfo![USERNAME],
       });
 

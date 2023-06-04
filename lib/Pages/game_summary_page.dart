@@ -30,7 +30,7 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
             .snapshots(),
         builder: (BuildContext buildContext,
             AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text("There has been an error");
+          if (snapshot.hasError) return Text(ERROR_MESSAGE);
           //if connecting show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting &&
               snapshot.data == null) return Center(child: SizedBox());

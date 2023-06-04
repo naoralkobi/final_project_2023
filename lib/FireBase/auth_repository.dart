@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../consts.dart';
 import 'fireBaseDB.dart';
 
 
@@ -106,7 +105,7 @@ class AuthRepository with ChangeNotifier {
       _user = firebaseUser;
       _status = Status.Authenticated;
       DocumentReference doc =
-      FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid);
+      FirebaseFirestore.instance.collection(USERS).doc(firebaseUser.uid);
       if (!(await doc.get()).exists) {
         isNewStatus = IsNew.New;
       } else {
@@ -139,17 +138,6 @@ class AuthRepository with ChangeNotifier {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      // final firebaseUser = FirebaseAuth.instance.currentUser;
-
-      //   if (_isNew) {
-      //     FirebaseFirestore.instance
-      //         .collection("users")
-      //         .doc(user.id)
-      //         .set({"email": user.email, "UID": user.id, "Languages": {}});
-      //   }
-      // });
-      // print(isNew.toString() + "%^&%^&%^&%^&%^&%^&%^&%^&%^&%^&");
-      // notifyListeners();
       await FirebaseAuth.instance.signInWithCredential(credential);
 
       isSigningIn = false;

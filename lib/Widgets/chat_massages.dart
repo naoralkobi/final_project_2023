@@ -54,7 +54,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                     .snapshots(),
                 builder: (BuildContext buildContext,
                     AsyncSnapshot<QuerySnapshot> snapshots) {
-                  if (snapshots.hasError) return const Text("There has been an error");
+                  if (snapshots.hasError) return const Text(ERROR_MESSAGE);
                   //if connecting show progressIndicator
                   if (snapshots.connectionState == ConnectionState.waiting &&
                       snapshots.data == null) {

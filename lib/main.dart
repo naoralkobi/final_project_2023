@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'Pages/home_page.dart';
 import 'Pages/createProfilePage.dart';
 import 'package:flutter/services.dart';
+import 'consts.dart';
 import 'firebase/auth_repository.dart';
 import 'package:final_project_2023/Pages/login_page.dart';
 
@@ -122,20 +123,20 @@ class _MyAppState extends State<MyApp> {
     // bool isNew = true;
     final user = FirebaseAuth.instance.currentUser;
     isNew = await FirebaseFirestore.instance
-        .collection("users")
+        .collection(USERS)
         .get()
         .then((value) {
       for (var element in value.docs) {
-        if (element.data()["email"] == user!.email) {
+        if (element.data()[EMAIL] == user!.email) {
           isNew = false;
         }
       }
       if (isNew) {
         // If the user is new, add the user to the users collection
         FirebaseFirestore.instance
-            .collection("users")
+            .collection(USERS)
             .doc(user!.uid)
-            .set({"email": user.email, "UID": user.uid, "Languages": {}});
+            .set({EMAIL: user.email, "UID": user.uid, "Languages": {}});
       }
       return isNew;
     });
@@ -146,8 +147,8 @@ class _MyAppState extends State<MyApp> {
     AuthRepository authRep = AuthRepository.instance();
     UserCredential newUser = (await authRep.signUp(email, password))!;
     FirebaseFirestore.instance
-        .collection("users")
+        .collection(USERS)
         .doc(newUser.user!.uid)
-        .set({"email": email, "UID": newUser.user!.uid, "Languages": {}});
+        .set({EMAIL: email, "UID": newUser.user!.uid, "Languages": {}});
   }
 }

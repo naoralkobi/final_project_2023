@@ -117,7 +117,7 @@ class _ProfileDatePickerState extends State<ProfileDatePicker> {
   void updateFirebase() {
     final user = FirebaseAuth.instance.currentUser; // Get the current user
     FirebaseFirestore.instance // Access the Firestore instance
-        .collection('users') // Access the 'users' collection
+        .collection(USERS) // Access the USERS collection
         .doc(user!.uid) // Access the document corresponding to the user's UID
         .update({
       "birthDate": dateController.text

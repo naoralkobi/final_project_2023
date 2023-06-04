@@ -44,16 +44,16 @@ class ListViewFriendsState extends State<ListViewFriends> {
     }
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('users')
+            .collection(USERS)
             .doc(user!.uid)
             .snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<DocumentSnapshot> currentUserInfo) {
-          if (currentUserInfo.hasError) return const Text("There has been an error");
+          if (currentUserInfo.hasError) return const Text(ERROR_MESSAGE);
           //if connecting show progressIndicator
           if (currentUserInfo.connectionState == ConnectionState.waiting &&
               currentUserInfo.data == null) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else {
             return Container(
               color: const Color(0xFFF8F5F5),
@@ -66,13 +66,13 @@ class ListViewFriendsState extends State<ListViewFriends> {
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshots) {
                     if (snapshots.hasError) {
-                      return const Text("There has been an error ");
+                      return const Text(ERROR_MESSAGE);
                     }
                     if (snapshots.connectionState == ConnectionState.waiting &&
                         snapshots.data == null) {
                       return const Center(child: CircularProgressIndicator());
                     } else {
-                      List friends = currentUserInfo.data!["friends"];
+                      List friends = currentUserInfo.data![FRIENDS];
                       if (friends.isEmpty) {
                         return Center(
                           child: Column(
@@ -88,12 +88,12 @@ class ListViewFriendsState extends State<ListViewFriends> {
                                   height: SizeConfig.blockSizeVertical * 2.0),
                               TextButton(
                                 style: TextButton.styleFrom(
-                                  backgroundColor: Color(0xFF6D94BE),
+                                  backgroundColor: const Color(0xFF6D94BE),
                                   shape: RoundedRectangleBorder(
-                                    side: BorderSide(color: Colors.grey),
+                                    side: const BorderSide(color: Colors.grey),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  padding: EdgeInsets.all(10.0),
+                                  padding: const EdgeInsets.all(10.0),
                                 ),
                                 onPressed: () {
                                   navigateToAddFriend(context);
@@ -110,20 +110,27 @@ class ListViewFriendsState extends State<ListViewFriends> {
                         return ListView.separated(
                             separatorBuilder:
                                 (BuildContext context, int index) {
-                                  Map<String, dynamic>? friendData = snapshots.data!.docs[index]?.data() as Map<String, dynamic>?;
+                                  // Retrieve the friend data at the current index
+                                  Map<String, dynamic>? friendData = snapshots.data!.docs[index].data() as Map<String, dynamic>?;
+                                  // Retrieve the friend's languages from the data
                                   Map<String, dynamic>? friendLanguages = friendData?[LANGUAGES];
+                                  // Check conditions to determine the separator widget
                                   if (((widget.isSelectFriendPage &&
                                       (friendLanguages == null || !friendLanguages.containsKey(widget.selectedLanguage))) ||
                                       !friends.contains(friendData?[USERNAME]))) {
+                                    // If it's the select friend page and the friend doesn't have the selected language
+                                    // or the friend is not in the friends list, hide the separator
                                     return const SizedBox();
                               } else if (widget.searchText != "" &&
                                   !friendData?[USERNAME]
                                       .toLowerCase()
                                       .contains(
                                       widget.searchText.toLowerCase())) {
-                                return const SizedBox();
+                                    // If there's a search text and the friend's username doesn't contain it, hide the separator
+                                    return const SizedBox();
                               } else {
-                                return const Divider();
+                                    // If none of the above conditions are met, display a visible separator
+                                    return const Divider();
                               }
                             },
                             scrollDirection: Axis.vertical,

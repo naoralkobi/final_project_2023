@@ -33,7 +33,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
   void initState() {
     super.initState();
     FirebaseFirestore.instance
-        .collection('users')
+        .collection(USERS)
         .doc(AuthRepository.instance().user!.uid)
         .get()
         .then((value) {
@@ -67,11 +67,11 @@ class ChooseLanguageState extends State<ChooseLanguage> {
       ),
       child: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('users')
+            .collection(USERS)
             .doc(currentUserID)
             .snapshots(),
         builder: (BuildContext buildContext, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text("There has been an error");
+          if (snapshot.hasError) return Text(ERROR_MESSAGE);
           if (snapshot.connectionState == ConnectionState.waiting &&
               snapshot.data == null) return CircularProgressIndicator();
           if (widget.isFromFriendList && languagesList.isEmpty){
@@ -209,12 +209,12 @@ class ChooseLanguageState extends State<ChooseLanguage> {
   //         borderRadius: BorderRadius.circular(18.0)),
   //     child: StreamBuilder(
   //         stream: FirebaseFirestore.instance
-  //             .collection('users')
+  //             .collection(USERS)
   //             .doc(currentUserID)
   //             .snapshots(),
   //         builder: (BuildContext buildContext,
   //             AsyncSnapshot<DocumentSnapshot> snapshot) {
-  //           if (snapshot.hasError) return Text("There has been an error");
+  //           if (snapshot.hasError) return Text(ERROR_MESSAGE);
   //           //if connecting show progressIndicator
   //           if (snapshot.connectionState == ConnectionState.waiting &&
   //               snapshot.data == null) return SizedBox();

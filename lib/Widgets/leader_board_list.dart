@@ -113,7 +113,7 @@ class LeaderboardListState extends State<LeaderboardList> {
                                         size: SizeConfig.blockSizeHorizontal * 4,
                                       ),
                                       Text(usersDocs[index]
-                                          .data()['score']
+                                          .data()[SCORE]
                                           .toString()),
                                     ],
                                   ),
@@ -155,18 +155,18 @@ class LeaderboardListState extends State<LeaderboardList> {
     int prevRank = -1;
     int prevScore = -1;
     await FirebaseFirestore.instance
-        .collection('users')
-        .orderBy('score', descending: true)
+        .collection(USERS)
+        .orderBy(SCORE, descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         if (prevScore == -1) {
           prevRank = 1;
-          prevScore = doc['score'];
+          prevScore = doc[SCORE];
         } else {
-          if (prevScore > doc['score']) {
+          if (prevScore > doc[SCORE]) {
             prevRank += 1;
-            prevScore = doc['score'];
+            prevScore = doc[SCORE];
           }
         }
         if (widget.usernames.contains(doc[USERNAME])) {
@@ -187,18 +187,18 @@ class LeaderboardListState extends State<LeaderboardList> {
     int prevRank = -1;
     int prevScore = -1;
     await FirebaseFirestore.instance
-        .collection('users')
-        .orderBy('score', descending: true)
+        .collection(USERS)
+        .orderBy(SCORE, descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         if (prevScore == -1) {
           prevRank = 1;
-          prevScore = doc['score'];
+          prevScore = doc[SCORE];
         } else {
-          if (prevScore > doc['score']) {
+          if (prevScore > doc[SCORE]) {
             prevRank += 1;
-            prevScore = doc['score'];
+            prevScore = doc[SCORE];
           }
         }
         if (doc[USERNAME] == username) {
