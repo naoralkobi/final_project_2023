@@ -3,12 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../consts.dart';
 import 'view_user_profile.dart';
 import '../Widgets/leader_board_list.dart';
-
 import '../screen_size_config.dart';
 
 class Leaderboard extends StatefulWidget {
   Map userInfo;
-
 
   Leaderboard(this.userInfo);
 
@@ -25,7 +23,7 @@ class LeaderboardState extends State<Leaderboard> {
   double appBarHeight =  SizeConfig.blockSizeHorizontal * 7 * 2 + SizeConfig.blockSizeVertical * 10 +
       SizeConfig.blockSizeHorizontal * 12.0 + SizeConfig.blockSizeVertical * 15;
 
-  Widget _appBarTitle = Text(
+  final Widget _appBarTitle = const Text(
     "Leaderboard",
     style: TextStyle(
         fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
@@ -46,11 +44,11 @@ class LeaderboardState extends State<Leaderboard> {
       length: 3,
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Color(0xFFF8F5F5),
+          backgroundColor: const Color(0xFFF8F5F5),
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(appBarHeight),
             child: AppBar(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
                   bottom: Radius.circular(18.0),
                 ),
@@ -69,16 +67,16 @@ class LeaderboardState extends State<Leaderboard> {
               ),
               flexibleSpace: SafeArea(
                 child: Container(
-                  padding: EdgeInsets.only(right: 16),
+                  padding: const EdgeInsets.only(right: 16),
                   child: Column(
                     children: [
                       Row(
                           children: <Widget>[
-                            SizedBox(
+                            const SizedBox(
                               width: 2,
                             ),
                             IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.arrow_back_rounded,
                                   color: Colors.white,
                                 ),
@@ -87,7 +85,7 @@ class LeaderboardState extends State<Leaderboard> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                 }),
-                            SizedBox(
+                            const SizedBox(
                               width: 12,
                             ),
                             _appBarTitle,
@@ -125,12 +123,12 @@ class LeaderboardState extends State<Leaderboard> {
                                 mainAxisAlignment: MainAxisAlignment
                                     .center,
                                 children: [
-                                  ImageIcon(AssetImage(
+                                  ImageIcon(const AssetImage(
                                       "assets/images/trophy.png"),
                                     color: Colors.white,
                                     size: SizeConfig
                                         .blockSizeHorizontal * 7,),
-                                  SizedBox(width: 3,),
+                                  const SizedBox(width: 3,),
                                   widget.userInfo.containsKey(
                                       SCORE) ? Text(
                                     widget.userInfo[SCORE].toString(),
@@ -139,7 +137,7 @@ class LeaderboardState extends State<Leaderboard> {
                                             .blockSizeHorizontal * 4,
                                         color: Colors.white
                                     ),
-                                  ) : Text("")
+                                  ) : const Text("")
                                 ],
                               ),
                             ),
@@ -157,7 +155,7 @@ class LeaderboardState extends State<Leaderboard> {
                                   color: Colors.white,
                                   size: SizeConfig.blockSizeHorizontal *
                                       7,),
-                                SizedBox(width: 3,),
+                                const SizedBox(width: 3,),
                                 Text(
                                   rank.toString(),
                                   style: TextStyle(
@@ -183,8 +181,8 @@ class LeaderboardState extends State<Leaderboard> {
           ),
           body: TabBarView(
             children: <Widget>[
-              LeaderboardList([], true, false, widget.userInfo[USERNAME]),
-              LeaderboardList([], false, false, widget.userInfo[USERNAME]),
+              LeaderboardList(const [], true, false, widget.userInfo[USERNAME]),
+              LeaderboardList(const [], false, false, widget.userInfo[USERNAME]),
               LeaderboardList(friendsList, false, true, widget.userInfo[USERNAME]),
             ],
           )
@@ -192,35 +190,45 @@ class LeaderboardState extends State<Leaderboard> {
     );
   }
 
-  void _getCurrentRank(String username)  async {
-    int prevRank = -1;
-    int prevScore = -1;
-    int userRank = 0;
+  void _getCurrentRank(String username) async {
+    int prevRank = -1; // Initialize previous rank variable
+    int prevScore = -1; // Initialize previous score variable
+    int userRank = 0; // Initialize user's rank variable
 
+    // Retrieve the user data from the Firestore collection
     await FirebaseFirestore.instance
         .collection(USERS)
         .orderBy(SCORE, descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        if (prevScore == -1){
+      for (var doc in querySnapshot.docs) {
+        // Iterate through each document in the query snapshot
+
+        if (prevScore == -1) {
+          // If it's the first document, set previous rank to 1 and previous score to the document's score
           prevRank = 1;
           prevScore = doc[SCORE];
-        }
-        else{
-          if (prevScore > doc[SCORE]){
+        } else {
+          // If it's not the first document, check if the previous score is greater than the current document's score
+          // If it is, increment the previous rank and update the previous score
+          if (prevScore > doc[SCORE]) {
             prevRank += 1;
             prevScore = doc[SCORE];
           }
         }
-        if (doc[USERNAME] == username){
+
+        if (doc[USERNAME] == username) {
+          // If the document's username matches the user's username, store the user's rank
           userRank = prevRank;
         }
-      });
+      }
     });
-    if (mounted){
+
+    // Update the 'rank' state variable with the user's rank
+    if (mounted) {
       setState(() {
         rank = userRank;
-      });}
+      });
+    }
   }
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Pages/view_user_profile.dart';
-
 import '../consts.dart';
 import '../screen_size_config.dart';
 
@@ -17,7 +15,7 @@ class LeaderboardList extends StatefulWidget {
 
   @override
   LeaderboardListState createState() {
-    return new LeaderboardListState();
+    return LeaderboardListState();
   }
 }
 
@@ -152,24 +150,33 @@ class LeaderboardListState extends State<LeaderboardList> {
   }
 
   void _getFriends() async {
-    int prevRank = -1;
-    int prevScore = -1;
+    int prevRank = -1; // Initialize previous rank variable
+    int prevScore = -1; // Initialize previous score variable
+
+    // Retrieve the user data from the Firestore collection
     await FirebaseFirestore.instance
         .collection(USERS)
         .orderBy(SCORE, descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
+        // Iterate through each document in the query snapshot
+
         if (prevScore == -1) {
+          // If it's the first document, set previous rank to 1 and previous score to the document's score
           prevRank = 1;
           prevScore = doc[SCORE];
         } else {
+          // If it's not the first document, check if the previous score is greater than the current document's score
+          // If it is, increment the previous rank and update the previous score
           if (prevScore > doc[SCORE]) {
             prevRank += 1;
             prevScore = doc[SCORE];
           }
         }
+
         if (widget.usernames.contains(doc[USERNAME])) {
+          // If the document's username is in the list of usernames passed to the widget, store the document and rank
           if (mounted) {
             setState(() {
               usersDocs.add(doc);
@@ -177,47 +184,61 @@ class LeaderboardListState extends State<LeaderboardList> {
             });
           }
         }
-      });
+      }
     });
   }
 
   void _getAllUsers(String username) async {
-    int index = 0;
-    int indexUser = 0;
-    int prevRank = -1;
-    int prevScore = -1;
+    int index = 0; // Initialize an index variable
+    int indexUser = 0; // Initialize an indexUser variable
+    int prevRank = -1; // Initialize previous rank variable
+    int prevScore = -1; // Initialize previous score variable
+
+    // Retrieve the user data from the Firestore collection
     await FirebaseFirestore.instance
         .collection(USERS)
         .orderBy(SCORE, descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
+        // Iterate through each document in the query snapshot
+
         if (prevScore == -1) {
+          // If it's the first document, set previous rank to 1 and previous score to the document's score
           prevRank = 1;
           prevScore = doc[SCORE];
         } else {
+          // If it's not the first document, check if the previous score is greater than the current document's score
+          // If it is, increment the previous rank and update the previous score
           if (prevScore > doc[SCORE]) {
             prevRank += 1;
             prevScore = doc[SCORE];
           }
         }
+
         if (doc[USERNAME] == username) {
+          // If the document's username matches the user's username, store the index
           indexUser = index;
         }
+
+        // Add the document and rank to the lists
         if (mounted) {
           setState(() {
             usersDocs.add(doc);
             ranks.add(prevRank);
           });
         }
+
         index++;
-      });
+      }
     });
+
     if (widget.isMyRank) {
+      // If it's the user's own rank, animate to the corresponding index
       _animateToIndex(indexUser);
     }
   }
 
   _animateToIndex(index) => _controller.animateTo(tileSize * index,
-      duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+      duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
 }
