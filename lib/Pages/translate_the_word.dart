@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/Pages/add_question.dart';
 import '../FireBase/question.dart';
@@ -26,9 +24,9 @@ class TranslateTheWordState extends State<TranslateTheWord> {
   final answer4Controller = TextEditingController();
   bool isFieldsFilled = true;
 
-  Question question = new Question();
+  Question question = Question();
 
-  Widget _appBarTitle = Text(
+  final Widget _appBarTitle = const Text(
     "Translate the Word",
     style: TextStyle(
         fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
@@ -42,11 +40,11 @@ class TranslateTheWordState extends State<TranslateTheWord> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Color(0xFFF8F5F5),
+        backgroundColor: const Color(0xFFF8F5F5),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(70),
+          preferredSize: const Size.fromHeight(70),
           child: AppBar(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(18.0),
               ),
@@ -54,14 +52,14 @@ class TranslateTheWordState extends State<TranslateTheWord> {
             automaticallyImplyLeading: false,
             flexibleSpace: SafeArea(
               child: Container(
-                padding: EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.only(right: 16),
                 child: Row(
                   children: <Widget>[
-                    SizedBox(
+                    const SizedBox(
                       width: 2,
                     ),
                     IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_rounded,
                           color: Colors.white,
                         ),
@@ -69,7 +67,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                         onPressed: () {
                           Navigator.pop(context);
                         }),
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
                     Expanded(
@@ -78,7 +76,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           _appBarTitle,
-                          SizedBox(
+                          const SizedBox(
                             height: 3,
                           ),
                         ],
@@ -121,24 +119,13 @@ class TranslateTheWordState extends State<TranslateTheWord> {
               padding:
               EdgeInsets.only(top: SizeConfig.blockSizeVertical * 4),
             ),
-            /*Align(
-              alignment: Alignment.centerLeft,
-              child: Text("     Insert a word in " + _getLanguage() + " and 4 translations " + "\n"+
-              "     in English and select the correct translation",
-                  style: TextStyle(
-                  fontSize: 16)),
-            ),
-            Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 4),
-            ),*/
-            Text("The word in " + _getLanguage() + ":", style: TextStyle(
+            Text("The word in ${_getLanguage()}:", style: TextStyle(
                 fontSize: SizeConfig.blockSizeHorizontal * 4.8, fontWeight: FontWeight.w500)),
             Padding(
               padding:
               EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
             ),
-            Container(
+            SizedBox(
               width: SizeConfig.blockSizeHorizontal * 75,
               height: SizeConfig.blockSizeVertical * 6,
               child: TextFormField(
@@ -148,26 +135,26 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                   alignLabelWithHint: true,
                   filled: true,
                   fillColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: PURPLE_COLOR,
                       width: 2.0,
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.grey,
                       width: 2.0,
                     ),
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                 ),
@@ -192,7 +179,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                 SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 12.7,
                 ),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -202,26 +189,26 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -251,7 +238,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                 Padding(
                     padding:
                     EdgeInsets.only(left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -261,26 +248,26 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -302,7 +289,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                 Padding(
                     padding:
                     EdgeInsets.only(left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -312,26 +299,26 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -353,7 +340,7 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                 Padding(
                     padding:
                     EdgeInsets.only(left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -363,26 +350,26 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -448,12 +435,12 @@ class TranslateTheWordState extends State<TranslateTheWord> {
                                     borderRadius: BorderRadius.circular(18.0),
                                   ),
                                   actions: <Widget>[
-                                    isLoading? SizedBox() : TextButton(
+                                    isLoading? const SizedBox() : TextButton(
                                       onPressed: () => Navigator.pop(context, 'No'),
                                       child: const Text('No', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0,)),
                                     ),
                                     //SizedBox(width: SizeConfig.blockSizeHorizontal * 8.0),
-                                    isLoading? CircularProgressIndicator() : TextButton(
+                                    isLoading? const CircularProgressIndicator() : TextButton(
                                       onPressed: () {
                                         setStateDialog((){
                                           isLoading = true;

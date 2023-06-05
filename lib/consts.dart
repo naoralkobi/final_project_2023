@@ -75,6 +75,12 @@ const Color PURPLE_COLOR = Color(0xFFA66CB7) ;
 /// Settings:
 const String GOOGLE_API_KEY = 'AIzaSyC_-_XeUsGfdBt4h1fx2ZYYdEC_K_aFAOY';
 const String GOOGLE_TRANSLATE_SERVER = 'https://translation.googleapis.com/language/translate/v2?';
+const String YOUTUBE_SERVER = 'https://www.googleapis.com/youtube/v3/search';
+
+/// Admins:
+const String NAOR = 'naor9985@gmail.com';
+const String AVIV = 'avivhar13@gmail.com';
+const String RON = 'rontsohrl@gmail.com';
 
 
 

@@ -40,11 +40,6 @@ class _ChatPageState extends State<ChatPage> {
   final messageController = TextEditingController();
   StreamController<String> gameController = StreamController.broadcast();
   final picker = ImagePicker();
-  final notImplementedSnackBar = const SnackBar(
-    duration: Duration(milliseconds: 1000),
-    content: Text('Not implemented yet!'),
-    behavior: SnackBarBehavior.floating,
-  );
   late Image languageFlag;
   String gameID = "";
   StreamSubscription<DocumentSnapshot>? streamSubscription;
@@ -311,94 +306,92 @@ class _ChatPageState extends State<ChatPage> {
                           bottomRight: Radius.circular(20.0),
                           bottomLeft: Radius.circular(20.0)),
                     ),
-                    child: Container(
-                      child: Row(
-                        children: <Widget>[
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            iconSize: SizeConfig.blockSizeHorizontal * 8,
-                            icon: const Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ViewUserProfile(
-                                          widget.friendInfo["UID"])));
-                            },
-                            child: CircleAvatar(
-                              backgroundImage:
-                              NetworkImage(widget.friendInfo["URL"]),
-                              maxRadius: 20,
-                            ),
-                          ),
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 4,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  widget.friendInfo[USERNAME],
-                                  style: TextStyle(
-                                      fontSize:
-                                      SizeConfig.blockSizeHorizontal * 5,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 2,
-                          ),
-                          if (friendsList
-                              .contains(widget.friendInfo[USERNAME]) || widget.isMyFriend)
-                            SizedBox()
-                          else
-                            IconButton(
-                                icon: const Icon(
-                                  Icons.person_add_alt_1_outlined,
-                                  color: Colors.white,
-                                  size: 25,
-                                ),
-                                onPressed: () {
-                                  FirebaseDB.Firebase_db.addFriend(
-                                      widget.friendInfo[USERNAME],
-                                      context);
-                                  setState(() {
-                                    widget.isMyFriend = true;
-                                  });
-                                })
-                          ,
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 2,
-                          ),
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 4,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.video_call),
+                    child: Row(
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          iconSize: SizeConfig.blockSizeHorizontal * 8,
+                          icon: const Icon(
+                            Icons.arrow_back,
                             color: Colors.white,
-                            onPressed: () async {
-                              await _handleCameraAndMic();
-                              startCall();
-                            },
                           ),
-                          languageFlag,
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 4,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ViewUserProfile(
+                                        widget.friendInfo["UID"])));
+                          },
+                          child: CircleAvatar(
+                            backgroundImage:
+                            NetworkImage(widget.friendInfo["URL"]),
+                            maxRadius: 20,
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 4,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                widget.friendInfo[USERNAME],
+                                style: TextStyle(
+                                    fontSize:
+                                    SizeConfig.blockSizeHorizontal * 5,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 2,
+                        ),
+                        if (friendsList
+                            .contains(widget.friendInfo[USERNAME]) || widget.isMyFriend)
+                          const SizedBox()
+                        else
+                          IconButton(
+                              icon: const Icon(
+                                Icons.person_add_alt_1_outlined,
+                                color: Colors.white,
+                                size: 25,
+                              ),
+                              onPressed: () {
+                                FirebaseDB.Firebase_db.addFriend(
+                                    widget.friendInfo[USERNAME],
+                                    context);
+                                setState(() {
+                                  widget.isMyFriend = true;
+                                });
+                              })
+                        ,
+                        SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 2,
+                        ),
+                        SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 4,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.video_call),
+                          color: Colors.white,
+                          onPressed: () async {
+                            await _handleCameraAndMic();
+                            startCall();
+                          },
+                        ),
+                        languageFlag,
+                        SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 4,
+                        ),
+                      ],
                     ),
                   ),
                 ],

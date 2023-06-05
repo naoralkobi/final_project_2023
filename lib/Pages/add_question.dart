@@ -2,9 +2,6 @@ import 'package:final_project_2023/Pages/translate_the_word.dart';
 import 'package:final_project_2023/Pages/verb_conjugation.dart';
 import 'package:final_project_2023/Pages/whats_in_the_picture.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project_2023/firebase/FirebaseDB.dart';
-import 'package:final_project_2023/firebase/auth_repository.dart';
 import 'package:final_project_2023/consts.dart';
 import '../screen_size_config.dart';
 import 'complete_the_sentence.dart';
@@ -30,7 +27,7 @@ class AddQuestionState extends State<AddQuestion> {
   ];
   List<String> levelList = [BEGINNER, INTERMEDIATE, ADVANCED];
 
-  Widget _appBarTitle = Text(
+  final Widget _appBarTitle = const Text(
     "Add a Question",
     style: TextStyle(
         fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
@@ -40,11 +37,11 @@ class AddQuestionState extends State<AddQuestion> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xFFF8F5F5),
+      backgroundColor: const Color(0xFFF8F5F5),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: const Size.fromHeight(70),
         child: AppBar(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(18.0),
             ),
@@ -52,14 +49,14 @@ class AddQuestionState extends State<AddQuestion> {
           automaticallyImplyLeading: false,
           flexibleSpace: SafeArea(
             child: Container(
-              padding: EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: 16),
               child: Row(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     width: 2,
                   ),
                   IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_rounded,
                         color: Colors.white,
                       ),
@@ -67,7 +64,7 @@ class AddQuestionState extends State<AddQuestion> {
                       onPressed: () {
                         Navigator.pop(context);
                       }),
-                  SizedBox(
+                  const SizedBox(
                     width: 12,
                   ),
                   Expanded(
@@ -76,7 +73,7 @@ class AddQuestionState extends State<AddQuestion> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         _appBarTitle,
-                        SizedBox(
+                        const SizedBox(
                           height: 3,
                         ),
                       ],
@@ -97,7 +94,7 @@ class AddQuestionState extends State<AddQuestion> {
             Padding(
               padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical * 3),
             ),
-            Container(
+            SizedBox(
               width: SizeConfig.blockSizeHorizontal * 45,
               child: Text(
                 "Select a language:",
@@ -115,12 +112,12 @@ class AddQuestionState extends State<AddQuestion> {
                   isExpanded: true,
                   hint: Text(LANGUAGES,
                       style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal*4, fontWeight: FontWeight.w500)),
-                  underline: SizedBox.shrink(),
+                  underline: const SizedBox.shrink(),
                   value: languageId,
                   items: languagesList.map((String value) {
-                    return new DropdownMenuItem<String>(
+                    return DropdownMenuItem<String>(
                       value: value,
-                      child: new Text(value,
+                      child: Text(value,
                           style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal*4, fontWeight: FontWeight.w500)),
                     );
                   }).toList(),
@@ -141,7 +138,7 @@ class AddQuestionState extends State<AddQuestion> {
             Padding(
               padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical * 3),
             ),
-            Container(
+            SizedBox(
               width: SizeConfig.blockSizeHorizontal * 45,
               child: Text(
                 "Select a level:",
@@ -159,12 +156,12 @@ class AddQuestionState extends State<AddQuestion> {
                   isExpanded: true,
                   hint: Text("Level",
                       style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal*4, fontWeight: FontWeight.w500)),
-                  underline: SizedBox.shrink(),
+                  underline: const SizedBox.shrink(),
                   value: levelId,
                   items: levelList.map((String value) {
-                    return new DropdownMenuItem<String>(
+                    return DropdownMenuItem<String>(
                       value: value,
-                      child: new Text(value,
+                      child: Text(value,
                           style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal*4, fontWeight: FontWeight.w500)),
                     );
                   }).toList(),
@@ -224,7 +221,7 @@ class AddQuestionState extends State<AddQuestion> {
             Padding(
               padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical * 3),
             ),
-            Container(
+            SizedBox(
               height: SizeConfig.blockSizeHorizontal * 40,
               width: SizeConfig.blockSizeHorizontal * 40,
               child: ElevatedButton(
@@ -232,9 +229,9 @@ class AddQuestionState extends State<AddQuestion> {
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
-                            side: BorderSide(color: Colors.grey))),
+                            side: const BorderSide(color: Colors.grey))),
                     backgroundColor:
-                    MaterialStateProperty.all(Color(0xFFB9D9EB)),
+                    MaterialStateProperty.all(const Color(0xFFB9D9EB)),
                   ),
                   onPressed: () {
                     if (languageId == null) {
@@ -258,7 +255,7 @@ class AddQuestionState extends State<AddQuestion> {
             Padding(
               padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical * 4),
             ),
-            Container(
+            SizedBox(
               height: SizeConfig.blockSizeHorizontal * 40,
               width: SizeConfig.blockSizeHorizontal * 40,
               child: ElevatedButton(
@@ -266,9 +263,9 @@ class AddQuestionState extends State<AddQuestion> {
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
-                            side: BorderSide(color: Colors.grey))),
+                            side: const BorderSide(color: Colors.grey))),
                     backgroundColor:
-                    MaterialStateProperty.all(Color(0xFFB9D9EB)),
+                    MaterialStateProperty.all(const Color(0xFFB9D9EB)),
                   ),
                   onPressed: () {
                     if (languageId == null) {
@@ -299,7 +296,7 @@ class AddQuestionState extends State<AddQuestion> {
             Padding(
               padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical * 3),
             ),
-            Container(
+            SizedBox(
               height: SizeConfig.blockSizeHorizontal * 40,
               width: SizeConfig.blockSizeHorizontal * 40,
               child: ElevatedButton(
@@ -307,9 +304,9 @@ class AddQuestionState extends State<AddQuestion> {
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
-                            side: BorderSide(color: Colors.grey))),
+                            side: const BorderSide(color: Colors.grey))),
                     backgroundColor:
-                    MaterialStateProperty.all(Color(0xFFB9D9EB)),
+                    MaterialStateProperty.all(const Color(0xFFB9D9EB)),
                   ),
                   onPressed: () {
                     if (languageId == null) {
@@ -333,7 +330,7 @@ class AddQuestionState extends State<AddQuestion> {
             Padding(
               padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical * 4),
             ),
-            Container(
+            SizedBox(
               height: SizeConfig.blockSizeHorizontal * 40,
               width: SizeConfig.blockSizeHorizontal * 40,
               child: ElevatedButton(
@@ -341,9 +338,9 @@ class AddQuestionState extends State<AddQuestion> {
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
-                            side: BorderSide(color: Colors.grey))),
+                            side: const BorderSide(color: Colors.grey))),
                     backgroundColor:
-                    MaterialStateProperty.all(Color(0xFFB9D9EB)),
+                    MaterialStateProperty.all(const Color(0xFFB9D9EB)),
                   ),
                   onPressed: () {
                     if (languageId == null) {
@@ -407,6 +404,6 @@ class AddQuestionState extends State<AddQuestion> {
   }
 
   String? _getLanguageLevel() {
-    return languageId! + "-" + levelId!.toLowerCase();
+    return "${languageId!}-${levelId!.toLowerCase()}";
   }
 }

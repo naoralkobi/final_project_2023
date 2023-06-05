@@ -1,15 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/Pages/add_question.dart';
-
 import '../consts.dart';
 import '../firebase/Question.dart';
-// import '../screen_size_config.dart';
 
 class CompleteTheSentence extends StatefulWidget {
   final String? language;
@@ -30,9 +25,9 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
   final answer4Controller = TextEditingController();
   bool isFieldsFilled = true;
 
-  Question question = new Question();
+  Question question = Question();
 
-  Widget _appBarTitle = Text(
+  final Widget _appBarTitle = const Text(
     "Complete the Sentence",
     style: TextStyle(
         fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
@@ -46,11 +41,11 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Color(0xFFF8F5F5),
+        backgroundColor: const Color(0xFFF8F5F5),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(70),
+          preferredSize: const Size.fromHeight(70),
           child: AppBar(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(18.0),
               ),
@@ -58,14 +53,14 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
             automaticallyImplyLeading: false,
             flexibleSpace: SafeArea(
               child: Container(
-                padding: EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.only(right: 16),
                 child: Row(
                   children: <Widget>[
-                    SizedBox(
+                    const SizedBox(
                       width: 2,
                     ),
                     IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_rounded,
                           color: Colors.white,
                         ),
@@ -73,7 +68,7 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                         onPressed: () {
                           Navigator.pop(context);
                         }),
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
                     Expanded(
@@ -82,7 +77,7 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           _appBarTitle,
-                          SizedBox(
+                          const SizedBox(
                             height: 3,
                           ),
                         ],
@@ -108,7 +103,7 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                     Text("Language: ",style: TextStyle(
                         fontSize: SizeConfig.blockSizeHorizontal * 4, color: Colors.black) ),
                     Text(_getLanguage(),style: TextStyle(
-                        fontSize: SizeConfig.blockSizeHorizontal * 4, color: Color(0xFF6D94BE)) ),
+                        fontSize: SizeConfig.blockSizeHorizontal * 4, color: const Color(0xFF6D94BE)) ),
                   ],
                 ),
                 Row(
@@ -116,7 +111,7 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                     Text("Level: ",style: TextStyle(
                         fontSize: SizeConfig.blockSizeHorizontal * 4, color: Colors.black)),
                     Text(_getLevel(),style: TextStyle(
-                        fontSize: SizeConfig.blockSizeHorizontal * 4, color: Color(0xFF6D94BE))),
+                        fontSize: SizeConfig.blockSizeHorizontal * 4, color: const Color(0xFF6D94BE))),
                   ],
                 ),
               ],
@@ -125,24 +120,13 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
               padding:
               EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
             ),
-            /*Align(
-              alignment: Alignment.centerLeft,
-              child: Text("     Insert a word in " + _getLanguage() + " and 4 translations " + "\n"+
-              "     in English and select the correct translation",
-                  style: TextStyle(
-                  fontSize: 16)),
-            ),
-            Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 4),
-            ),*/
             Text("The beginning of the sentence:", style: TextStyle(
                 fontSize: SizeConfig.blockSizeHorizontal * 4.8, fontWeight: FontWeight.w500)),
             Padding(
               padding:
               EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
-            Container(
+            SizedBox(
               width: SizeConfig.blockSizeHorizontal * 75,
               height: SizeConfig.blockSizeVertical * 9,
               child: TextFormField(
@@ -153,26 +137,26 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                   alignLabelWithHint: true,
                   filled: true,
                   fillColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: PURPLE_COLOR,
                       width: 2.0,
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.grey,
                       width: 2.0,
                     ),
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                 ),
@@ -197,7 +181,7 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                 SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 12.7,
                 ),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -207,26 +191,26 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -245,7 +229,7 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
               padding:
               EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
-            Container(
+            SizedBox(
               width: SizeConfig.blockSizeHorizontal * 75,
               height: SizeConfig.blockSizeVertical * 9,
               child: TextFormField(
@@ -256,26 +240,26 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                   alignLabelWithHint: true,
                   filled: true,
                   fillColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: PURPLE_COLOR,
                       width: 2.0,
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.grey,
                       width: 2.0,
                     ),
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                 ),
@@ -303,7 +287,7 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                 Padding(
                     padding:
                     EdgeInsets.only(left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -313,26 +297,26 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -354,7 +338,7 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                 Padding(
                     padding:
                     EdgeInsets.only(left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -364,26 +348,26 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -405,7 +389,7 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                 Padding(
                     padding:
                     EdgeInsets.only(left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -415,26 +399,26 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -460,10 +444,6 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                 ),
               ),
             ),
-            /*Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 7),
-            ),*/
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -500,17 +480,17 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                                     borderRadius: BorderRadius.circular(18.0),
                                   ),
                                   actions: <Widget>[
-                                    isLoading? SizedBox() : TextButton(
+                                    isLoading? const SizedBox() : TextButton(
                                       onPressed: () => Navigator.pop(context, 'No'),
                                       child: const Text('No', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0,)),
                                     ),
-                                    isLoading? CircularProgressIndicator() : TextButton(
+                                    isLoading? const CircularProgressIndicator() : TextButton(
                                       onPressed: () {
                                         setStateDialog((){
                                           isLoading = true;
                                         });
                                         question.type = "Complete the sentence";
-                                        question.questionBody = beginningController.text + " _______ " + endController.text;
+                                        question.questionBody = "${beginningController.text} _______ ${endController.text}";
                                         question.correctAnswer = answer1Controller.text;
                                         question.answers.add(answer1Controller.text);
                                         question.answers.add(answer2Controller.text);
@@ -597,16 +577,6 @@ class CompleteTheSentenceState extends State<CompleteTheSentence> {
                 },
                 child: const Text('Close', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0,)),
               ),
-
-              /*SizedBox(width: SizeConfig.blockSizeHorizontal * 7.0),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'Finish');
-                  navigateToHomePage(context);
-                },
-                child: const Text('Close', style: TextStyle(color: PURPLE_COLOR, fontSize: 16.0)),
-              ),
-              SizedBox(width: SizeConfig.blockSizeHorizontal * 1.0),*/
             ],
           );}
     );

@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:final_project_2023/Pages/show_image.dart';
@@ -40,9 +38,9 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
   //String imageUrl = "";
   File? imageFile;
 
-  Question question = new Question();
+  Question question = Question();
 
-  Widget _appBarTitle = Text(
+  final Widget _appBarTitle = const Text(
     "What's in the Picture",
     style: TextStyle(
         fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
@@ -56,11 +54,11 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Color(0xFFF8F5F5),
+        backgroundColor: const Color(0xFFF8F5F5),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(70),
+          preferredSize: const Size.fromHeight(70),
           child: AppBar(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(18.0),
               ),
@@ -68,14 +66,14 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
             automaticallyImplyLeading: false,
             flexibleSpace: SafeArea(
               child: Container(
-                padding: EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.only(right: 16),
                 child: Row(
                   children: <Widget>[
-                    SizedBox(
+                    const SizedBox(
                       width: 2,
                     ),
                     IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_rounded,
                           color: Colors.white,
                         ),
@@ -83,7 +81,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                         onPressed: () {
                           Navigator.pop(context);
                         }),
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
                     Expanded(
@@ -92,7 +90,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           _appBarTitle,
-                          SizedBox(
+                          const SizedBox(
                             height: 3,
                           ),
                         ],
@@ -121,7 +119,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                     Text(_getLanguage(),
                         style: TextStyle(
                             fontSize: SizeConfig.blockSizeHorizontal * 4,
-                            color: Color(0xFF6D94BE))),
+                            color: const Color(0xFF6D94BE))),
                   ],
                 ),
                 Row(
@@ -133,24 +131,11 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                     Text(_getLevel(),
                         style: TextStyle(
                             fontSize: SizeConfig.blockSizeHorizontal * 4,
-                            color: Color(0xFF6D94BE))),
+                            color: const Color(0xFF6D94BE))),
                   ],
                 ),
               ],
             ),
-            /*Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text("     Upload an image and insert 4 descriptions in"  + "\n"
-                  + "     " +  _getLanguage() +
-                  " for what's in the picture and select" + "\n"+
-                  "     the correct description",
-                  style: TextStyle(
-                      fontSize: 16)),
-            ),*/
             Padding(
               padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
             ),
@@ -162,6 +147,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
               padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
             ),
             Stack(
+              clipBehavior: Clip.none,
               children: [
                 Hero(
                   tag: "Picture",
@@ -170,11 +156,11 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                         if (imageFile != null) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ShowImage(
-                                imageUrl: imageFile,
-                                tag: "Picture",
-                                title: "Picture",
-                                isURL: false,
-                              )));
+                                    imageUrl: imageFile,
+                                    tag: "Picture",
+                                    title: "Picture",
+                                    isURL: false,
+                                  )));
                         }
                       },
                       child: Container(
@@ -190,17 +176,17 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                           borderRadius: BorderRadius.circular(8.0),
                           child: imageFile == null
                               ? (Image.asset(
-                            "assets/images/image.png",
-                            fit: BoxFit.cover,
-                            height: SizeConfig.blockSizeVertical * 15,
-                            width: SizeConfig.blockSizeVertical * 15,
-                          ))
+                                  "assets/images/image.png",
+                                  fit: BoxFit.cover,
+                                  height: SizeConfig.blockSizeVertical * 15,
+                                  width: SizeConfig.blockSizeVertical * 15,
+                                ))
                               : (Image.file(
-                            imageFile!,
-                            fit: BoxFit.cover,
-                            height: SizeConfig.blockSizeVertical * 15,
-                            width: SizeConfig.blockSizeVertical * 15,
-                          )),
+                                  imageFile!,
+                                  fit: BoxFit.cover,
+                                  height: SizeConfig.blockSizeVertical * 15,
+                                  width: SizeConfig.blockSizeVertical * 15,
+                                )),
                         ),
                       )),
                 ),
@@ -216,24 +202,23 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                       constraints: BoxConstraints(
                           maxHeight: SizeConfig.blockSizeVertical * 6.0,
                           maxWidth: SizeConfig.blockSizeVertical * 6.0),
-                      fillColor: Color(0xAFA66CB7),
+                      fillColor: const Color(0xAFA66CB7),
+                      padding:
+                          EdgeInsets.all(SizeConfig.blockSizeVertical * 1.2),
+                      shape: const CircleBorder(),
                       child: Icon(
                         Icons.camera_alt_outlined,
                         color: Colors.white,
                         size: SizeConfig.blockSizeVertical * 3.5,
                       ),
-                      padding:
-                      EdgeInsets.all(SizeConfig.blockSizeVertical * 1.2),
-                      shape: CircleBorder(),
                     ))
               ],
-              clipBehavior: Clip.none,
             ),
             Padding(
               padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 4),
             ),
             FittedBox(
-              child: Text("The correct description in " + _getLanguage() + ":",
+              child: Text("The correct description in ${_getLanguage()}:",
                   style: TextStyle(
                       fontSize: SizeConfig.blockSizeHorizontal * 4.8,
                       fontWeight: FontWeight.w500)),
@@ -248,7 +233,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                 SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 12.7,
                 ),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -258,26 +243,26 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -309,7 +294,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                 Padding(
                     padding: EdgeInsets.only(
                         left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -319,26 +304,26 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -361,7 +346,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                 Padding(
                     padding: EdgeInsets.only(
                         left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -371,26 +356,26 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -413,7 +398,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                 Padding(
                     padding: EdgeInsets.only(
                         left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -423,26 +408,26 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -450,69 +435,6 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                 ),
               ],
             ),
-
-            /* Padding(
-                padding:
-                EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
-              ),
-              Text("The correct translation:", style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.w500)),
-              Padding(
-                padding:
-                EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
-              ),
-              Row(
-              children: <Widget>[
-                // SizedBox(
-                //   width: 30,
-                // ),
-                Radio<String>(
-                  value: '1',
-                  activeColor: PURPLE_COLOR,
-                  groupValue: correctAnswer,
-                  onChanged: (String? value) {
-                    setState(() {
-                      correctAnswer = value!;
-                    });
-                  },
-                ),
-                Text("1       "),
-                Radio<String>(
-                  value: '2',
-                  activeColor: PURPLE_COLOR,
-                  groupValue: correctAnswer,
-                  onChanged: (String? value) {
-                    setState(() {
-                      correctAnswer = value!;
-                    });
-                  },
-                ),
-                Text("2       "),
-                Radio<String>(
-                  value: '3',
-                  activeColor: PURPLE_COLOR,
-                  groupValue: correctAnswer,
-                  onChanged: (String? value) {
-                    setState(() {
-                      correctAnswer = value!;
-                    });
-                  },
-                ),
-                Text("3       "),
-                Radio<String>(
-                  value: '4',
-                  activeColor: PURPLE_COLOR,
-                  groupValue: correctAnswer,
-                  onChanged: (String? value) {
-                    setState(() {
-                      correctAnswer = value!;
-                    });
-                  },
-                ),
-                Text("4       "),
-              ],
-            ),*/
-
             Padding(
               padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
@@ -522,17 +444,17 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                 fit: BoxFit.fitWidth,
                 child: isImageUploaded
                     ? (isFieldsFilled
-                    ? Text(" ",
-                    style: TextStyle(
-                        fontSize: SizeConfig.blockSizeHorizontal * 4))
-                    : Text("     Fill in all fields",
-                    style: TextStyle(
-                        fontSize: SizeConfig.blockSizeHorizontal * 4,
-                        color: Colors.red[800])))
+                        ? Text(" ",
+                            style: TextStyle(
+                                fontSize: SizeConfig.blockSizeHorizontal * 4))
+                        : Text("     Fill in all fields",
+                            style: TextStyle(
+                                fontSize: SizeConfig.blockSizeHorizontal * 4,
+                                color: Colors.red[800])))
                     : Text("     Upload an Image",
-                    style: TextStyle(
-                        fontSize: SizeConfig.blockSizeHorizontal * 4,
-                        color: Colors.red[800])),
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeHorizontal * 4,
+                            color: Colors.red[800])),
               ),
             ),
             Row(
@@ -589,56 +511,54 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                                         elevation: 24.0,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(18.0),
+                                              BorderRadius.circular(18.0),
                                         ),
                                         actions: <Widget>[
                                           isLoading
-                                              ? SizedBox()
+                                              ? const SizedBox()
                                               : TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(
-                                                    context, 'No'),
-                                            child: const Text('No',
-                                                style: TextStyle(
-                                                  color:
-                                                  PURPLE_COLOR,
-                                                  fontSize: 18.0,
-                                                )),
-                                          ),
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, 'No'),
+                                                  child: const Text('No',
+                                                      style: TextStyle(
+                                                        color: PURPLE_COLOR,
+                                                        fontSize: 18.0,
+                                                      )),
+                                                ),
                                           isLoading
-                                              ? CircularProgressIndicator()
+                                              ? const CircularProgressIndicator()
                                               : TextButton(
-                                            onPressed: () async {
-                                              setStateDialog(() {
-                                                isLoading = true;
-                                              });
-                                              question.type =
-                                              "What's in the picture";
-                                              question.correctAnswer =
-                                                  answer1Controller.text;
-                                              question.answers.add(
-                                                  answer1Controller.text);
-                                              question.answers.add(
-                                                  answer2Controller.text);
-                                              question.answers.add(
-                                                  answer3Controller.text);
-                                              question.answers.add(
-                                                  answer4Controller.text);
-                                              String imageUrl =
-                                              await uploadImage();
-                                              question.questionBody =
-                                                  imageUrl;
-                                              _updateFirebase();
-                                              Navigator.pop(
-                                                  context, 'Yes');
-                                              _addScore();
-                                            },
-                                            child: const Text('Yes',
-                                                style: TextStyle(
-                                                    color:
-                                                    PURPLE_COLOR,
-                                                    fontSize: 18.0)),
-                                          ),
+                                                  onPressed: () async {
+                                                    setStateDialog(() {
+                                                      isLoading = true;
+                                                    });
+                                                    question.type =
+                                                        "What's in the picture";
+                                                    question.correctAnswer =
+                                                        answer1Controller.text;
+                                                    question.answers.add(
+                                                        answer1Controller.text);
+                                                    question.answers.add(
+                                                        answer2Controller.text);
+                                                    question.answers.add(
+                                                        answer3Controller.text);
+                                                    question.answers.add(
+                                                        answer4Controller.text);
+                                                    String imageUrl =
+                                                        await uploadImage();
+                                                    question.questionBody =
+                                                        imageUrl;
+                                                    _updateFirebase();
+                                                    Navigator.pop(
+                                                        context, 'Yes');
+                                                    _addScore();
+                                                  },
+                                                  child: const Text('Yes',
+                                                      style: TextStyle(
+                                                          color: PURPLE_COLOR,
+                                                          fontSize: 18.0)),
+                                                ),
                                         ],
                                       );
                                     },
@@ -676,12 +596,12 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
   }
 
   pickImage() async {
-    final _picker = ImagePicker();
+    final picker = ImagePicker();
     PickedFile? image;
     await Permission.photos.request();
     var permissionStatus = await Permission.photos.status;
     if (permissionStatus.isGranted) {
-      image = await _picker.getImage(
+      image = await picker.getImage(
           source: ImageSource.gallery,
           imageQuality: 20,
           maxWidth: 500,
@@ -690,22 +610,21 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
         imageFile = File(image.path);
         setState(() {});
       } else {
-        final snackBar = SnackBar(
+        const snackBar = SnackBar(
           content: Text('No image selected'),
         );
-        ScaffoldMessenger.of(this.context).showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
-      print("error");
+      debugPrint("error");
     }
   }
 
   Future<String> uploadImage() async {
-    String id = DateTime.now().millisecondsSinceEpoch.toString() +
-        "-" +
-        question.correctAnswer!;
+    String id =
+        "${DateTime.now().millisecondsSinceEpoch}-${question.correctAnswer!}";
     var snapshot =
-    await _storage.ref().child('questions/$id').putFile(imageFile!);
+        await _storage.ref().child('questions/$id').putFile(imageFile!);
     var downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
   }
@@ -717,7 +636,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
 
   void _addScore() {
     showDialog<String>(
-        context: this.context,
+        context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           var user = FirebaseAuth.instance.currentUser;
@@ -733,7 +652,7 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
               children: [
                 const Text('+  ',
                     style:
-                    TextStyle(fontWeight: FontWeight.w600, fontSize: 18.0),
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 18.0),
                     textAlign: TextAlign.center),
                 Image.asset(
                   "assets/images/coin.png",
@@ -758,16 +677,6 @@ class WhatsInThePictureState extends State<WhatsInThePicture> {
                       fontSize: 18.0,
                     )),
               ),
-
-              /*SizedBox(width: SizeConfig.blockSizeHorizontal * 7.0),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'Finish');
-                  navigateToHomePage(context);
-                },
-                child: const Text('Close', style: TextStyle(color: PURPLE_COLOR, fontSize: 16.0)),
-              ),
-              SizedBox(width: SizeConfig.blockSizeHorizontal * 1.0),*/
             ],
           );
         });

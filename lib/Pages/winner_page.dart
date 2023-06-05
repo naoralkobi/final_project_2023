@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:final_project_2023/screen_size_config.dart';
@@ -60,10 +59,10 @@ class _WinnerPageState extends State<WinnerPage> {
             .snapshots(),
         builder: (BuildContext buildContext,
             AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text(ERROR_MESSAGE);
+          if (snapshot.hasError) return const Text(ERROR_MESSAGE);
           //if connecting show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting &&
-              snapshot.data == null) return Center(child: SizedBox());
+              snapshot.data == null) return const Center(child: SizedBox());
           List questionsData = (snapshot.data!.data() as Map<dynamic, dynamic>)["questions"] as List<dynamic>;
           if ((snapshot.data!.data() as Map<dynamic, dynamic>)["uid1"] == widget.userInfo["UID"]) {
             user1Info = widget.userInfo;
@@ -73,31 +72,12 @@ class _WinnerPageState extends State<WinnerPage> {
             user1Info = widget.opponentInfo;
           }
           int winner = getWinner(snapshot.data!.data() as Map<dynamic, dynamic>);
-
-          // List questionsData = (snapshot.data!.data()!["questions"] as List<dynamic>);
-          // if ((snapshot.data!.data()!["uid1"] as String) == widget.userInfo["UID"]) {
-          //   user1Info = widget.userInfo;
-          //   user2Info = widget.opponentInfo;
-          // } else {
-          //   user2Info = widget.userInfo;
-          //   user1Info = widget.opponentInfo;
-          // }
-          // int winner = getWinner(snapshot.data!.data()! as Map<dynamic, dynamic>);
-          // List questionsData = snapshot.data!.data()!["questions"];
-          // if ((snapshot.data!.data()!["uid1"] as String) == widget.userInfo["UID"]) {
-          //   user1Info = widget.userInfo;
-          //   user2Info = widget.opponentInfo;
-          // } else {
-          //   user2Info = widget.userInfo;
-          //   user1Info = widget.opponentInfo;
-          // }
-          // int winner = getWinner(snapshot.data!.data()!);
           return Scaffold(
             body: Column(children: [
               SizedBox(
                 height: SizeConfig.screenHeight * 0.12,
               ),
-              Container(
+              SizedBox(
                 width: SizeConfig.screenWidth * 0.8,
                 child: Center(
                   child: Text("THE WINNER IS:",
@@ -164,12 +144,12 @@ class _WinnerPageState extends State<WinnerPage> {
   }
 
   void startTimer() {
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = Duration(seconds: 1);
     if (_timer != null) {
       _timer!.cancel();
       _timer = null;
     }
-    _timer = new Timer.periodic(
+    _timer = Timer.periodic(
       oneSec,
           (Timer? timer) {
         if (!mounted) return;
@@ -244,7 +224,7 @@ class _WinnerPageState extends State<WinnerPage> {
         SizedBox(
           height: SizeConfig.screenHeight * 0.02,
         ),
-        Container(
+        SizedBox(
           width: SizeConfig.screenWidth * 0.7,
           child: FittedBox(
             fit: BoxFit.scaleDown,
@@ -287,7 +267,7 @@ class _WinnerPageState extends State<WinnerPage> {
       alignment: Alignment.center,
       child: AnimatedOpacity(
         opacity: _start <= 6 ? 1.0 : 0.0,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         child: displayWidget,
       ),
     );

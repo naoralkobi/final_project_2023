@@ -1,7 +1,8 @@
+import 'package:final_project_2023/Pages/video_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../consts.dart';
 
 class YouTubeVideoListPage extends StatefulWidget {
   final String searchQuery;
@@ -22,50 +23,35 @@ class _YouTubeVideoListPageState extends State<YouTubeVideoListPage> {
   }
 
   Future<void> fetchYouTubeVideos(String searchQuery) async {
-    String apiKey = 'AIzaSyC_-_XeUsGfdBt4h1fx2ZYYdEC_K_aFAOY';
-    String apiUrl = 'https://www.googleapis.com/youtube/v3/search';
-    String nextPageToken = ''; // Add this line
+    String apiKey = GOOGLE_API_KEY;
+    String apiUrl = YOUTUBE_SERVER;
+    String nextPageToken = '';
 
     do {
+      // Perform a GET request to fetch YouTube videos using the API key, search query, and nextPageToken
       var response = await http.get(Uri.parse(
           '$apiUrl?key=$apiKey&part=snippet&q=$searchQuery&type=video&pageToken=$nextPageToken'
       ));
 
       if (response.statusCode == 200) {
+        // If the response is successful (status code 200), parse the response body as JSON
         var data = jsonDecode(response.body);
         setState(() {
+          // Update the state by adding the fetched videos to the videos list
           videos.addAll(data['items']);
-          nextPageToken = data['nextPageToken'] ?? ''; // Add this line
+          nextPageToken = data['nextPageToken'] ?? '';
         });
       } else {
         throw Exception('Failed to fetch YouTube videos');
       }
-    } while (nextPageToken.isNotEmpty); // Add this line
+    } while (nextPageToken.isNotEmpty);
   }
-
-  // Future<void> fetchYouTubeVideos(String searchQuery) async {
-  //   String apiKey = 'AIzaSyC_-_XeUsGfdBt4h1fx2ZYYdEC_K_aFAOY';
-  //   String apiUrl = 'https://www.googleapis.com/youtube/v3/search';
-  //
-  //   var response = await http.get(Uri.parse(
-  //       '$apiUrl?key=$apiKey&part=snippet&q=$searchQuery&type=video'
-  //   ));
-  //
-  //   if (response.statusCode == 200) {
-  //     var data = jsonDecode(response.body);
-  //     setState(() {
-  //       videos = data['items'];
-  //     });
-  //   } else {
-  //     throw Exception('Failed to fetch YouTube videos');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('YouTube Videos'),
+        title: const Text('YouTube Videos'),
       ),
       body: ListView.builder(
         itemCount: videos.length,
@@ -88,39 +74,6 @@ class _YouTubeVideoListPageState extends State<YouTubeVideoListPage> {
             },
           );
         },
-      ),
-    );
-  }
-}
-
-class YouTubeVideoPlayerPage extends StatelessWidget {
-  final String videoId;
-
-  YouTubeVideoPlayerPage({required this.videoId});
-
-  @override
-  Widget build(BuildContext context) {
-    YoutubePlayerController _controller = YoutubePlayerController(
-      initialVideoId: videoId,
-      flags: YoutubePlayerFlags(
-        autoPlay: true,
-      ),
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('YouTube Video Player'),
-      ),
-      body: Center(
-        child: YoutubePlayer(
-          controller: _controller,
-          showVideoProgressIndicator: true,
-          progressIndicatorColor: Colors.red,
-          progressColors: ProgressBarColors(
-            playedColor: Colors.red,
-            handleColor: Colors.redAccent,
-          ),
-        ),
       ),
     );
   }
