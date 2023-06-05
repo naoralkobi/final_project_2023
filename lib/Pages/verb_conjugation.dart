@@ -1,24 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 import 'package:final_project_2023/Pages/add_question.dart';
 import 'package:final_project_2023/screen_size_config.dart';
-
 import '../consts.dart';
 import '../firebase/Question.dart';
 
 /// Purpose of the code:
 /// This class represents a screen that allows users to add verb conjugation questions.
 
-
 class VerbConjugation extends StatefulWidget {
   final String? language;
   final String? level;
   final String? languageLevel;
+
   // Constructor to initialize the VerbConjugation widget
   VerbConjugation(this.language, this.level, this.languageLevel);
 
@@ -36,9 +31,9 @@ class VerbConjugationState extends State<VerbConjugation> {
   final answer4Controller = TextEditingController();
   bool isFieldsFilled = true;
 
-  Question question = new Question();
+  Question question = Question();
 
-  Widget _appBarTitle = Text(
+  final Widget _appBarTitle = const Text(
     "Verb Conjugation",
     style: TextStyle(
         fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
@@ -52,11 +47,11 @@ class VerbConjugationState extends State<VerbConjugation> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Color(0xFFF8F5F5),
+        backgroundColor: const Color(0xFFF8F5F5),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(70),
+          preferredSize: const Size.fromHeight(70),
           child: AppBar(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(18.0),
               ),
@@ -64,14 +59,14 @@ class VerbConjugationState extends State<VerbConjugation> {
             automaticallyImplyLeading: false,
             flexibleSpace: SafeArea(
               child: Container(
-                padding: EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.only(right: 16),
                 child: Row(
                   children: <Widget>[
-                    SizedBox(
+                    const SizedBox(
                       width: 2,
                     ),
                     IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_rounded,
                           color: Colors.white,
                         ),
@@ -79,7 +74,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                         onPressed: () {
                           Navigator.pop(context);
                         }),
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
                     Expanded(
@@ -88,7 +83,7 @@ class VerbConjugationState extends State<VerbConjugation> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           _appBarTitle,
-                          SizedBox(
+                          const SizedBox(
                             height: 3,
                           ),
                         ],
@@ -103,53 +98,49 @@ class VerbConjugationState extends State<VerbConjugation> {
         body: Column(
           children: [
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Row(
                   children: [
-                    Text("Language: ",style: TextStyle(
-                        fontSize: SizeConfig.blockSizeHorizontal * 4, color: Colors.black) ),
-                    Text(_getLanguage(),style: TextStyle(
-                        fontSize: SizeConfig.blockSizeHorizontal * 4, color: Color(0xFF6D94BE)) ),
+                    Text("Language: ",
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeHorizontal * 4,
+                            color: Colors.black)),
+                    Text(_getLanguage(),
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeHorizontal * 4,
+                            color: const Color(0xFF6D94BE))),
                   ],
                 ),
                 // Display selected level
                 Row(
                   children: [
-                    Text("Level: ",style: TextStyle(
-                        fontSize: SizeConfig.blockSizeHorizontal * 4, color: Colors.black)),
-                    Text(_getLevel(),style: TextStyle(
-                        fontSize: SizeConfig.blockSizeHorizontal * 4, color: Color(0xFF6D94BE))),
+                    Text("Level: ",
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeHorizontal * 4,
+                            color: Colors.black)),
+                    Text(_getLevel(),
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeHorizontal * 4,
+                            color: const Color(0xFF6D94BE))),
                   ],
                 ),
               ],
             ),
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
             ),
-            /*Align(
-              alignment: Alignment.centerLeft,
-              child: Text("     Insert a word in " + _getLanguage() + " and 4 translations " + "\n"+
-              "     in English and select the correct translation",
-                  style: TextStyle(
-                  fontSize: 16)),
-            ),
+            Text("The beginning of the sentence:",
+                style: TextStyle(
+                    fontSize: SizeConfig.blockSizeHorizontal * 4.8,
+                    fontWeight: FontWeight.w500)),
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 4),
-            ),*/
-            Text("The beginning of the sentence:", style: TextStyle(
-                fontSize: SizeConfig.blockSizeHorizontal * 4.8, fontWeight: FontWeight.w500)),
-            Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
-            Container(
+            SizedBox(
               width: SizeConfig.blockSizeHorizontal * 75,
               height: SizeConfig.blockSizeVertical * 9,
               child: TextFormField(
@@ -160,51 +151,49 @@ class VerbConjugationState extends State<VerbConjugation> {
                   alignLabelWithHint: true,
                   filled: true,
                   fillColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: PURPLE_COLOR,
                       width: 2.0,
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.grey,
                       width: 2.0,
                     ),
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                 ),
               ),
             ),
-
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
             ),
-
-            Text("The correct verb conjugation:", style: TextStyle(
-                fontSize: SizeConfig.blockSizeHorizontal * 4.8, fontWeight: FontWeight.w500)),
+            Text("The correct verb conjugation:",
+                style: TextStyle(
+                    fontSize: SizeConfig.blockSizeHorizontal * 4.8,
+                    fontWeight: FontWeight.w500)),
             /*Text("(select the correct one)", style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.w500)),*/
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
             Row(
               children: [
                 SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 12.7,
                 ),
-                Container(
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -214,26 +203,26 @@ class VerbConjugationState extends State<VerbConjugation> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -241,18 +230,17 @@ class VerbConjugationState extends State<VerbConjugation> {
                 ),
               ],
             ),
-
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
             ),
-            Text("The end of the sentence:", style: TextStyle(
-                fontSize: SizeConfig.blockSizeHorizontal * 4.8, fontWeight: FontWeight.w500)),
+            Text("The end of the sentence:",
+                style: TextStyle(
+                    fontSize: SizeConfig.blockSizeHorizontal * 4.8,
+                    fontWeight: FontWeight.w500)),
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
-            Container(
+            SizedBox(
               width: SizeConfig.blockSizeHorizontal * 75,
               height: SizeConfig.blockSizeVertical * 9,
               child: TextFormField(
@@ -263,54 +251,56 @@ class VerbConjugationState extends State<VerbConjugation> {
                   alignLabelWithHint: true,
                   filled: true,
                   fillColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: PURPLE_COLOR,
                       width: 2.0,
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.grey,
                       width: 2.0,
                     ),
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
                 ),
               ),
             ),
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
             ),
-            Text("Incorrect conjugations:", style: TextStyle(
-                fontSize: SizeConfig.blockSizeHorizontal * 4.8, fontWeight: FontWeight.w500)),
+            Text("Incorrect conjugations:",
+                style: TextStyle(
+                    fontSize: SizeConfig.blockSizeHorizontal * 4.8,
+                    fontWeight: FontWeight.w500)),
             /*Text("(select the correct one)", style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.w500)),*/
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
             Row(
               children: [
                 Padding(
-                    padding:
-                    EdgeInsets.only(left: SizeConfig.blockSizeVertical * 3)),
-                Text("1.", style: TextStyle(
-                    fontSize: SizeConfig.blockSizeHorizontal * 5.5, fontWeight: FontWeight.w500)),
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.blockSizeVertical * 3)),
+                Text("1.",
+                    style: TextStyle(
+                        fontSize: SizeConfig.blockSizeHorizontal * 5.5,
+                        fontWeight: FontWeight.w500)),
                 Padding(
-                    padding:
-                    EdgeInsets.only(left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.blockSizeVertical * 1)),
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -320,26 +310,26 @@ class VerbConjugationState extends State<VerbConjugation> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -348,20 +338,21 @@ class VerbConjugationState extends State<VerbConjugation> {
               ],
             ),
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
             Row(
               children: [
                 Padding(
-                    padding:
-                    EdgeInsets.only(left: SizeConfig.blockSizeVertical * 3)),
-                Text("2.", style: TextStyle(
-                    fontSize: SizeConfig.blockSizeHorizontal * 5.5, fontWeight: FontWeight.w500)),
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.blockSizeVertical * 3)),
+                Text("2.",
+                    style: TextStyle(
+                        fontSize: SizeConfig.blockSizeHorizontal * 5.5,
+                        fontWeight: FontWeight.w500)),
                 Padding(
-                    padding:
-                    EdgeInsets.only(left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.blockSizeVertical * 1)),
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -371,26 +362,26 @@ class VerbConjugationState extends State<VerbConjugation> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -399,20 +390,21 @@ class VerbConjugationState extends State<VerbConjugation> {
               ],
             ),
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
             Row(
               children: [
                 Padding(
-                    padding:
-                    EdgeInsets.only(left: SizeConfig.blockSizeVertical * 3)),
-                Text("3.", style: TextStyle(
-                    fontSize: SizeConfig.blockSizeHorizontal * 5.5, fontWeight: FontWeight.w500)),
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.blockSizeVertical * 3)),
+                Text("3.",
+                    style: TextStyle(
+                        fontSize: SizeConfig.blockSizeHorizontal * 5.5,
+                        fontWeight: FontWeight.w500)),
                 Padding(
-                    padding:
-                    EdgeInsets.only(left: SizeConfig.blockSizeVertical * 1)),
-                Container(
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.blockSizeVertical * 1)),
+                SizedBox(
                   width: SizeConfig.blockSizeHorizontal * 75,
                   height: SizeConfig.blockSizeVertical * 6,
                   child: TextFormField(
@@ -422,26 +414,26 @@ class VerbConjugationState extends State<VerbConjugation> {
                       alignLabelWithHint: true,
                       filled: true,
                       fillColor: Colors.white,
-                      labelStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: PURPLE_COLOR,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 2.0,
                         ),
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(10.0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
                       ),
                     ),
@@ -449,109 +441,54 @@ class VerbConjugationState extends State<VerbConjugation> {
                 ),
               ],
             ),
-
-            /* Padding(
-                padding:
-                EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
-              ),
-              Text("The correct translation:", style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.w500)),
-              Padding(
-                padding:
-                EdgeInsets.only(top: SizeConfig.blockSizeVertical * 3),
-              ),
-              Row(
-              children: <Widget>[
-                // SizedBox(
-                //   width: 30,
-                // ),
-                Radio<String>(
-                  value: '1',
-                  activeColor: PURPLE_COLOR,
-                  groupValue: correctAnswer,
-                  onChanged: (String? value) {
-                    setState(() {
-                      correctAnswer = value!;
-                    });
-                  },
-                ),
-                Text("1       "),
-                Radio<String>(
-                  value: '2',
-                  activeColor: PURPLE_COLOR,
-                  groupValue: correctAnswer,
-                  onChanged: (String? value) {
-                    setState(() {
-                      correctAnswer = value!;
-                    });
-                  },
-                ),
-                Text("2       "),
-                Radio<String>(
-                  value: '3',
-                  activeColor: PURPLE_COLOR,
-                  groupValue: correctAnswer,
-                  onChanged: (String? value) {
-                    setState(() {
-                      correctAnswer = value!;
-                    });
-                  },
-                ),
-                Text("3       "),
-                Radio<String>(
-                  value: '4',
-                  activeColor: PURPLE_COLOR,
-                  groupValue: correctAnswer,
-                  onChanged: (String? value) {
-                    setState(() {
-                      correctAnswer = value!;
-                    });
-                  },
-                ),
-                Text("4       "),
-              ],
-            ),*/
-
             Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
+              padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1),
             ),
-
             Align(
               alignment: Alignment.centerLeft,
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: isFieldsFilled
-                    ? Text(" ", style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal * 4))
+                    ? Text(" ",
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeHorizontal * 4))
                     : Text(
-                  "     Fill in all fields",
-                  style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal * 4, color: Colors.red[800]),
-                ),
+                        "     Fill in all fields",
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeHorizontal * 4,
+                            color: Colors.red[800]),
+                      ),
               ),
             ),
-            /*Padding(
-              padding:
-              EdgeInsets.only(top: SizeConfig.blockSizeVertical * 7),
-            ),*/
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
                     child: Row(
                       children: [
-                        Text("Finish ", style: TextStyle(
-                            fontSize: SizeConfig.blockSizeHorizontal * 5.5, fontWeight: FontWeight.w500, color: Colors.grey)),
-                        Icon(Icons.arrow_forward_rounded,
-                          color: Colors.grey, size: SizeConfig.blockSizeHorizontal * 6,)
+                        Text("Finish ",
+                            style: TextStyle(
+                                fontSize: SizeConfig.blockSizeHorizontal * 5.5,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey)),
+                        Icon(
+                          Icons.arrow_forward_rounded,
+                          color: Colors.grey,
+                          size: SizeConfig.blockSizeHorizontal * 6,
+                        )
                       ],
                     ),
-                    onPressed: (){
-                      if (beginningController.text == "" || endController.text == "" || answer1Controller.text == "" ||
-                          answer2Controller.text == "" || answer3Controller.text == "" || answer4Controller.text == "") {
+                    onPressed: () {
+                      if (beginningController.text == "" ||
+                          endController.text == "" ||
+                          answer1Controller.text == "" ||
+                          answer2Controller.text == "" ||
+                          answer3Controller.text == "" ||
+                          answer4Controller.text == "") {
                         setState(() {
                           isFieldsFilled = false;
                         });
-                      } else{
+                      } else {
                         setState(() {
                           isFieldsFilled = true;
                         });
@@ -559,48 +496,70 @@ class VerbConjugationState extends State<VerbConjugation> {
                         showDialog<String>(
                             context: context,
                             barrierDismissible: false,
-                            builder: (BuildContext context) =>
-                                StatefulBuilder(
-                                  builder: (context, setStateDialog){
+                            builder: (BuildContext context) => StatefulBuilder(
+                                  builder: (context, setStateDialog) {
                                     return AlertDialog(
-                                      title: const Text('Add a Question', textAlign: TextAlign.center),
-                                      content: const Text('Are you sure you would like to submit the question?', textAlign: TextAlign.center),
+                                      title: const Text('Add a Question',
+                                          textAlign: TextAlign.center),
+                                      content: const Text(
+                                          'Are you sure you would like to submit the question?',
+                                          textAlign: TextAlign.center),
                                       elevation: 24.0,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18.0),
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
                                       ),
                                       actions: <Widget>[
-                                        isLoading? SizedBox(): TextButton(
-                                          onPressed: () => Navigator.pop(context, 'No'),
-                                          child: const Text('No', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0,)),
-                                        ),
-                                        isLoading? CircularProgressIndicator() : TextButton(
-                                          onPressed: () {
-                                            setStateDialog((){
-                                              isLoading = true;
-                                            });
-                                            question.type = "Verb conjugation";
-                                            question.questionBody = beginningController.text + " _______ " + endController.text;
-                                            question.correctAnswer = answer1Controller.text;
-                                            question.answers.add(answer1Controller.text);
-                                            question.answers.add(answer2Controller.text);
-                                            question.answers.add(answer3Controller.text);
-                                            question.answers.add(answer4Controller.text);
-                                            _updateFirebase();
-                                            Navigator.pop(context, 'Yes');
-                                            _addScore();
-                                          },
-                                          child: const Text('Yes', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0)),
-                                        ),
+                                        isLoading
+                                            ? const SizedBox()
+                                            : TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    context, 'No'),
+                                                child: const Text('No',
+                                                    style: TextStyle(
+                                                      color: PURPLE_COLOR,
+                                                      fontSize: 18.0,
+                                                    )),
+                                              ),
+                                        isLoading
+                                            ? const CircularProgressIndicator()
+                                            : TextButton(
+                                                onPressed: () {
+                                                  setStateDialog(() {
+                                                    isLoading = true;
+                                                  });
+                                                  question.type =
+                                                      "Verb conjugation";
+                                                  question.questionBody =
+                                                      "${beginningController.text} _______ ${endController.text}";
+                                                  question.correctAnswer =
+                                                      answer1Controller.text;
+                                                  question.answers.add(
+                                                      answer1Controller.text);
+                                                  question.answers.add(
+                                                      answer2Controller.text);
+                                                  question.answers.add(
+                                                      answer3Controller.text);
+                                                  question.answers.add(
+                                                      answer4Controller.text);
+                                                  _updateFirebase();
+                                                  Navigator.pop(context, 'Yes');
+                                                  _addScore();
+                                                },
+                                                child: const Text('Yes',
+                                                    style: TextStyle(
+                                                        color: PURPLE_COLOR,
+                                                        fontSize: 18.0)),
+                                              ),
                                       ],
                                     );
                                   },
                                 ));
-
-                      }}),
+                      }
+                    }),
                 Padding(
-                  padding:
-                  EdgeInsets.only(right: SizeConfig.blockSizeHorizontal * 4),
+                  padding: EdgeInsets.only(
+                      right: SizeConfig.blockSizeHorizontal * 4),
                 ),
               ],
             )
@@ -616,16 +575,18 @@ class VerbConjugationState extends State<VerbConjugation> {
     FirebaseFirestore.instance
         .collection('questions')
         .doc(widget.languageLevel) // Use the language level as the document ID
-        .update({"questions" : FieldValue.arrayUnion([question.toJson()])});
+        .update({
+      "questions": FieldValue.arrayUnion([question.toJson()])
+    });
   }
 
 // This method returns the selected language or an empty string if no language is selected
-  String _getLanguage(){
+  String _getLanguage() {
     return widget.language == null ? "" : widget.language.toString();
   }
 
 // This method returns the selected level or an empty string if no level is selected
-  String _getLevel(){
+  String _getLevel() {
     return widget.level == null ? "" : widget.level.toString();
   }
 
@@ -636,11 +597,10 @@ class VerbConjugationState extends State<VerbConjugation> {
   }
 
 // This method adds a score to the user and displays an AlertDialog
-  void _addScore (){
+  void _addScore() {
     showDialog<String>(
         context: context,
         barrierDismissible: false,
-
         builder: (BuildContext context) {
           // Get the current user
           var user = FirebaseAuth.instance.currentUser;
@@ -652,11 +612,15 @@ class VerbConjugationState extends State<VerbConjugation> {
               .update({SCORE: FieldValue.increment(1)});
 
           return AlertDialog(
-            title: const Text('Your question was added', textAlign: TextAlign.center),
+            title: const Text('Your question was added',
+                textAlign: TextAlign.center),
             content: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('+  ',style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18.0), textAlign: TextAlign.center),
+                const Text('+  ',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 18.0),
+                    textAlign: TextAlign.center),
                 Image.asset(
                   "assets/images/coin.png",
                   width: SizeConfig.blockSizeHorizontal * 9,
@@ -675,14 +639,14 @@ class VerbConjugationState extends State<VerbConjugation> {
                   Navigator.pop(context, 'Close');
                   Navigator.pop(context);
                 },
-                child: const Text('Close', style: TextStyle(color: PURPLE_COLOR, fontSize: 18.0,)),
+                child: const Text('Close',
+                    style: TextStyle(
+                      color: PURPLE_COLOR,
+                      fontSize: 18.0,
+                    )),
               ),
             ],
           );
-        }
-    );
+        });
   }
-
 }
-
-

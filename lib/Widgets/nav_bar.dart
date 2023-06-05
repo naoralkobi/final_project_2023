@@ -170,12 +170,34 @@ class NavBar extends StatelessWidget {
             title: const Text('Logout'),
             leading: const Icon(Icons.exit_to_app),
             onTap: () {
-              AuthRepository.instance().signOut();
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) {
-                  return const LoginPage();
-                }),
-                    (route) => false,
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Logout'),
+                    content: const Text('Are you sure you want to logout?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('No'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          AuthRepository.instance().signOut();
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return const LoginPage();
+                            }),
+                                (route) => false,
+                          );
+                        },
+                        child: const Text('Yes'),
+                      ),
+                    ],
+                  );
+                },
               );
             },
           ),

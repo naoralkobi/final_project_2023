@@ -21,6 +21,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool pressed = false;
   var user = FirebaseAuth.instance.currentUser;
+  bool isAdmin = [NAOR, AVIV, RON].contains(FirebaseAuth.instance.currentUser?.email);
   final TextEditingController _filter = TextEditingController();
   String _searchText = "";
   Icon _searchIcon = const Icon(
@@ -151,18 +152,19 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                             isSearching
-                            // if true don't show questions icon.
                                 ? const SizedBox()
-                                : IconButton(
-                                    icon: Image.asset(
-                                      "assets/images/question.png",
-                                      width: SizeConfig.blockSizeHorizontal * 7,
-                                      height: SizeConfig.blockSizeVertical * 3,
-                                    ),
-                                    onPressed: () {
-                                      navigateToAddQuestion(context);
-                                    }),
-                            // if False show questions icon.
+                                : isAdmin // Check if the user is an admin.
+                                ? IconButton(
+                              icon: Image.asset(
+                                "assets/images/question.png",
+                                width: SizeConfig.blockSizeHorizontal * 7,
+                                height: SizeConfig.blockSizeVertical * 3,
+                              ),
+                              onPressed: () {
+                                navigateToAddQuestion(context);
+                              },
+                            )
+                                : const SizedBox(),
                             IconButton(
                               icon: _searchIcon,
                               iconSize: SizeConfig.blockSizeHorizontal * 7,

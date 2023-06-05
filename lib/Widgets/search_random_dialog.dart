@@ -26,16 +26,15 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
     super.initState();
     String languageLevelUpper = widget.userInfo[LANGUAGES][widget.language];
     level = languageLevelUpper.toLowerCase();
-    //FirebaseFirestore.instance.clearPersistence();
   }
 
   String _findMatch(List waitingList, Map userInfo) {
     String match = "";
-    int myAge = FirebaseDB.Firebase_db.getAge(userInfo["birthDate"]);
+    int myAge = FirebaseDB.firebaseDb.getAge(userInfo["birthDate"]);
     if (waitingList.isEmpty) {
       return match;
     }
-    waitingList.forEach((friendInfo) {
+    for (var friendInfo in waitingList) {
       if (friendInfo is Map && friendInfo.containsKey("UID") && userInfo.containsKey("UID")) {
         if (friendInfo["UID"] != userInfo["UID"]) {
 
@@ -51,24 +50,7 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
           }
         }
       }
-    });
-
-
-
-    // waitingList.forEach((friendInfo) {
-    //   if (friendInfo["UID"] != userInfo["UID"]) {
-    //     if ((myAge >= friendInfo["minAge"] && myAge <= friendInfo["maxAge"]) &&
-    //         (friendInfo["age"] >= userInfo["minAge"] &&
-    //             friendInfo["age"] <= userInfo["maxAge"])) {
-    //       if ((friendInfo["preferred gender"] == "Dont Care" ||
-    //           (friendInfo["preferred gender"] == userInfo["gender"])) &&
-    //           (userInfo["preferred gender"] == "Dont Care" ||
-    //               (userInfo["preferred gender"] == friendInfo["gender"]))) {
-    //         match = friendInfo["UID"];
-    //       }
-    //     }
-    //   }
-    // });
+    }
     return match;
   }
 
@@ -77,20 +59,17 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection(WAITING_LIST)
-            .doc(widget.language + "-" + level)
+            .doc("${widget.language}-$level")
             .snapshots(),
         builder: (BuildContext buildContext,
             AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text(ERROR_MESSAGE);
+          if (snapshot.hasError) return const Text(ERROR_MESSAGE);
           //if connecting show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting ||
-              snapshot.data == null)
+              snapshot.data == null) {
             return dialog(context, widget.userInfo);
-          else if (snapshot.connectionState == ConnectionState.active) {
-/*            if(snapshot.data!.metadata.isFromCache) {
-              return dialog(context, widget.userInfo);
-            }*/
-            if (isFound) return SizedBox();
+          } else if (snapshot.connectionState == ConnectionState.active) {
+            if (isFound) return const SizedBox();
             if ((snapshot.data!.data() as Map<dynamic, dynamic>).containsKey(widget.userInfo["UID"])) {
               _enterChatPage(
                   widget.language,
@@ -102,27 +81,12 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
               List waitingList = (snapshot.data!.data() as Map<String, dynamic>)[WAITING_LIST];
               String match = _findMatch(waitingList, widget.userInfo);
               if (match.isEmpty && !isInWaitingList) {
-                FirebaseDB.Firebase_db.addToWaitingList(
+                FirebaseDB.firebaseDb.addToWaitingList(
                     widget.userInfo, widget.language, level);
                 isInWaitingList = true;
               } else if (match.isNotEmpty) {
                 _enterChatPage(widget.language, match, true, widget.userInfo);
               }
-/*              if (waitingList.isEmpty) {
-                FirebaseDB.Firebase_db.addToWaitingList(
-                    widget.userInfo, widget.language, level);
-              } else if (waitingList.length == 1) {
-                if (waitingList[0] == widget.userInfo["UID"]) {
-                  return dialog(context,widget.userInfo);
-                }else {
-                  _enterChatPage(widget.language, waitingList[0], true, widget.userInfo);
-                }
-              }else if(waitingList.length == 2){
-                String friendID = waitingList[0] == widget.userInfo["UID"] ?
-                waitingList[1] : waitingList[0];
-                _enterChatPage(widget.language, friendID,false, widget.userInfo);
-              }
-              return dialog(context,widget.userInfo);*/
             }
           }
           return dialog(context, widget.userInfo);
@@ -132,18 +96,19 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
   void _enterChatPage(
       String language, String friendID, bool isCreateChat, Map userInfo) async {
     String currentUserID = AuthRepository.instance().user!.uid;
-    String chatID = await FirebaseDB.Firebase_db.getChatIdOfFriend(
+    String chatID = await FirebaseDB.firebaseDb.getChatIdOfFriend(
         currentUserID, friendID, language);
     isFound = true;
     if (isCreateChat) {
-      FirebaseDB.Firebase_db.startChatWithRandom(
+      FirebaseDB.firebaseDb.startChatWithRandom(
           widget.userInfo, friendID, widget.language, chatID);
     } else {
-      FirebaseDB.Firebase_db.removeChatInvite(userInfo, language);
+      FirebaseDB.firebaseDb.removeChatInvite(userInfo, language);
     }
-    if (isInWaitingList)
-      FirebaseDB.Firebase_db.removeFromWaitingList(
+    if (isInWaitingList) {
+      FirebaseDB.firebaseDb.removeFromWaitingList(
           widget.userInfo, widget.language, level);
+    }
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
@@ -154,14 +119,15 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
                   .get(),
               builder: (BuildContext buildContext,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.hasError) return Text(ERROR_MESSAGE);
+                if (snapshot.hasError) return const Text(ERROR_MESSAGE);
                 //if connecting show progressIndicator
                 if (snapshot.connectionState == ConnectionState.waiting &&
-                    snapshot.data == null)
-                  return Center(child: CircularProgressIndicator());
-                else
+                    snapshot.data == null) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
                   return ChatPage(chatID, currentUserID, snapshot.data!.data()! as Map<String, dynamic>,
                       language, widget.userInfo);
+                }
               });
         },
       ),
@@ -171,7 +137,7 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
   dialog(BuildContext context, Map userInfo) {
     return Dialog(
         shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.grey, width: 2),
+            side: const BorderSide(color: Colors.grey, width: 2),
             borderRadius: BorderRadius.circular(18.0)),
         child: FittedBox(
           fit: BoxFit.fitWidth,
@@ -181,21 +147,22 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
               Container(
                 margin:
                 EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 5),
-                child: CircularProgressIndicator(
+                child: const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(PURPLE_COLOR),
                 ),
               ),
               SizedBox(width: SizeConfig.blockSizeHorizontal * 6.5),
-              Text("Looking for a match..."),
+              const Text("Looking for a match..."),
               Container(
                   margin:
                   EdgeInsets.only(bottom: SizeConfig.blockSizeVertical * 8),
                   child: IconButton(
-                      icon: Icon(Icons.cancel_outlined),
+                      icon: const Icon(Icons.cancel_outlined),
                       onPressed: () {
-                        if (isInWaitingList)
-                          FirebaseDB.Firebase_db.removeFromWaitingList(
+                        if (isInWaitingList) {
+                          FirebaseDB.firebaseDb.removeFromWaitingList(
                               userInfo, widget.language, level);
+                        }
                         Navigator.of(context).pop();
                       }))
             ],

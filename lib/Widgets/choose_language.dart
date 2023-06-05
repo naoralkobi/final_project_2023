@@ -375,7 +375,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
     setState(() {
       isLoadingChat = true;
     });
-    String chatID = await FirebaseDB.Firebase_db.getChatIdOfFriend(
+    String chatID = await FirebaseDB.firebaseDb.getChatIdOfFriend(
         currentUserID, friendInfo["UID"], language);
     Navigator.of(context).pop();
     Navigator.of(context).pop();

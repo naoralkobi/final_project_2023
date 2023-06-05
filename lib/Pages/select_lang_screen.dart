@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_2023/Pages/speech_recognition.dart';
-import 'package:final_project_2023/Pages/videoLearningPage.dart';
+import 'package:final_project_2023/Pages/video_learning_page.dart';
 import 'package:final_project_2023/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/screen_size_config.dart';
