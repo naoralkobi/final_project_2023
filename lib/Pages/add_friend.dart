@@ -13,14 +13,14 @@ class AddFriend extends StatefulWidget {
 }
 
 class AddFriendState extends State<AddFriend> {
-  final TextEditingController searchUsername = new TextEditingController();
+  final TextEditingController searchUsername = TextEditingController();
   var user = FirebaseAuth.instance.currentUser;
   final _formKey = GlobalKey<FormState>();
   bool isNotEmpty = false;
   List users = []; // users we get from API
   List filteredUsers = []; // users filtered by search text
   bool isFriend = false;
-  Widget _appBarTitle = Text(
+  final Widget _appBarTitle = const Text(
     "Add a Friend",
     style: TextStyle(
         fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
@@ -29,17 +29,17 @@ class AddFriendState extends State<AddFriend> {
   @override
   void initState() {
     super.initState();
-    this.getUsers();
+    getUsers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF8F5F5),
+      backgroundColor: const Color(0xFFF8F5F5),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: const Size.fromHeight(70),
         child: AppBar(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(18.0),
             ),
@@ -47,14 +47,14 @@ class AddFriendState extends State<AddFriend> {
           automaticallyImplyLeading: false,
           flexibleSpace: SafeArea(
             child: Container(
-              padding: EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: 16),
               child: Row(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     width: 2,
                   ),
                   IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_rounded,
                         color: Colors.white,
                       ),
@@ -62,7 +62,7 @@ class AddFriendState extends State<AddFriend> {
                       onPressed: () {
                         Navigator.pop(context);
                       }),
-                  SizedBox(
+                  const SizedBox(
                     width: 12,
                   ),
                   Expanded(
@@ -71,7 +71,7 @@ class AddFriendState extends State<AddFriend> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         _appBarTitle,
-                        SizedBox(
+                        const SizedBox(
                           height: 3,
                         ),
                       ],
@@ -84,7 +84,7 @@ class AddFriendState extends State<AddFriend> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
         child: Column(
           children: [
             Form(
@@ -99,26 +99,26 @@ class AddFriendState extends State<AddFriend> {
                     alignLabelWithHint: true,
                     filled: true,
                     fillColor: Colors.white,
-                    labelStyle: TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(10.0),
+                    labelStyle: const TextStyle(color: Colors.grey),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: PURPLE_COLOR,
                         width: 2.0,
                       ),
                     ),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
                         width: 2.0,
                       ),
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(10.0),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
                       ),
                     ),
                   ),
@@ -136,11 +136,11 @@ class AddFriendState extends State<AddFriend> {
             ),
             TextButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF6D94BE)),
+                backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF6D94BE)),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    side: BorderSide(color: Colors.grey),
+                    side: const BorderSide(color: Colors.grey),
                   ),
                 ),
               ),
@@ -152,7 +152,7 @@ class AddFriendState extends State<AddFriend> {
                   });
                 }
               },
-              child: Text(
+              child: const Text(
                 SEARCH,
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
@@ -162,8 +162,8 @@ class AddFriendState extends State<AddFriend> {
               child: Visibility(
                 visible: isNotEmpty,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 40, 0, 25),
-                  child: Text("Results for \"" + searchUsername.text + "\":",
+                  padding: const EdgeInsets.fromLTRB(20, 40, 0, 25),
+                  child: Text("Results for \"${searchUsername.text}\":",
                       style: TextStyle(
                           fontSize: SizeConfig.blockSizeHorizontal * 5.5,
                           fontWeight: FontWeight.w600)),
@@ -219,15 +219,16 @@ class AddFriendState extends State<AddFriend> {
         .orderBy(USERNAME)
         .get()
         .then((value) {
-      value.docs.forEach((element) {
+      for (var element in value.docs) {
         if (element.id != user.uid) {
           if (friendsList.contains(element.data()[USERNAME])) {
             tempList.add(Tuple2(element.data(),
                 true)); // item2 here is if this user already friend
-          } else
+          } else {
             tempList.add(Tuple2(element.data(), false));
+          }
         }
-      });
+      }
       setState(() {
         users = tempList;
       });
@@ -238,7 +239,7 @@ class AddFriendState extends State<AddFriend> {
     isFriend = userInfo.item2;
     return ListTile(
       dense: true,
-      tileColor: Color(0xFFF8F5F5),
+      tileColor: const Color(0xFFF8F5F5),
       title: Text(
         userInfo.item1[USERNAME],
         style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal * 5),
@@ -257,18 +258,13 @@ class AddFriendState extends State<AddFriend> {
         ),
       ),
       trailing: isFriend
-          ? Icon(Icons.check, size: 35, color: Color(0xFF6D94BE))
+          ? const Icon(Icons.check, size: 35, color: Color(0xFF6D94BE))
           : IconButton(
-        icon: Icon(Icons.person_add_alt_1_outlined,
+        icon: const Icon(Icons.person_add_alt_1_outlined,
             size: 25, color: Color(0xFF6D94BE)),
         onPressed: () async {
           await FirebaseDB.Firebase_db.addFriend(
               userInfo.item1[USERNAME], context);
-          // await Future.delayed(Duration(milliseconds: 500));
-          // await getUsers();
-          // setState(() {
-          //   _buildList();
-          // });
           _buildList();
         },
       ),
@@ -277,7 +273,6 @@ class AddFriendState extends State<AddFriend> {
 
   void _buildList() async {
     await getUsers();
-    // await Future.delayed(Duration(milliseconds: 100));
     filteredUsers = users;
     List tempList = [];
     for (int i = 0; i < filteredUsers.length; i++) {

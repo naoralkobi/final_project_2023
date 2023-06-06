@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 /// A widget to show an image either from a network URL or a local file path.
@@ -32,7 +31,7 @@ class ShowImageState extends State<ShowImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: const Size.fromHeight(70),
         child: AppBar(
           title: Text(widget.title),
           backgroundColor: Colors.transparent,

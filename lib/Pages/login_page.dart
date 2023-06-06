@@ -44,16 +44,25 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         body: Container(
           margin: const EdgeInsets.all(24),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _header(context),
-                _inputField(context),
-                _forgotPassword(context),
-                _signup(context),
-              ],
-            ),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints viewportConstraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: viewportConstraints.maxHeight,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _header(context),
+                      _inputField(context),
+                      _forgotPassword(context),
+                      _signup(context),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),

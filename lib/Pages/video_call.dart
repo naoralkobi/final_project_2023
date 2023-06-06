@@ -4,6 +4,7 @@ import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../consts.dart';
 
 class VideoCallPage extends StatefulWidget {
   final String channelName;
@@ -26,52 +27,61 @@ class _VideoCallPageState extends State<VideoCallPage> {
   }
 
   Future<void> initAgora() async {
+    // Request microphone and camera permissions
     await [Permission.microphone, Permission.camera].request();
 
-    _engine = await RtcEngine.create('c8c68b6a28be4e3784eb6d76f6d2fbe0');
+    // Create an instance of the Agora RtcEngine
+    _engine = await RtcEngine.create(AGORA_API);
 
+    // Enable video
     await _engine?.enableVideo();
 
+    // Set event handlers for the RtcEngine
     _engine?.setEventHandler(
       RtcEngineEventHandler(
         joinChannelSuccess: (String channel, int uid, int elapsed) {
           setState(() {
-            print('Local user $uid joined channel $channel');
+            debugPrint('Local user $uid joined channel $channel');
           });
         },
         userJoined: (int uid, int elapsed) {
           setState(() {
-            print('Remote user $uid joined channel');
+            debugPrint('Remote user $uid joined channel');
             _remoteUid = uid;
           });
         },
         userOffline: (int uid, UserOfflineReason reason) {
           setState(() {
-            print('Remote user $uid left channel');
+            debugPrint('Remote user $uid left channel');
             _remoteUid = null;
           });
         },
       ),
     );
 
+    // Join the channel
     await _engine?.joinChannel(null, widget.channelName, null, 0);
   }
 
   void _finishCall(String callRequestId) {
+    // Update the call request status to 'completed'
     FirebaseFirestore.instance
         .collection('call_requests')
         .doc(callRequestId)
         .update({'status': 'completed'});
 
+    // Leave the channel and destroy the RtcEngine instance
     _engine?.leaveChannel();
     _engine?.destroy();
 
-    Navigator.pop(context); // Return to the previous page (chat page)
+    // Return to the previous page (chat page)
+    Navigator.pop(context);
   }
 
   @override
   void dispose() {
     super.dispose();
+    // Leave the channel and destroy the RtcEngine instance
     _engine?.leaveChannel();
     _engine?.destroy();
   }
@@ -80,7 +90,7 @@ class _VideoCallPageState extends State<VideoCallPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Video Call'),
+        title: const Text('Video Call'),
       ),
       body: Stack(
         children: [
@@ -92,7 +102,7 @@ class _VideoCallPageState extends State<VideoCallPage> {
               : const Text('Waiting for remote user to join...'),
           Align(
             alignment: Alignment.bottomRight,
-            child: Container(
+            child: SizedBox(
               width: 120,
               height: 160,
               child: Align(
@@ -101,7 +111,7 @@ class _VideoCallPageState extends State<VideoCallPage> {
                   width: 60,
                   height: 80,
                   color: Colors.black54,
-                  child: RtcLocalView.SurfaceView(),
+                  child: const RtcLocalView.SurfaceView(),
                 ),
               ),
             ),
@@ -123,30 +133,32 @@ class _VideoCallPageState extends State<VideoCallPage> {
                       setState(() {
                         _mute = !_mute;
                       });
+                      // Mute/unmute the local audio stream
                       _engine?.muteLocalAudioStream(_mute);
                     },
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CircleAvatar(
                   backgroundColor: Colors.grey,
                   radius: 25,
                   child: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.switch_camera,
                       color: Colors.white,
                     ),
                     onPressed: () {
+                      // Switch camera between front and rear
                       _engine?.switchCamera();
                     },
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CircleAvatar(
                   backgroundColor: Colors.grey,
                   radius: 25,
                   child: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.call_end,
                       color: Colors.white,
                     ),
@@ -163,4 +175,3 @@ class _VideoCallPageState extends State<VideoCallPage> {
     );
   }
 }
-

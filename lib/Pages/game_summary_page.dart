@@ -30,10 +30,10 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
             .snapshots(),
         builder: (BuildContext buildContext,
             AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text(ERROR_MESSAGE);
+          if (snapshot.hasError) return const Text(ERROR_MESSAGE);
           //if connecting show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting &&
-              snapshot.data == null) return Center(child: SizedBox());
+              snapshot.data == null) return const Center(child: SizedBox());
           List questionsData = (snapshot.data!.data() as Map<String, dynamic>)["questions"];
           if (snapshot.data!['uid1'] == widget.userInfo['UID']) {
             user1Info = widget.userInfo;
@@ -44,9 +44,9 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
           }
           return Scaffold(
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70),
+              preferredSize: const Size.fromHeight(70),
               child: AppBar(
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.circular(18.0),
                   ),
@@ -54,14 +54,14 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
                 automaticallyImplyLeading: false,
                 flexibleSpace: SafeArea(
                   child: Container(
-                    padding: EdgeInsets.only(right: 16),
+                    padding: const EdgeInsets.only(right: 16),
                     child: Row(
                       children: <Widget>[
-                        SizedBox(
+                        const SizedBox(
                           width: 2,
                         ),
                         IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.arrow_back_rounded,
                               color: Colors.white,
                             ),
@@ -69,7 +69,7 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
                             onPressed: () {
                               Navigator.pop(context);
                             }),
-                        SizedBox(
+                        const SizedBox(
                           width: 12,
                         ),
                         Expanded(
@@ -85,7 +85,7 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 3,
                               ),
                             ],
@@ -120,7 +120,6 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             SizedBox(
                               width: SizeConfig.blockSizeHorizontal * 28,
@@ -130,7 +129,7 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
                                 radius: SizeConfig.blockSizeVertical * 3.5,
                                 backgroundImage: NetworkImage(user1Info["URL"]),
                               ),
-                              Container(
+                              SizedBox(
                                 width: SizeConfig.blockSizeHorizontal * 22,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
@@ -189,7 +188,7 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
                                   fontSize: SizeConfig.blockSizeHorizontal * 6,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.grey)),
-                          Icon(Icons.arrow_forward_rounded, color: Colors.grey)
+                          const Icon(Icons.arrow_forward_rounded, color: Colors.grey)
                         ],
                       ),
                       onPressed: () {

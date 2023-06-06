@@ -63,7 +63,7 @@ class _WinnerPageState extends State<WinnerPage> {
           //if connecting show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting &&
               snapshot.data == null) return const Center(child: SizedBox());
-          List questionsData = (snapshot.data!.data() as Map<dynamic, dynamic>)["questions"] as List<dynamic>;
+          //List questionsData = (snapshot.data!.data() as Map<dynamic, dynamic>)["questions"] as List<dynamic>;
           if ((snapshot.data!.data() as Map<dynamic, dynamic>)["uid1"] == widget.userInfo["UID"]) {
             user1Info = widget.userInfo;
             user2Info = widget.opponentInfo;
@@ -72,6 +72,7 @@ class _WinnerPageState extends State<WinnerPage> {
             user1Info = widget.opponentInfo;
           }
           int winner = getWinner(snapshot.data!.data() as Map<dynamic, dynamic>);
+          // after we know who is the winner we will show it to the screen.
           return Scaffold(
             body: Column(children: [
               SizedBox(
@@ -190,20 +191,20 @@ class _WinnerPageState extends State<WinnerPage> {
       }
     }
     if (user1Score > user2Score) {
-      return 1;
+      return USER1WIN;
     } else if (user2Score > user1Score) {
-      return 2;
+      return USER1LOSS;
     }
-    return 3; //its a tie
+    return TIE;
   }
 
   Widget getWinnerWidget(int winner, Map user1, Map user2) {
     Map winnerInfo;
     Widget displayWidget;
-    if (winner == 3) {
+    if (winner == TIE) {
       displayWidget = Center(
         child: Text(
-          "IT'S A TIE",
+          "IT'S A TIE 😃",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: SizeConfig.blockSizeHorizontal * 18,
@@ -211,7 +212,7 @@ class _WinnerPageState extends State<WinnerPage> {
         ),
       );
     } else {
-      if (winner == 1) {
+      if (winner == USER1WIN) {
         winnerInfo = user1Info;
       } else {
         winnerInfo = user2Info;

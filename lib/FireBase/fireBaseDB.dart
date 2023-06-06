@@ -7,11 +7,11 @@ import '../consts.dart';
 import '../firebase/auth_repository.dart';
 
 class FirebaseDB {
-  static final FirebaseDB firebaseDb = FirebaseDB._internal();
+  static final FirebaseDB Firebase_db = FirebaseDB._internal();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   factory FirebaseDB() {
-    return firebaseDb;
+    return Firebase_db;
   }
 
   FirebaseDB._internal();

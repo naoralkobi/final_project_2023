@@ -24,6 +24,7 @@ class QuestionsPage extends StatefulWidget {
   _QuestionsPageState createState() => _QuestionsPageState(this.opponentInfo);
 }
 
+//  SingleTickerProviderStateMixin - to provide an animation ticker for animations within the state.
 class _QuestionsPageState extends State<QuestionsPage>
     with SingleTickerProviderStateMixin {
   int groupValue = -1;
@@ -69,20 +70,19 @@ class _QuestionsPageState extends State<QuestionsPage>
     SizeConfig().init(context);
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection("games")
+            .collection(GAMES)
             .doc(widget.gameId)
             .snapshots(),
         builder: (BuildContext buildContext, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text(ERROR_MESSAGE);
+          if (snapshot.hasError) return const Text(ERROR_MESSAGE);
 
-          if (snapshot.connectionState == ConnectionState.waiting && snapshot.data == null)
-            return Center(child: CircularProgressIndicator());
-
-          Map? questionData = getQuestionByNum(snapshot.data!.data()! as Map<dynamic, dynamic>, widget.questionNumber);
-
-          if (answers == null) {
-            answers = questionData!["answers"];
+          if (snapshot.connectionState == ConnectionState.waiting && snapshot.data == null) {
+            return const Center(child: CircularProgressIndicator());
           }
+          // get the question by question number.
+          Map? questionData = getQuestionByNum(snapshot.data!.data()! as Map<dynamic, dynamic>, widget.questionNumber);
+          // set answer to questionData![ANSWERS] if and only if answer is null.
+          answers ??= questionData![ANSWERS];
 
           if (firstShuffle!) {
             answers = shuffle(answers!);
@@ -92,9 +92,9 @@ class _QuestionsPageState extends State<QuestionsPage>
 
           return Scaffold(
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70),
+              preferredSize: const Size.fromHeight(70),
               child: AppBar(
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.circular(18.0),
                   ),
@@ -113,13 +113,13 @@ class _QuestionsPageState extends State<QuestionsPage>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                "Question " + widget.questionNumber.toString(),
+                                "Question ${widget.questionNumber}",
                                 style: TextStyle(
                                     fontSize: SizeConfig.blockSizeVertical * 4.5,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white),
                               ),
-                              SizedBox(height: 3),
+                              const SizedBox(height: 3),
                             ],
                           ),
                         ),
@@ -140,7 +140,7 @@ class _QuestionsPageState extends State<QuestionsPage>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "${_start} sec",
+                            "$_start sec",
                             style: TextStyle(
                                 color: Colors.grey,
                                 fontWeight: FontWeight.bold,
@@ -151,6 +151,7 @@ class _QuestionsPageState extends State<QuestionsPage>
                       SizedBox(height: SizeConfig.blockSizeVertical * 1),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
+                        // timer indicator.
                         child: LinearProgressIndicator(
                           value: (_start) / 10,
                           backgroundColor: Colors.grey,
@@ -166,17 +167,17 @@ class _QuestionsPageState extends State<QuestionsPage>
                   child: questionData[opponentAnswer] == ""
                       ? Center(
                     child: Text(
-                      "Your enemy is still Thinking...",
+                      "Your opponent is still Thinking...",
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                   )
                       : Center(
-                    child: Text("Your enemy Answered!", style: TextStyle(color: Colors.grey[700])),
+                    child: Text("Your opponent Answered!", style: TextStyle(color: Colors.grey[700])),
                   ),
                 ),
                 SizedBox(height: SizeConfig.blockSizeVertical * 4),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.blue[200],
                     borderRadius: BorderRadius.circular(15),
@@ -188,7 +189,7 @@ class _QuestionsPageState extends State<QuestionsPage>
                   ),
                   child: Column(
                     children: [
-                      Container(
+                      SizedBox(
                         width: SizeConfig.screenWidth * 0.7,
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
@@ -206,7 +207,7 @@ class _QuestionsPageState extends State<QuestionsPage>
                       getBodyWidget(questionData["type"], questionData["questionBody"]),
                       SizedBox(height: SizeConfig.blockSizeVertical * 1),
                       ListView.builder(
-                        shrinkWrap: true,
+                        shrinkWrap: true, // used to control the size of the scrollable widget
                         itemCount: answers!.length,
                         itemBuilder: (context, index) {
                           return Padding(
@@ -230,10 +231,11 @@ class _QuestionsPageState extends State<QuestionsPage>
                                       spreadRadius: 0.5,
                                       blurRadius: 2,
                                       offset:
-                                      Offset(0, 4),
+                                      const Offset(0, 4),
                                     ),
                                   ],
                                 ),
+                                // create a list of options with a radio button for each option and handle the selection of a single option.
                                 child: RadioListTile(
                                     value: index,
                                     title: Text(
@@ -245,13 +247,18 @@ class _QuestionsPageState extends State<QuestionsPage>
                                     activeColor: Colors.black,
                                     groupValue: groupValue,
                                     onChanged: (int? val) {
-                                      if (mounted)
+                                      //The mounted property is a boolean value
+                                      // that indicates whether the current
+                                      // widget is currently in the tree
+                                      // and attached to the widget hierarchy.
+                                      if (mounted) {
                                         setState(() {
                                           groupValue = val!;
                                           updateFirebase(
                                               snapshot.data!.data()! as Map<dynamic, dynamic>, answers![val]);
 
                                         });
+                                      }
                                     })),
                           );
                         },
@@ -265,250 +272,20 @@ class _QuestionsPageState extends State<QuestionsPage>
         });
   }
 
-  /// original build!
-  // @override
-  // Widget build(BuildContext context) {
-  //   SizeConfig().init(context);
-  //   return StreamBuilder(
-  //       stream: FirebaseFirestore.instance
-  //           .collection("games")
-  //           .doc(widget.gameId)
-  //           .snapshots(),
-  //       builder: (BuildContext buildContext,
-  //           AsyncSnapshot<DocumentSnapshot> snapshot) {
-  //         if (snapshot.hasError) return Text(ERROR_MESSAGE);
-  //         //if connecting show progressIndicator
-  //         if (snapshot.connectionState == ConnectionState.waiting &&
-  //             snapshot.data == null) return Center(child: SizedBox());
-  //         Map? questionData =
-  //         getQuestionByNum(snapshot.data!.data()! as Map<dynamic, dynamic>, widget.questionNumber);
-  //         if (answers == null) {
-  //           answers = questionData!["answers"];
-  //         }
-  //         if (firstShuffle!) {
-  //           answers = shuffle(answers!);
-  //           firstShuffle = false;
-  //         }
-  //         correctAnswer = questionData!["correctAnswer"];
-  //
-  //         return Scaffold(
-  //           appBar: PreferredSize(
-  //             preferredSize: Size.fromHeight(70),
-  //             child: AppBar(
-  //               shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.vertical(
-  //                   bottom: Radius.circular(18.0),
-  //                 ),
-  //               ),
-  //               automaticallyImplyLeading: false,
-  //               flexibleSpace: SafeArea(
-  //                 child: Container(
-  //                   padding: EdgeInsets.only(
-  //                       right: SizeConfig.blockSizeVertical * 4),
-  //                   child: Row(
-  //                     children: <Widget>[
-  //                       SizedBox(
-  //                         width: SizeConfig.blockSizeVertical * 0.1,
-  //                       ),
-  //                       SizedBox(
-  //                         width: SizeConfig.blockSizeVertical * 2,
-  //                       ),
-  //                       Expanded(
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.center,
-  //                           mainAxisAlignment: MainAxisAlignment.center,
-  //                           children: <Widget>[
-  //                             Text(
-  //                               "Question " + widget.questionNumber.toString(),
-  //                               style: TextStyle(
-  //                                   fontSize:
-  //                                   SizeConfig.blockSizeVertical * 4.5,
-  //                                   fontWeight: FontWeight.w600,
-  //                                   color: Colors.white),
-  //                             ),
-  //                             SizedBox(
-  //                               height: 3,
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //           body: Column(
-  //             children: [
-  //               SizedBox(
-  //                 height: SizeConfig.blockSizeVertical * 4,
-  //               ),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //                 children: [
-  //                   Stack(
-  //                     children: [
-  //                       Opacity(
-  //                           opacity: 0.2,
-  //                           child: Icon(
-  //                             Icons.timer_rounded,
-  //                             size: SizeConfig.blockSizeVertical * 11,
-  //                           )),
-  //                       Positioned(
-  //                         bottom: SizeConfig.blockSizeVertical * 2.5,
-  //                         right: _start > 9
-  //                             ? SizeConfig.blockSizeHorizontal * 5.5
-  //                             : SizeConfig.blockSizeHorizontal * 8.3,
-  //                         child: Text(
-  //                           _start.toString(),
-  //                           style: TextStyle(
-  //                               fontSize: SizeConfig.blockSizeVertical * 4.7,
-  //                               fontWeight: FontWeight.bold,
-  //                               color: _start > 5
-  //                                   ? Colors.black
-  //                                   : Colors.red[500]),
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                   Padding(
-  //                     padding: EdgeInsets.only(
-  //                         top: SizeConfig.blockSizeVertical * 2),
-  //                     child: Container(
-  //                         height: SizeConfig.blockSizeVertical * 6.5,
-  //                         width: SizeConfig.blockSizeVertical * 18.5,
-  //                         // padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-  //                         decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(14.0),
-  //                           color: Colors.white,
-  //                           border: Border.all(
-  //                               color: Colors.grey,
-  //                               style: BorderStyle.solid,
-  //                               width: 0.80),
-  //                         ),
-  //                         child: Row(
-  //                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                             children: [
-  //                               CircleAvatar(
-  //                                   backgroundColor: Colors.grey,
-  //                                   radius: SizeConfig.blockSizeVertical * 2.1,
-  //                                   child: CircleAvatar(
-  //                                     backgroundColor: Colors.white,
-  //                                     radius: SizeConfig.blockSizeVertical * 2,
-  //                                     backgroundImage: NetworkImage(
-  //                                         widget.opponentInfo["URL"]),
-  //                                   )),
-  //                               Center(
-  //                                 child: questionData[opponentAnswer] == ""
-  //                                     ? Text(
-  //                                   "Thinking...",
-  //                                   style: TextStyle(
-  //                                       color: Colors.grey[700]),
-  //                                 )
-  //                                     : Text("Answered!",
-  //                                     style: TextStyle(
-  //                                         color: Colors.grey[700])),
-  //                               )
-  //                             ])),
-  //                   )
-  //                 ],
-  //               ),
-  //               SizedBox(
-  //                 height: SizeConfig.blockSizeVertical * 4,
-  //               ),
-  //               Container(
-  //                 width: SizeConfig.screenWidth * 0.7,
-  //                 child: FittedBox(
-  //                   fit: BoxFit.scaleDown,
-  //                   child: SizedBox(
-  //                     child: Text(
-  //                       questionData["type"] + ":",
-  //                       style: TextStyle(
-  //                           fontSize: SizeConfig.blockSizeVertical * 4,
-  //                           fontWeight: FontWeight.bold),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 height: SizeConfig.blockSizeVertical * 2,
-  //               ),
-  //               getBodyWidget(
-  //                   questionData["type"], questionData["questionBody"]),
-  //               SizedBox(
-  //                 height: SizeConfig.blockSizeVertical * 1,
-  //               ),
-  //               ListView.builder(
-  //                 shrinkWrap: true,
-  //                 itemCount: answers!.length,
-  //                 itemBuilder: (context, index) {
-  //                   return Padding(
-  //                     padding: EdgeInsets.fromLTRB(
-  //                         SizeConfig.screenWidth * 0.1,
-  //                         SizeConfig.blockSizeVertical * 3,
-  //                         SizeConfig.screenWidth * 0.1,
-  //                         0),
-  //                     child: Container(
-  //                         height: SizeConfig.blockSizeVertical * 7,
-  //                         decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(14.0),
-  //                           color: chooseColor(index),
-  //                           border: Border.all(
-  //                               color: Colors.grey,
-  //                               style: BorderStyle.solid,
-  //                               width: 0.80),
-  //                           boxShadow: [
-  //                             BoxShadow(
-  //                               color: Colors.grey.withOpacity(0.3),
-  //                               spreadRadius: 0.5,
-  //                               blurRadius: 2,
-  //                               offset:
-  //                               Offset(0, 4), // changes position of shadow
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         child: RadioListTile(
-  //                             value: index,
-  //                             title: Text(
-  //                               answers![index],
-  //                               style: TextStyle(
-  //                                   fontSize:
-  //                                   SizeConfig.blockSizeVertical * 2.5),
-  //                             ),
-  //                             activeColor: Colors.black,
-  //                             groupValue: groupValue,
-  //                             onChanged: (int? val) {
-  //                               if (mounted)
-  //                                 setState(() {
-  //                                   groupValue = val!;
-  //                                   updateFirebase(
-  //                                       snapshot.data!.data()! as Map<dynamic, dynamic>, answers![val]);
-  //
-  //                                 });
-  //                             })),
-  //                   );
-  //                 },
-  //               )
-  //             ],
-  //           ),
-  //         );
-  //       });
-  // }
-
   Color? chooseColor(int index) {
     if (groupValue == index) {
-      return Color(0xFFB9D9EB);
+      return const Color(0xFFB9D9EB);
     }
     return Colors.white;
   }
 
   void startTimer() {
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = Duration(seconds: 1);
     if (_timer != null) {
       _timer!.cancel();
       _timer = null;
     }
-    _timer = new Timer.periodic(
+    _timer = Timer.periodic(
       oneSec,
           (Timer? timer) {
         if (!mounted) return;
@@ -551,7 +328,7 @@ class _QuestionsPageState extends State<QuestionsPage>
   }
 
   List shuffle(List items) {
-    var random = new Random();
+    var random = Random();
     // Go through all elements.
     for (var i = items.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
@@ -569,46 +346,16 @@ class _QuestionsPageState extends State<QuestionsPage>
         return q;
       }
     }
+    debugPrint("Error not found the question");
+    return null;
   }
 
   void updateFirebase(Map oldData, String answer) {
-/*
-    List newData = [];
-    String userAnswer = "";
-    if (widget.userNumber == 1) {
-      userAnswer = "user1Answer";
-    } else {
-      userAnswer = "user2Answer";
-    }
-    for (Map q in oldData["questions"]) {
-      if (q["questionNumber"] == widget.questionNumber) {
-        Map temp = q;
-        temp[userAnswer] = answer;
-        newData.add(temp);
-      } else {
-        newData.add(q);
-      }
-    }
-    FirebaseFirestore.instance
-        .collection("games")
-        .doc(widget.gameId)
-        .update({"questions": newData});
-*/
-    String userAnswer = "user" + widget.userNumber.toString() +"Answer";
-    List newData = [];
+    String userAnswer = "user${widget.userNumber}Answer";
     DocumentReference documentReference = FirebaseFirestore.instance.collection("games").doc(widget.gameId);
     FirebaseFirestore.instance.
     runTransaction((transaction) async{
       await transaction.get(documentReference).then((value) {
-/*        for (Map q in value["questions"]) {
-          if (q["questionNumber"] == widget.questionNumber) {
-            Map temp = q;
-            temp[userAnswer] = answer;
-            newData.add(temp);
-          } else {
-            newData.add(q);
-          }
-        }*/
         List questions = value["questions"];
         Map oldAnswer = questions[widget.questionNumber-1];
         oldAnswer[userAnswer] = answer;
@@ -640,7 +387,7 @@ class _QuestionsPageState extends State<QuestionsPage>
         ),
       );
     } else {
-      return Container(
+      return SizedBox(
         width: SizeConfig.screenWidth * 0.7,
         height: SizeConfig.blockSizeVertical * 15,
         child: Center(
@@ -649,7 +396,7 @@ class _QuestionsPageState extends State<QuestionsPage>
             style: TextStyle(
               fontSize: SizeConfig.blockSizeVertical * 7,
             ),
-            maxLines: 3, // you can change it accordingly
+            maxLines: 3,
             // overflow: TextOverflow.ellipsis,
           ),
         ),
