@@ -21,10 +21,37 @@ void main() {
     test('Accuracy score test', () {
       String recognizedText = 'Hello, how are you today?';
 
-      double result = calculateAccuracyScore(recognizedText);
+      double result = calculateAccuracyScore(recognizedText,recognizedText);
 
       // The recognized text matches the expected text exactly, so we expect the score to be 1.
       expect(result, 1.0);
+    });
+
+    test('Text to Phonemes test', () async {
+      String text = 'hello world';
+      String language = 'English';
+
+      String result = await textToPhonemes(text, language);
+
+      // Here, you should replace 'expectedResult' with the phonemes string that you expect
+      // the text "hello world" to be converted into.
+      String expectedResult = 'h\u0259l\u02c8\u0259\u028a w\u02c8\u025c\u02d0ld';
+
+      expect(result, expectedResult);
+    });
+
+
+    test('Levenshtein Distance test', () async {
+      String originalText = 'hello world';
+      String recognizedText = 'hellu world';
+      String language = 'English';
+
+      double result = await calculatePronunciationScore(originalText, recognizedText, language);
+
+      // The expected distance could be computed separately (in this case, it's 5)
+      double expectedDistance = 0.6153846153846154;
+
+      expect(result, expectedDistance);
     });
 
     test('Feedback generation test', () {
