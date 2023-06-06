@@ -30,7 +30,7 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
 
   String _findMatch(List waitingList, Map userInfo) {
     String match = "";
-    int myAge = FirebaseDB.firebaseDb.getAge(userInfo["birthDate"]);
+    int myAge = FirebaseDB.Firebase_db.getAge(userInfo["birthDate"]);
     if (waitingList.isEmpty) {
       return match;
     }
@@ -81,7 +81,7 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
               List waitingList = (snapshot.data!.data() as Map<String, dynamic>)[WAITING_LIST];
               String match = _findMatch(waitingList, widget.userInfo);
               if (match.isEmpty && !isInWaitingList) {
-                FirebaseDB.firebaseDb.addToWaitingList(
+                FirebaseDB.Firebase_db.addToWaitingList(
                     widget.userInfo, widget.language, level);
                 isInWaitingList = true;
               } else if (match.isNotEmpty) {
@@ -96,17 +96,17 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
   void _enterChatPage(
       String language, String friendID, bool isCreateChat, Map userInfo) async {
     String currentUserID = AuthRepository.instance().user!.uid;
-    String chatID = await FirebaseDB.firebaseDb.getChatIdOfFriend(
+    String chatID = await FirebaseDB.Firebase_db.getChatIdOfFriend(
         currentUserID, friendID, language);
     isFound = true;
     if (isCreateChat) {
-      FirebaseDB.firebaseDb.startChatWithRandom(
+      FirebaseDB.Firebase_db.startChatWithRandom(
           widget.userInfo, friendID, widget.language, chatID);
     } else {
-      FirebaseDB.firebaseDb.removeChatInvite(userInfo, language);
+      FirebaseDB.Firebase_db.removeChatInvite(userInfo, language);
     }
     if (isInWaitingList) {
-      FirebaseDB.firebaseDb.removeFromWaitingList(
+      FirebaseDB.Firebase_db.removeFromWaitingList(
           widget.userInfo, widget.language, level);
     }
     Navigator.of(context).pushReplacement(
@@ -160,7 +160,7 @@ class _SearchRandomDialogState extends State<SearchRandomDialog> {
                       icon: const Icon(Icons.cancel_outlined),
                       onPressed: () {
                         if (isInWaitingList) {
-                          FirebaseDB.firebaseDb.removeFromWaitingList(
+                          FirebaseDB.Firebase_db.removeFromWaitingList(
                               userInfo, widget.language, level);
                         }
                         Navigator.of(context).pop();

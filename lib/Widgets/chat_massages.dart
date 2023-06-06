@@ -30,20 +30,17 @@ class ChatMessages extends StatefulWidget {
 
 class _ChatMessagesState extends State<ChatMessages> {
   Timestamp? lastMessageTime;
-  FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
   var dateDividersIndices = [];
   String gameID = "";
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    //return StreamBuilder<Object>(
-    //    stream: gameController.stream,
-    //    builder: (context, gameSnapshot) {
     return Column(
       children: [
         Flexible(
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height / 1.1,
               child: StreamBuilder(
                 stream: _db
@@ -68,6 +65,11 @@ class _ChatMessagesState extends State<ChatMessages> {
                           return SizedBox(
                               height: SizeConfig.blockSizeVertical * 10);
                         } else {
+                          // we have five different type of message:
+                          // we check what is the type of the message and return
+                          // the message as a Widget.
+                          // types:
+                          // [Date, Text, GameSummary, GameCanceled, GameInvite]
                           if (snapshots.data!.docs[index][MESSAGE_TYPE] ==
                               MESSAGE_TYPE_DATE_DIVIDER) {
                             return _buildDateSeparator(
@@ -302,7 +304,6 @@ class _ChatMessagesState extends State<ChatMessages> {
                               }else{
                                 lvl = ADVANCED;
                               }
-                              //print("widget.userID = " + widget.userID + " widget.friendInfo[uid] = " +widget.friendInfo["UID"] + "widget.language = " + widget.language + "lvl = " +lvl);
                               gameID = await FirebaseDB.Firebase_db
                                   .makeNewGame(
                                   widget.userID,
@@ -440,7 +441,9 @@ class _ChatMessagesState extends State<ChatMessages> {
       ],
     );
   }
-
+  /// Builds a widget representing a date separator in the chat.
+  ///
+  /// The [timestamp] parameter is the timestamp of the date to be displayed.
   Widget _buildDateSeparator(Timestamp timestamp) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -468,11 +471,15 @@ class _ChatMessagesState extends State<ChatMessages> {
     );
   }
 
+  /// Builds a widget representing a chat message.
+  ///
+  /// The [snapshot] parameter is the document snapshot containing the message data.
+  /// The [userID] parameter is the ID of the user viewing the chat.
+  /// The [chatID] parameter is the ID of the chat.
   Widget _buildMessage(
       DocumentSnapshot snapshot, String userID, String chatID) {
     return GestureDetector(
       child: Row(
-        //mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: snapshot[MESSAGE_ID_FROM] == userID
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
@@ -487,8 +494,6 @@ class _ChatMessagesState extends State<ChatMessages> {
                     constraints: BoxConstraints(
                         minWidth: SizeConfig.blockSizeHorizontal * 10,
                         maxWidth: SizeConfig.blockSizeHorizontal * 80),
-                    //width: MESSAGE_WIDTH,
-                    //height: snapshot[MESSAGE_TYPE] == MESSAGE_TYPE_IMAGE ? SizeConfig.blockSizeVertical * 40 :null,
                     padding: snapshot[MESSAGE_TYPE] == MESSAGE_TYPE_IMAGE
                         ? const EdgeInsets.all(4)
                         : const EdgeInsets.all(MESSAGE_PADDING),
@@ -564,6 +569,10 @@ class _ChatMessagesState extends State<ChatMessages> {
     );
   }
 
+  /// Converts a timestamp to a formatted time string.
+  ///
+  /// The [timestamp] parameter is the timestamp to be converted.
+  /// Returns a formatted time string in the format "HH:MM".
   String timeConverter(Timestamp timestamp) {
     DateTime date = timestamp.toDate();
     String hour = date.hour.toString();

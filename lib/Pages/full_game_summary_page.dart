@@ -1,9 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:final_project_2023/screen_size_config.dart';
-
 import '../consts.dart';
 
 class FullGameSummaryPage extends StatefulWidget {
@@ -22,9 +19,9 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: const Size.fromHeight(70),
         child: AppBar(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(18.0),
             ),
@@ -32,14 +29,14 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
           automaticallyImplyLeading: false,
           flexibleSpace: SafeArea(
             child: Container(
-              padding: EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: 16),
               child: Row(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     width: 2,
                   ),
                   IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_rounded,
                         color: Colors.white,
                       ),
@@ -47,7 +44,7 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       }),
-                  SizedBox(
+                  const SizedBox(
                     width: 12,
                   ),
                   Expanded(
@@ -62,7 +59,7 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 3,
                         ),
                       ],
@@ -91,7 +88,7 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
     }
     return Container(
       height: SizeConfig.screenHeight * 0.89,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Colors.black),
         ),
@@ -101,14 +98,14 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
           SizedBox(
             height: SizeConfig.blockSizeVertical * 1,
           ),
-          Text("Q" + questionData["questionNumber"].toString() ,
+          Text("Q${questionData["questionNumber"]}" ,
               style: TextStyle(
                   fontSize: SizeConfig.blockSizeVertical * 4.5,
-                  color: Color(0xFF6D94BE))),
+                  color: const Color(0xFF6D94BE))),
           SizedBox(
             height: SizeConfig.blockSizeVertical * 3.5,
           ),
-          Container(
+          SizedBox(
             width: SizeConfig.screenWidth * 0.7,
             child: FittedBox(
               fit: BoxFit.scaleDown,
@@ -126,12 +123,9 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
             height: SizeConfig.blockSizeVertical * 2,
           ),
           getBodyWidget(questionData["type"], questionData["questionBody"]),
-          // SizedBox(
-          //   height: SizeConfig.blockSizeVertical * 1,
-          // ),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: questionData["answers"]!.length,
             itemBuilder: (context, index) {
               return Padding(
@@ -154,7 +148,7 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
                           color: Colors.grey.withOpacity(0.3),
                           spreadRadius: 0.5,
                           blurRadius: 2,
-                          offset: Offset(0, 4), // changes position of shadow
+                          offset: const Offset(0, 4), // changes position of shadow
                         ),
                       ],
                     ),
@@ -181,7 +175,7 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
                 getUserAnswer(widget.user1Info, questionData["user1Answer"],
                     questionData["correctAnswer"]),
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     border: Border(
                       left: BorderSide(color: Colors.black),
                     ),
@@ -217,7 +211,7 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
         ),
       );
     } else {
-      return Container(
+      return SizedBox(
         width: SizeConfig.screenWidth * 0.7,
         height: SizeConfig.blockSizeVertical * 15,
         child: Center(
@@ -251,10 +245,7 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
                 radius: SizeConfig.blockSizeHorizontal * 5,
                 backgroundImage: NetworkImage(userInfo["URL"]),
               ),
-              // SizedBox(
-              //   height: SizeConfig.screenHeight * 0.02,
-              // ),
-              Container(
+              SizedBox(
                 width: SizeConfig.screenWidth * 0.15,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
@@ -283,10 +274,10 @@ class _FullGameSummaryPageState extends State<FullGameSummaryPage> {
               color: Colors.black,
             ),
             children: <TextSpan>[
-              TextSpan(text: 'Answered: '),
+              const TextSpan(text: 'Answered: '),
               TextSpan(
-                  text: '"' + userAnswer + '"',
-                  style: new TextStyle(
+                  text: '"$userAnswer"',
+                  style: TextStyle(
                       color: userAnswer == correctAnswer
                           ? Colors.green[300]
                           : Colors.red[300])),

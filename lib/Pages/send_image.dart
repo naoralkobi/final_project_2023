@@ -19,17 +19,17 @@ class SendImageState extends State<SendImage>{
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70),
         child: AppBar(
-          title: Text('Send Image'),
+          title: const Text('Send Image'),
         ),
       ),
       body: Center(
         child:Image.file(widget.imageFile),
       ),
       floatingActionButton:FloatingActionButton(
-          child: Icon(Icons.send_outlined,color: Colors.white,size: 22,),
           backgroundColor: PURPLE_COLOR,
           elevation: 0,
-          onPressed: () => Navigator.pop(context,[true])
+          onPressed: () => Navigator.pop(context,[true]),
+          child: const Icon(Icons.send_outlined,color: Colors.white,size: 22,)
       ),
     );
   }

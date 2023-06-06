@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/firebase/auth_repository.dart';
@@ -38,9 +37,9 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
           if (userInfo.hasError) return Text(ERROR_MESSAGE);
           // Show a progress indicator while connecting to Firestore and waiting for data
           if (userInfo.connectionState == ConnectionState.waiting &&
-              userInfo.data == null)
-            return Center(child: CircularProgressIndicator());
-          else {
+              userInfo.data == null) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
             // Extract user data from the snapshot
             Map<String, dynamic> userData = userInfo.data!.data() as Map<String, dynamic>;
             // Extract language data from user data
@@ -49,11 +48,9 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
             return Scaffold(
                 resizeToAvoidBottomInset: false, // Avoid resizing the layout when the keyboard appears
                 body: SingleChildScrollView(
-                  physics: ScrollPhysics(),
+                  physics: const ScrollPhysics(),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 3,
@@ -64,7 +61,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.arrow_back_rounded,
                                 ),
                                 iconSize: SizeConfig.blockSizeHorizontal * 8,
@@ -75,7 +72,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                             // Show the edit button only if the current user is the owner of the profile
                             widget.user!.uid == (userInfo.data!.data() as Map<String, dynamic>)["UID"]
                                 ? IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.edit,
                                   color: PURPLE_COLOR,
                                 ),
@@ -92,13 +89,10 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                                                 userInfo.data!.data()! as Map<String, dynamic>);
                                           }));
                                 })
-                                : SizedBox(),
+                                : const SizedBox(),
                           ],
                         ),
                       ),
-                      // SizedBox(
-                      //   height: SizeConfig.blockSizeVertical * 1,
-                      // ),
                       GestureDetector(
                         onTap: () {
                           // Open a page to show the profile image in full screen
@@ -117,7 +111,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: SizeConfig.screenWidth * 0.7,
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
@@ -138,14 +132,14 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                       ),
                       Visibility(
                         visible: (userInfo.data!.data() as Map<String, dynamic>).containsKey(SCORE),
-                        child: Container(
+                        child: SizedBox(
                           width: SizeConfig.screenWidth * 0.7,
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
                             child: SizedBox(
                               child: Row(
                                 children: [
-                                  ImageIcon(AssetImage("assets/images/trophy.png"),
+                                  ImageIcon(const AssetImage("assets/images/trophy.png"),
                                       color: Colors.black,
                                       size: SizeConfig.blockSizeHorizontal * 8),
                                   SizedBox(
@@ -165,7 +159,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                                       : Text("0", style: TextStyle(
                                       fontSize: SizeConfig.screenWidth * 0.05))
                                   // Display an empty text if there is no score
-                                      : Text("")
+                                      : const Text("")
                                 ],
                               ),
                             ),
@@ -186,7 +180,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                           ),
                         ]),
                       ),
-                      Divider(
+                      const Divider(
                         indent: 35,
                         endIndent: 35,
                         thickness: 0.6,
@@ -245,17 +239,6 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 2,
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.fromLTRB(40, 0, 0, 6),
-                      //   child: Row(children: [
-                      //     Text(
-                      //       "Date Of Birth",
-                      //       style: TextStyle(
-                      //           color: Colors.grey,
-                      //           fontSize: SizeConfig.screenWidth * 0.035),
-                      //     ),
-                      //   ]),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.only(left: 40),
                         child: Row(children: [
@@ -314,6 +297,16 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                             // height: 50,
                             constraints: BoxConstraints(
                                 minHeight: SizeConfig.blockSizeVertical * 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                style: BorderStyle.solid,
+                                color: Colors.grey,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(12.0),
+                              ),
+                            ),
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
@@ -321,16 +314,6 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                                   (userInfo.data!.data() as Map<String, dynamic>)["description"],
                                 style: TextStyle(
                                     fontSize: SizeConfig.screenWidth * 0.035),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                style: BorderStyle.solid,
-                                color: Colors.grey,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                const Radius.circular(12.0),
                               ),
                             ),
                           ),
@@ -353,7 +336,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                       Flexible(
                         // fit: FlexFit.loose,
                         child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           reverse: true,
                           itemCount: (userInfo.data!.data() as Map<String, dynamic>)[LANGUAGES].length,
@@ -396,6 +379,17 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
           width: SizeConfig.screenWidth * 0.3,
           // Set the minimum height of the container based on the vertical block size
           constraints: BoxConstraints(minHeight: SizeConfig.blockSizeVertical * 1.2),
+          decoration: BoxDecoration(
+            // Set a white background color for the container
+            color: Colors.white,
+            border: Border.all(
+              style: BorderStyle.solid,
+              color: Colors.grey, // Set a grey color for the border
+            ),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(16.0),
+            ),
+          ),
           child: Padding(
             // Add padding inside the container
             padding: const EdgeInsets.all(4.0),
@@ -404,17 +398,6 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
               textAlign: TextAlign.center, // Center align the level text
               // Set the font size based on the screen width
               style: TextStyle(fontSize: SizeConfig.screenWidth * 0.035),
-            ),
-          ),
-          decoration: BoxDecoration(
-            // Set a white background color for the container
-            color: Colors.white,
-            border: Border.all(
-              style: BorderStyle.solid,
-              color: Colors.grey, // Set a grey color for the border
-            ),
-            borderRadius: BorderRadius.all(
-              const Radius.circular(16.0),
             ),
           ),
         ),

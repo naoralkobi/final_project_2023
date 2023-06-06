@@ -40,6 +40,13 @@ const String TEMP = 'temp';
 const String SCORE = 'score';
 const String EMAIL = 'email';
 const String ERROR_MESSAGE = 'There has been an error';
+const String CALL_REQUESTS = 'call_requests';
+const String CHANNELNAME = 'channelName';
+const String ANSWERS = 'answers';
+const String SPEECH_TO_TEXT = 'speech_to_text';
+const int USER1WIN = 1;
+const int USER1LOSS = 2;
+const int TIE = 3;
 
 ///Chat sizes
 const double APP_BAR_IMAGE_WIDTH = 40.0;
@@ -76,6 +83,7 @@ const Color PURPLE_COLOR = Color(0xFFA66CB7) ;
 const String GOOGLE_API_KEY = 'AIzaSyC_-_XeUsGfdBt4h1fx2ZYYdEC_K_aFAOY';
 const String GOOGLE_TRANSLATE_SERVER = 'https://translation.googleapis.com/language/translate/v2?';
 const String YOUTUBE_SERVER = 'https://www.googleapis.com/youtube/v3/search';
+const String AGORA_API = 'c8c68b6a28be4e3784eb6d76f6d2fbe0';
 
 /// Admins:
 const String NAOR = 'naor9985@gmail.com';
