@@ -6,6 +6,7 @@ import 'package:final_project_2023/screen_size_config.dart';
 import 'package:final_project_2023/consts.dart';
 import '../FireBase/fireBaseDB.dart';
 import '../FireBase/auth_repository.dart';
+import '../Pages/friends_list.dart';
 import 'search_random_dialog.dart';
 
 class ChooseLanguage extends StatefulWidget {
@@ -19,7 +20,7 @@ class ChooseLanguage extends StatefulWidget {
 
   @override
   ChooseLanguageState createState() {
-    return new ChooseLanguageState();
+    return ChooseLanguageState();
   }
 }
 
@@ -42,8 +43,9 @@ class ChooseLanguageState extends State<ChooseLanguage> {
         setState(() {
           Map friendLanguages = widget.friendInfo[LANGUAGES];
           languages.forEach((key, value) {
-            if (friendLanguages.containsKey(key))
+            if (friendLanguages.containsKey(key)) {
               languagesList.add(key);
+            }
           });
         });
       }
@@ -62,7 +64,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
     SizeConfig().init(context);
     return Dialog(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.blueAccent, width: 2),
+        side: const BorderSide(color: Colors.blueAccent, width: 2),
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: StreamBuilder(
@@ -71,25 +73,25 @@ class ChooseLanguageState extends State<ChooseLanguage> {
             .doc(currentUserID)
             .snapshots(),
         builder: (BuildContext buildContext, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return Text(ERROR_MESSAGE);
+          if (snapshot.hasError) return const Text(ERROR_MESSAGE);
           if (snapshot.connectionState == ConnectionState.waiting &&
-              snapshot.data == null) return CircularProgressIndicator();
+              snapshot.data == null) return const CircularProgressIndicator();
           if (widget.isFromFriendList && languagesList.isEmpty){
             return Container(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                      "You and " + widget.friendInfo[USERNAME] + " don't learn a common language",
+                      "${"You and " + widget.friendInfo[USERNAME]} don't learn a common language",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -97,29 +99,29 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text("OK ", style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text("OK ", style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ],
               ),
             );
           }
-          else
+          else {
             return Container(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Choose a Language", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 20.0),
+                  const Text("Choose a Language", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 20.0),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15.0),
                       color: Colors.grey[200],
                     ),
                     child: DropdownButton<String>(
                       isExpanded: true,
-                      hint: Text("Select Language"),
+                      hint: const Text("Select Language"),
                       underline: Container(),
                       value: languageId,
                       items: languagesList.map((String value) {
@@ -136,16 +138,16 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                       },
                     ),
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   isLangSelected
                       ? Container()
                       : Text(
                     "You must pick a preferred language",
                     style: TextStyle(color: Colors.red[800]),
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   isLoadingChat
-                      ? CircularProgressIndicator(
+                      ? const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFB9D9EB)))
                       : ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -189,185 +191,25 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                         }
                       }
                     },
-                    child: Text("OK ", style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text("OK ", style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ],
               ),
             );
+          }
         },
       ),
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   String currentUserID = AuthRepository.instance().user!.uid;
-  //   SizeConfig().init(context);
-  //   return new Dialog(
-  //     shape: RoundedRectangleBorder(
-  //         side: BorderSide(color: Colors.grey, width: 2),
-  //         borderRadius: BorderRadius.circular(18.0)),
-  //     child: StreamBuilder(
-  //         stream: FirebaseFirestore.instance
-  //             .collection(USERS)
-  //             .doc(currentUserID)
-  //             .snapshots(),
-  //         builder: (BuildContext buildContext,
-  //             AsyncSnapshot<DocumentSnapshot> snapshot) {
-  //           if (snapshot.hasError) return Text(ERROR_MESSAGE);
-  //           //if connecting show progressIndicator
-  //           if (snapshot.connectionState == ConnectionState.waiting &&
-  //               snapshot.data == null) return SizedBox();
-  //           if (widget.isFromFriendList && languagesList.isEmpty){
-  //             return Container(
-  //               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-  //               alignment: Alignment.center,
-  //               height: SizeConfig.blockSizeVertical * 30,
-  //               width: SizeConfig.blockSizeHorizontal * 50,
-  //               child: Column(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Text("You and " + widget.friendInfo[USERNAME] + " don't learn a common language",
-  //                       textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
-  //                   SizedBox(height: SizeConfig.blockSizeVertical * 4),
-  //                   TextButton(
-  //                     style: ButtonStyle(
-  //                       minimumSize: MaterialStateProperty.all(Size(65, 40)),
-  //                       backgroundColor: MaterialStateProperty.all(Color(0xFFB9D9EB)),
-  //                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
-  //                         side: BorderSide(color: Colors.grey),
-  //                         borderRadius: BorderRadius.circular(10.0),
-  //                       )),
-  //                     ),
-  //                     onPressed: () {
-  //                       Navigator.of(context).pop();
-  //                     },
-  //                     child: Text("OK ", style: TextStyle(fontSize: 14)),
-  //                   ),
-  //                 ],
-  //               ),
-  //             );
-  //           }
-  //           else
-  //             return Container(
-  //               height: SizeConfig.blockSizeVertical * 30,
-  //               child: new Column(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Text("Choose a Language", style: TextStyle(fontSize: 18)),
-  //                   SizedBox(
-  //                     height: SizeConfig.blockSizeVertical * 3,
-  //                   ),
-  //                   Container(
-  //                     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-  //                     decoration: BoxDecoration(
-  //                         borderRadius: BorderRadius.circular(10.0),
-  //                         color: Color(0xFFDFDFDF),
-  //                         border: Border.all(color: Colors.grey)),
-  //                     child: DropdownButton<String>(
-  //                         hint: Text("Language"),
-  //                         underline: SizedBox.shrink(),
-  //                         value: languageId,
-  //                         items: languagesList.map((String value) {
-  //                           return new DropdownMenuItem<String>(
-  //                             value: value,
-  //                             child: new Text(value),
-  //                           );
-  //                         }).toList(),
-  //                         onChanged: (newVal) {
-  //                           setState(() {
-  //                             isLangSelected = true;
-  //                             languageId = newVal!;
-  //                           });
-  //                         }),
-  //                   ),
-  //                   FittedBox(
-  //                     fit: BoxFit.fitWidth,
-  //                     child: isLangSelected
-  //                         ? Text(" ")
-  //                         : Text(
-  //                       "You must pick a preferred language",
-  //                       style: TextStyle(color: Colors.red[800]),
-  //                     ),
-  //                   ),
-  //                   SizedBox(
-  //                     height: SizeConfig.blockSizeVertical * 2,
-  //                   ),
-  //                   Padding(
-  //                     padding: EdgeInsets.only(
-  //                         right: SizeConfig.blockSizeHorizontal * 4),
-  //                     child: isLoadingChat
-  //                         ? CircularProgressIndicator(
-  //                         valueColor: AlwaysStoppedAnimation<Color>(
-  //                             Color(0xFFB9D9EB)))
-  //                         : Padding(
-  //                       padding: EdgeInsets.only(
-  //                           left: SizeConfig.blockSizeHorizontal * 4),
-  //                       child: TextButton(
-  //                         style: ButtonStyle(
-  //                           minimumSize: MaterialStateProperty.all(Size(65, 36)),
-  //                           backgroundColor: MaterialStateProperty.all(Color(0xFFB9D9EB)),
-  //                           shape: MaterialStateProperty.all(RoundedRectangleBorder(
-  //                             side: BorderSide(color: Colors.grey),
-  //                             borderRadius: BorderRadius.circular(10.0),
-  //                           )),
-  //                         ),
-  //                         onPressed: () {
-  //                           if (languageId == null) {
-  //                             setState(() {
-  //                               isLangSelected = false;
-  //                             });
-  //                           } else {
-  //                             if (widget.isFromFriendList) {
-  //                               _enterChatPage(
-  //                                   languageId!,
-  //                                   widget.friendInfo,
-  //                                   snapshot.data!.data()! as Map<dynamic, dynamic>
-  //                               );
-  //                             } else if (widget.isRandom) {
-  //                               Navigator.of(context).pop();
-  //                               showDialog(
-  //                                   barrierDismissible: false,
-  //                                   barrierColor: Colors.transparent,
-  //                                   context: context,
-  //                                   builder: (context) {
-  //                                     widget.blurController!
-  //                                         .add([1.5, 1.5]);
-  //                                     return SearchRandomDialog(
-  //                                         snapshot.data!.data()! as Map<dynamic, dynamic>
-  //                                         ,
-  //                                         languageId!);
-  //                                   }).then((value) async {
-  //                                 widget.blurController!.add([0, 0]);
-  //                               });
-  //                             } else {
-  //                               navigateToSelectFriend(
-  //                                   context, languageId!);
-  //                             }
-  //                           }
-  //                         },
-  //                         child:
-  //                         Text("OK ", style: TextStyle(fontSize: 14)),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             );
-  //         }),
-  //   );
-  // }
-
   void navigateToSelectFriend(context, String language) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => FriendsList(
-    //           true,
-    //           selectedLanguage: language,
-    //         )));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FriendsList(
+              true,
+              selectedLanguage: language,
+            )));
   }
 
   void _enterChatPage(String language, Map friendInfo, Map userInfo) async {

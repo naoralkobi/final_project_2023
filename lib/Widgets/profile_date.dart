@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../consts.dart';
@@ -54,14 +52,14 @@ class _ProfileDatePickerState extends State<ProfileDatePicker> {
           {
             _selectDate(context),
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             filled: true,
             labelText: "birth date",
             labelStyle: TextStyle(color: Colors.grey),
             fillColor: Colors.white,
             border: OutlineInputBorder(
-              borderRadius: const BorderRadius.all(
-                const Radius.circular(10.0),
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
               ),
             ),
             enabledBorder: OutlineInputBorder(
@@ -69,8 +67,8 @@ class _ProfileDatePickerState extends State<ProfileDatePicker> {
                 color: Colors.grey,
                 width: 2.0,
               ),
-              borderRadius: const BorderRadius.all(
-                const Radius.circular(10.0),
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
               ),
             ),
             hintText: 'Date of birth',
@@ -93,24 +91,21 @@ class _ProfileDatePickerState extends State<ProfileDatePicker> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Colors.blue,
             ),
           ),
-          child: child == null ? SizedBox() : child,
+          child: child ?? const SizedBox(),
         );
       },
     ))!;
     // If a date is picked and it is different from the current date
-    if (pickedDate != null && pickedDate != currentDate)
+    if (pickedDate != currentDate) {
       setState(() {
         // Update the text in the dateController to display the selected date
-        dateController.text = pickedDate.day.toString() +
-            '.' +
-            pickedDate.month.toString() +
-            '.' +
-            pickedDate.year.toString();
+        dateController.text = '${pickedDate.day}.${pickedDate.month}.${pickedDate.year}';
       });
+    }
   }
 
   /// Updates the birth date in Firebase for the current user.

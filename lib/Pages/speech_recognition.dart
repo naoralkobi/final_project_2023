@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_2023/consts.dart';
@@ -8,7 +7,6 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/services.dart' show PlatformException;
 
 class SpeechRecognitionScreen extends StatefulWidget {
 
@@ -57,7 +55,6 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
           .map((word) => Map<String, String>.from(word as Map<dynamic, dynamic>))
           .toList();
       setState(() {
-        //wordsList = words.map((word) => word.keys.first).toList();
         wordsList = words;
         randomWord = _generateRandomWord();
       });
@@ -89,36 +86,23 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
       translation = randomEntry.value;
     }
     setState(() {});
-    return await Future.delayed(Duration(seconds: 1));
+    return await Future.delayed(const Duration(seconds: 1));
   }
 
   Future<void> _initializeSpeechRecognition() async {
     _speech = stt.SpeechToText();
     bool isAvailable = await _speech!.initialize(
-        onError: (val) => print('onError: $val'),
-        onStatus: (val) => print('onStatus: $val'),
-        debugLogging: true,
-        finalTimeout: Duration(seconds: 1),
-        // options: stt.SpeechToTextOptions(
-        //     localeId: languageToLocale[widget.selectedLanguage] // using the localeId here
-        //)
+      onError: (val) => debugPrint('onError: $val'),
+      onStatus: (val) => debugPrint('onStatus: $val'),
+      debugLogging: true,
+      finalTimeout: const Duration(seconds: 1),
     );
     if (isAvailable) {
       _speech!.errorListener = (error) {
-        print('Speech recognition error: ${error.errorMsg}');
+        debugPrint('Speech recognition error: ${error.errorMsg}');
       };
-      setState(() {
-        _speech!.listen(
-          localeId: languageToLocale[widget.selectedLanguage],
-          onResult: (result) {
-            setState(() {
-              _recognizedText = result.recognizedWords;
-            });
-          },
-        );
-      });
     } else {
-      print('Speech recognition is not available on this device.');
+      debugPrint('Speech recognition is not available on this device.');
     }
   }
 
@@ -129,6 +113,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
       _recognizedText = '';
     });
     await _speech!.listen(
+      localeId: languageToLocale[widget.selectedLanguage],
       onResult: (result) {
         setState(() {
           _recognizedText = result.recognizedWords;
@@ -149,14 +134,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
     });
   }
 
-  void _sendAudioForAnalysis(String recordedAudio) {
-    // Implement the logic to send the recorded audio for analysis
-    // Example: make an API call to send the recorded audio
-    // You can use the recordedAudio variable to access the transcribed text
-    print('Sending audio for analysis: $recordedAudio');
-  }
-
-  Color bgColor = Color(0xff00A67E);
+  Color bgColor = const Color(0xff00A67E);
 
   @override
   Widget build(BuildContext context) {
@@ -165,10 +143,10 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
       floatingActionButton: AvatarGlow(
         endRadius: 75.0,
         animate: isListening,
-        duration: Duration(milliseconds: 2000),
-        glowColor: Color(0xff00A67E),
+        duration: const Duration(milliseconds: 2000),
+        glowColor: const Color(0xff00A67E),
         repeat: true,
-        repeatPauseDuration: Duration(milliseconds: 100),
+        repeatPauseDuration: const Duration(milliseconds: 100),
         showTwoGlows: true,
         child: GestureDetector(
           onTapDown: (details) {
@@ -186,7 +164,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
             });
             _stopListening();
           },
-          child: CircleAvatar(
+          child: const CircleAvatar(
             backgroundColor: Color(0xff00A67E),
             radius: 35,
             child: Icon(Icons.mic, color: Colors.white),
@@ -195,14 +173,14 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
       ),
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Speech Recognition'),
+        title: const Text('Speech Recognition'),
         centerTitle: true,
         backgroundColor: MAIN_BLUE_COLOR,
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               'Pull to Refresh',
               style: TextStyle(
@@ -211,7 +189,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             child: LiquidPullToRefresh(
               onRefresh: _updateRandomWord,
@@ -220,31 +198,31 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
               child: ListView(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     color: Colors.grey[300],
                     child: Column(
                       children: [
                         Text(
-                          'Language - ${language}',
-                          style: TextStyle(
+                          'Language - $language',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
-                          'Level - ${languageLevel}',
-                          style: TextStyle(
+                          'Level - $languageLevel',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 4),
-                        Text(
+                        const SizedBox(height: 4),
+                        const Text(
                           'Press and hold the record button and say the text:',
                           style: TextStyle(
                             fontSize: 16,
@@ -267,48 +245,48 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Text(
-                              '$_recognizedText',
-                              style: TextStyle(
+                              _recognizedText,
+                              style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
                               ),
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Text(
                               randomWord,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
                               ),
                             ),
-                            SizedBox(height: 20),
-                            Container(
+                            const SizedBox(height: 20),
+                            SizedBox(
                               height: null,
                               child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                  return const Padding(
+                                    padding: EdgeInsets.all(8.0),
                                   );
                                 },
                                 itemCount: 1,
                               ),
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Text(
                               _recognizedText,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
                               ),
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [],
@@ -318,12 +296,12 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           'Translation:',
                           style: TextStyle(
                             fontSize: 18,
@@ -332,10 +310,10 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           translation,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
@@ -385,8 +363,8 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
      // Display the score and suggestions for improvement
     _showScore(overallScore,feedback);
 
-    print('Score: $hammingDistance');
-    print('Feedback: $feedback');
+     debugPrint('Score: $hammingDistance');
+     debugPrint('Feedback: $feedback');
   }
 
 
@@ -400,7 +378,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
           content: Text(feedback),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -511,8 +489,8 @@ Future<double> calculatePronunciationScore(String originalText, String recognize
   String originalPhonemes = await textToPhonemes(originalText, language);
   String recognizedPhonemes = await textToPhonemes(recognizedText, language);
 
-  print(originalPhonemes);
-  print(recognizedPhonemes);
+  debugPrint(originalPhonemes);
+  debugPrint(recognizedPhonemes);
   // Now compare originalPhonemes and recognizedPhonemes.
   // using Levenshtein distance.
 
@@ -533,7 +511,9 @@ double levenshteinDistance(String s, String t) {
 
   // Initialize v0 (previous row of distances)
   // Edit distance for an empty s is just the number of characters in t
-  for (int i = 0; i < t.length + 1; i++) v0[i] = i;
+  for (int i = 0; i < t.length + 1; i++) {
+    v0[i] = i;
+  }
 
   // Calculate v1 (current row distances) from the previous row v0
   for (int i = 0; i < s.length; i++) {
@@ -560,12 +540,12 @@ double levenshteinDistance(String s, String t) {
   int levenshteinDistance = v0[t.length];
 
   // Calculate the maximum length between the two strings
-  int max_length = max(s.length, t.length);
+  int maxLength = max(s.length, t.length);
 
   // Normalize the distance between 0 and 1
-  double normalized_distance = 1 - (levenshteinDistance / max_length.toDouble());
+  double normalizedDistance = 1 - (levenshteinDistance / maxLength.toDouble());
 
-  return normalized_distance;
+  return normalizedDistance;
 }
 
 
