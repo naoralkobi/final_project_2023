@@ -60,19 +60,19 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
               filled: true,
               fillColor: Colors.white,
               labelText: widget.hintText,
-              labelStyle: TextStyle(color: Colors.grey),
-              border: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(
-                  const Radius.circular(10.0),
+              labelStyle: const TextStyle(color: Colors.grey),
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
                 ),
               ),
-              enabledBorder: OutlineInputBorder(
+              enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.grey,
                   width: 2.0,
                 ),
-                borderRadius: const BorderRadius.all(
-                  const Radius.circular(10.0),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
                 ),
               ),
               hintText: widget.hintText == "description" ? "Tell us about yourself" : null,
@@ -101,13 +101,13 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
     });
     // Retrieve the collection of users from Firestore
     await FirebaseFirestore.instance.collection(USERS).get().then((value) {
-      value.docs.forEach((element) {
+      for (var element in value.docs) {
         if (element.data()[USERNAME] == userName) {
           setState(() {
             isUserNameUnique = false;
           });
         }
-      });
+      }
     });
   }
 }

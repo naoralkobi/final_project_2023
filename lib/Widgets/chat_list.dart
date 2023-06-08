@@ -49,13 +49,13 @@ class ChatsListState extends State<ChatsList> {
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: SizeConfig.blockSizeHorizontal * 5)));
-              } else
+              } else {
                 return StreamBuilder<List<double>>(
                     stream: widget.blurController.stream,
                     builder: (context, blurSnapshot) {
                       double sigmaX = 0;
                       double sigmaY = 0;
-                      if (blurSnapshot.hasError) return Text(ERROR_MESSAGE);
+                      if (blurSnapshot.hasError) return const Text(ERROR_MESSAGE);
                       if (blurSnapshot.data != null){
                         sigmaX = blurSnapshot.data![0];
                         sigmaY = blurSnapshot.data![1];
@@ -79,20 +79,21 @@ class ChatsListState extends State<ChatsList> {
                                   _db.collection(USERS).doc(friendID).snapshots(),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<DocumentSnapshot> friendInfo) {
-                                    if (friendInfo.hasError)
+                                    if (friendInfo.hasError) {
                                       return Text(ERROR_MESSAGE);
+                                    }
                                     //if connecting show progressIndicator
                                     if (friendInfo.connectionState ==
                                         ConnectionState.waiting &&
-                                        friendInfo.data == null)
-                                      return Center(child: SizedBox());
-                                    else {
+                                        friendInfo.data == null) {
+                                      return const Center(child: SizedBox());
+                                    } else {
                                       if (widget.searchText != "" &&
                                           !friendInfo.data![USERNAME]
                                               .toLowerCase()
                                               .contains(
                                               widget.searchText.toLowerCase())) {
-                                        return SizedBox();
+                                        return const SizedBox();
                                       }
                                       int numUnreadMessages = 0;
                                       String unreadMessages = "";
@@ -102,8 +103,9 @@ class ChatsListState extends State<ChatsList> {
                                           numUnreadMessages = map[widget.userInfo["UID"]];
                                           unreadMessages = "$numUnreadMessages";
                                         }
-                                        if (numUnreadMessages > 99)
+                                        if (numUnreadMessages > 99) {
                                           unreadMessages = "99+";
+                                        }
                                       }
                                       return Card(
                                           shape: RoundedRectangleBorder(
@@ -121,9 +123,9 @@ class ChatsListState extends State<ChatsList> {
                                                     child: RichText(
                                                       overflow: TextOverflow.ellipsis,
                                                       strutStyle:
-                                                      StrutStyle(fontSize: 12.0),
+                                                      const StrutStyle(fontSize: 12.0),
                                                       text: TextSpan(
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               color: Colors.black),
                                                           text: snapshots
                                                               .data!.docs[index]
@@ -140,7 +142,7 @@ class ChatsListState extends State<ChatsList> {
                                                 maxRadius: 20,
                                               ),
                                               trailing:
-                                              Container(
+                                              SizedBox(
                                                 width: SizeConfig.blockSizeHorizontal*32,
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,21 +153,14 @@ class ChatsListState extends State<ChatsList> {
                                                         Text(
                                                           snapshots.data!.docs[index]
                                                           ['language'],
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               fontSize: 12,
                                                               fontWeight: FontWeight.w600,
                                                               color: Color(0xFF6D94BE)),
                                                         ),
-                                                        SizedBox(
+                                                        const SizedBox(
                                                           height: 5,
                                                         ),
-
-                                                        /*snapshots.data!.docs[index].data().containsKey(UNREAD_MESSAGES)?
-                                                        Container(
-                                                        child:Text(snapshots.data!.docs[index]
-                                                        [UNREAD_MESSAGES][widget.userInfo["UID"]])
-                                                        ):
-                                                        SizedBox()*/
                                                       ],
                                                     ),
                                                     Row(
@@ -186,11 +181,11 @@ class ChatsListState extends State<ChatsList> {
                                                                 Container(
                                                                     padding:EdgeInsets.only(left: SizeConfig.blockSizeHorizontal*2
                                                                         ,right: SizeConfig.blockSizeHorizontal*2),
-                                                                    child: Text(unreadMessages, style: TextStyle(color: Colors.white),)),
+                                                                    child: Text(unreadMessages, style: const TextStyle(color: Colors.white),)),
                                                               ],
                                                             )
-                                                        ): SizedBox(),
-                                                        Icon(
+                                                        ): const SizedBox(),
+                                                        const Icon(
                                                           Icons.arrow_forward_ios_rounded,
                                                           size: 20,
                                                         ),
@@ -206,13 +201,13 @@ class ChatsListState extends State<ChatsList> {
                       );
                     }
                 );
+              }
             }
           }),
     );
   }
 
   void _enterChatPage(String chatID, String language, Map friendInfo) async {
-    //String chatID = await FirebaseDB.Firebase_db.getChatIdOfFriend(AuthRepository.instance().user!.uid, friendID, language);
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
