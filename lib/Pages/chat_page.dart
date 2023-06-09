@@ -72,7 +72,7 @@ class _ChatPageState extends State<ChatPage> {
           height: SizeConfig.blockSizeVertical * 4,
         );
         break;
-      case HEBRREW:
+      case HEBREW:
         languageFlag = Image.asset(
           "assets/images/israel.png",
           width: SizeConfig.blockSizeHorizontal * 7,

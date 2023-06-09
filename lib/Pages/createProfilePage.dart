@@ -58,12 +58,15 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     ProfileVars().init();
     imageUrl = "";
     // Get the download URL of the user's profile image
-    _storage
-        .ref()
-        .child("userAvatars/" + user!.uid)
-        .getDownloadURL()
-        .then(found, onError: notFound);
+    if (user != null) {
+      _storage
+          .ref()
+          .child("userAvatars/${user!.uid}")
+          .getDownloadURL()
+          .then(found, onError: notFound);
+    }
   }
+
 
   @override
   void dispose() {
@@ -493,7 +496,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         LanguageWidget(ARABIC, firebaseController, widget.userInfo), // Language widget for Arabic
                         LanguageWidget(FRENCH, firebaseController, widget.userInfo), // Language widget for French
                         LanguageWidget(GERMAN, firebaseController, widget.userInfo), // Language widget for German
-                        LanguageWidget(HEBRREW, firebaseController, widget.userInfo), // Language widget for Hebrew
+                        LanguageWidget(HEBREW, firebaseController, widget.userInfo), // Language widget for Hebrew
                         LanguageWidget(ITALIAN, firebaseController, widget.userInfo), // Language widget for Italian
                         LanguageWidget(PORTUGUESE, firebaseController, widget.userInfo), // Language widget for Portuguese
                         LanguageWidget(SPANISH, firebaseController, widget.userInfo), // Language widget for Spanish

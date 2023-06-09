@@ -20,7 +20,7 @@ class AddQuestionState extends State<AddQuestion> {
     ARABIC,
     FRENCH,
     GERMAN,
-    HEBRREW,
+    HEBREW,
     ITALIAN,
     PORTUGUESE,
     SPANISH

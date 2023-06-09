@@ -96,13 +96,16 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                       GestureDetector(
                         onTap: () {
                           // Open a page to show the profile image in full screen
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ShowImage(
-                                imageUrl: (userInfo.data!.data() as Map<String, dynamic>)["UID"]
-                                ,
-                                tag: "profileImage",
-                                title: "Profile Image",
-                              )));
+                          String imageUrl = (userInfo.data!.data() as Map<String, dynamic>)["URL"];
+                          if (imageUrl.isNotEmpty){
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ShowImage(
+                                  imageUrl: imageUrl,
+                                  tag: "profileImage",
+                                  title: "Profile Image",
+                            )));
+                          }
+                          // TODO add else
                         },
                         child: CircleAvatar(
                           maxRadius: 85,

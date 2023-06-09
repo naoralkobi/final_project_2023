@@ -86,9 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
           if (snapshot.hasError) return const Text(ERROR_MESSAGE);
           // If connecting, show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting &&
-              snapshot.data == null) {
+              snapshot.data?.data() == null) {
             return const Center(child: SizedBox());
           } else {
+            final data = snapshot.data?.data() as Map<String, dynamic>;
             return Scaffold(
               // left menu.
               drawer: NavBar(snapshot.data!.data()! as Map<String, dynamic>,

@@ -18,7 +18,7 @@ class _TranslationScreenState extends State<TranslationScreen> {
 // Mapping of language name to its code
   final Map<String, String> languages = {
     ENGLISH: 'en',
-    HEBRREW: 'he',
+    HEBREW: 'he',
     ARABIC: 'ar',
     FRENCH: 'fr',
     GERMAN: 'de',
