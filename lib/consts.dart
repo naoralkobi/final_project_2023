@@ -48,6 +48,7 @@ const int USER1WIN = 1;
 const int USER1LOSS = 2;
 const int TIE = 3;
 
+
 ///Chat sizes
 const double APP_BAR_IMAGE_WIDTH = 40.0;
 const double APP_BAR_IMAGE_HEIGHT = 40.0;
@@ -84,6 +85,8 @@ const String GOOGLE_API_KEY = 'AIzaSyC_-_XeUsGfdBt4h1fx2ZYYdEC_K_aFAOY';
 const String GOOGLE_TRANSLATE_SERVER = 'https://translation.googleapis.com/language/translate/v2?';
 const String YOUTUBE_SERVER = 'https://www.googleapis.com/youtube/v3/search';
 const String AGORA_API = 'c8c68b6a28be4e3784eb6d76f6d2fbe0';
+const String FLASK_SERVER = 'ttp-wrni42euaa-ew.a.run.app';
+const String FLASK_ROUTE = '/text_to_phonemes';
 
 /// Admins:
 const String NAOR = 'naor9985@gmail.com';
