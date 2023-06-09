@@ -17,7 +17,7 @@ class SendImageState extends State<SendImage>{
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: const Size.fromHeight(70),
         child: AppBar(
           title: const Text('Send Image'),
         ),
