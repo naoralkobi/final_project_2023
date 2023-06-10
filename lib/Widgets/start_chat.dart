@@ -9,7 +9,7 @@ class StartChat extends StatefulWidget {
   StartChat(this.blurController);
   @override
   StartChatState createState() {
-    return new StartChatState();
+    return StartChatState();
   }
 }
 class StartChatState extends State<StartChat> {

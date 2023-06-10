@@ -41,7 +41,7 @@ class LeaderboardListState extends State<LeaderboardList> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1.5),
-      child: Container(
+      child: SizedBox(
         height: tileSize,
         child: ListView.builder(
             controller: _controller,
@@ -61,7 +61,7 @@ class LeaderboardListState extends State<LeaderboardList> {
                             SizedBox(width: SizeConfig.blockSizeHorizontal * 5.0),
                             Row(
                               children: <Widget>[
-                                Text("#" + currentRank.toString(),
+                                Text("#$currentRank",
                                     style: TextStyle(
                                         fontSize:
                                         SizeConfig.blockSizeVertical * 2.5)),
@@ -106,7 +106,7 @@ class LeaderboardListState extends State<LeaderboardList> {
                                   Row(
                                     children: [
                                       ImageIcon(
-                                        AssetImage("assets/images/trophy.png"),
+                                        const AssetImage("assets/images/trophy.png"),
                                         color: Colors.black,
                                         size: SizeConfig.blockSizeHorizontal * 4,
                                       ),
@@ -128,7 +128,7 @@ class LeaderboardListState extends State<LeaderboardList> {
                                 : currentRank == 3
                                 ? Image.asset('assets/images/third.png',
                                 height: medalSize, width: medalSize)
-                                : Text(''),
+                                : const Text(''),
                             Padding(
                               padding: EdgeInsets.only(
                                   right: SizeConfig.blockSizeHorizontal * 10.0,

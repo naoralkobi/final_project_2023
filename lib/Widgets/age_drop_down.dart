@@ -41,7 +41,7 @@ class _AgeDropDownState extends State<AgeDropDown> {
           return Container(
             height: SizeConfig.blockSizeVertical * 10,
             width: SizeConfig.blockSizeHorizontal * 20,
-            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
               color: Colors.white,
@@ -49,14 +49,14 @@ class _AgeDropDownState extends State<AgeDropDown> {
                   color: Colors.grey, style: BorderStyle.solid, width: 0.80),
             ),
             child: DropdownButton<int>(
-                hint: Text("Pick"),
-                underline: SizedBox.shrink(),
+                hint: const Text("Pick"),
+                underline: const SizedBox.shrink(),
                 value: ageVal == 1 ? null : ageVal,
                 items:
                 <int>[for (var i = 14; i < 100; i += 1) i].map((int value) {
-                  return new DropdownMenuItem<int>(
+                  return DropdownMenuItem<int>(
                     value: value,
-                    child: new Text(value.toString()),
+                    child: Text(value.toString()),
                   );
                 }).toList(),
                 onChanged: (newVal) {

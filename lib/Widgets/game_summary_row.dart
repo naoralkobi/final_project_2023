@@ -36,7 +36,7 @@ class GameSummaryRow extends StatelessWidget {
         children: [
           SizedBox(width: SizeConfig.blockSizeHorizontal*3,),
           Text(
-            "Q" + question["questionNumber"].toString(),
+            "Q${question["questionNumber"]}",
             style: TextStyle(fontSize: SizeConfig.blockSizeHorizontal * 6),
           ),
           SizedBox(width: SizeConfig.blockSizeHorizontal*19,),

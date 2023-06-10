@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
             .doc(user?.uid) // Use the null-aware operator here
             .snapshots(),
         builder: (BuildContext buildContext,
-            AsyncSnapshot<DocumentSnapshot> snapshot) {
+            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasError) return const Text(ERROR_MESSAGE);
           // If connecting, show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting &&
@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
             final data = snapshot.data?.data() as Map<String, dynamic>;
             return Scaffold(
               // left menu.
-              drawer: NavBar(snapshot.data!.data()! as Map<String, dynamic>,
+              drawer: NavBar(snapshot.data!.data()!,
                   blurController),
               resizeToAvoidBottomInset: false,
               appBar: PreferredSize(
