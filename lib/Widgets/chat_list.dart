@@ -212,7 +212,7 @@ class ChatsListState extends State<ChatsList> {
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
           return ChatPage(chatID, AuthRepository.instance().user!.uid, friendInfo, language,widget.userInfo);
-        }, // ...to here.
+        },
       ),
     );
   }

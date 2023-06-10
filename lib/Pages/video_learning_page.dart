@@ -23,6 +23,7 @@ class _YouTubeVideoListPageState extends State<YouTubeVideoListPage> {
   }
 
   Future<void> fetchYouTubeVideos(String searchQuery) async {
+    // Retrieve the API key and API URL
     String apiKey = GOOGLE_API_KEY;
     String apiUrl = YOUTUBE_SERVER;
     String nextPageToken = '';
@@ -42,6 +43,7 @@ class _YouTubeVideoListPageState extends State<YouTubeVideoListPage> {
           nextPageToken = data['nextPageToken'] ?? '';
         });
       } else {
+        // If the response is not successful, throw an exception with an error message
         throw Exception('Failed to fetch YouTube videos');
       }
     } while (nextPageToken.isNotEmpty);

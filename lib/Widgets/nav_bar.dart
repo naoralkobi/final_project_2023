@@ -229,13 +229,22 @@ class NavBar extends StatelessWidget {
     ).then((value) => blurController.add([0, 0]));
   }
 
+  //  This function is responsible for
+  //  showing a dialog in the application when invoked.
+  // input:
+  // context -  represents the current build context of the application.
+  //  The purpose of a callback function is to be called or executed by the
+  //  receiving function at a specific point or in response to a particular
+  //  event.
   void navigateToYoutube(context) {
     showDialog(
+      // the dialog will be displayed without any background color overlay
       barrierColor: Colors.transparent,
       context: context,
       builder: (BuildContext context) {
+        // sets the blur effect to 1.5 in both horizontal and vertical directions
         blurController.add([1.5, 1.5]);
-        return ChooseLanguageSpeech(searchQuery: "Youtube");
+        return ChooseLanguageSpeech(searchQuery: YOUTUBE);
       },
     ).then((value) => blurController.add([0, 0]));
   }

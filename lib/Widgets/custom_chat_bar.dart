@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/screen_size_config.dart';
-import 'package:final_project_2023/consts.dart';
 
 class CustomChatBar extends ContinuousRectangleBorder {
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    final double innerCircleRadius = 150.0;
 
     double x = 150, y = 45, r = 0.5;
     Path path = Path()
@@ -28,7 +26,7 @@ class CustomChatBar extends ContinuousRectangleBorder {
 class CustomShapeBorder extends ContinuousRectangleBorder {
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    final double innerCircleRadius = 150.0;
+    const double innerCircleRadius = 150.0;
 
     Path path = Path();
     path.lineTo(0, rect.height);
@@ -96,7 +94,7 @@ class AppBarBorder extends ShapeBorder {
 class ChatAppBar extends ShapeBorder {
   final bool usePadding;
 
-  ChatAppBar({this.usePadding = true});
+  const ChatAppBar({this.usePadding = true});
 
   @override
   EdgeInsetsGeometry get dimensions =>
@@ -107,7 +105,6 @@ class ChatAppBar extends ShapeBorder {
 
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    final double innerCircleRadius = 150.0;
     Size size = Size(rect.width, rect.height);
     Path path_0 = Path();
     path_0.moveTo(rect.bottomCenter.dx + 77, rect.bottomCenter.dy);

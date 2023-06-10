@@ -47,6 +47,10 @@ const String SPEECH_TO_TEXT = 'speech_to_text';
 const int USER1WIN = 1;
 const int USER1LOSS = 2;
 const int TIE = 3;
+const String YOUTUBE = 'Youtube';
+const String OK = 'OK';
+const String CHOOSE_A_LANGAUGE = 'Choose a Language';
+const String MUST_PICK_LANGAUGE = 'You must pick a preferred language';
 
 
 ///Chat sizes
