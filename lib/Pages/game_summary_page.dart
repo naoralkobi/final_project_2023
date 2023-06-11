@@ -34,8 +34,8 @@ class _GameSummaryPageState extends State<GameSummaryPage> {
           //if connecting show progressIndicator
           if (snapshot.connectionState == ConnectionState.waiting &&
               snapshot.data == null) return const Center(child: SizedBox());
-          List questionsData = (snapshot.data!.data() as Map<String, dynamic>)["questions"];
-          if (snapshot.data!['uid1'] == widget.userInfo['UID']) {
+          List questionsData = (snapshot.data!.data() as Map<String, dynamic>)[QUESTIONS];
+          if (snapshot.data![UID1] == widget.userInfo[UID]) {
             user1Info = widget.userInfo;
             user2Info = widget.opponentInfo;
           } else {

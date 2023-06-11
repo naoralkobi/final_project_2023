@@ -101,22 +101,6 @@ class _VideoCallPageState extends State<VideoCallPage> {
           )
               : const Text('Waiting for remote user to join...'),
           Align(
-            alignment: Alignment.bottomRight,
-            child: SizedBox(
-              width: 120,
-              height: 160,
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  width: 60,
-                  height: 80,
-                  color: Colors.black54,
-                  child: const RtcLocalView.SurfaceView(),
-                ),
-              ),
-            ),
-          ),
-          Align(
             alignment: Alignment.bottomLeft,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,

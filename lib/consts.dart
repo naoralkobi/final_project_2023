@@ -1,9 +1,12 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 
 ///Chat
 const String CHATS = 'chats';
 const String USERS = 'users';
 const String GAMES = 'games';
+const String UID = "UID";
 const String TOKENS = 'tokens';
 const String MESSAGES_COLLECTION = 'messages';
 const String TEXT_FIELD_HINT = "Enter your message here";
@@ -51,8 +54,24 @@ const String YOUTUBE = 'Youtube';
 const String OK = 'OK';
 const String CHOOSE_A_LANGAUGE = 'Choose a Language';
 const String MUST_PICK_LANGAUGE = 'You must pick a preferred language';
+const String USER_1_ANSWER = "user1Answer";
+const String USER_2_ANSWER = "user2Answer";
+const String QUESTIONS = "questions";
+const String QUESTION_NUM = "questionNumber";
+const String LANGUAGE = "language";
+const String LEVEL = "level";
+const String GAME_ID = "gameId";
+const String UID1 = "uid1";
+const String UID2 = "uid2";
+const String CORRECT_ANSWER ="correctAnswer";
+const String TYPE = "type";
+const String QUESTION_BODY = "questionBody";
 
-
+const int QUESTIONS_AMOUNT = 5;
+const int USER_1_NUMBER = 1;
+const int USER_2_NUMBER = 1;
+const int GROUP_VALUE_DEFAULT = -1;
+const int TIMER_START = 10;
 ///Chat sizes
 const double APP_BAR_IMAGE_WIDTH = 40.0;
 const double APP_BAR_IMAGE_HEIGHT = 40.0;

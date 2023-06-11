@@ -27,7 +27,7 @@ class QuestionsPage extends StatefulWidget {
 //  SingleTickerProviderStateMixin - to provide an animation ticker for animations within the state.
 class _QuestionsPageState extends State<QuestionsPage>
     with SingleTickerProviderStateMixin {
-  int groupValue = -1;
+  int groupValue = GROUP_VALUE_DEFAULT;
   String? opponentAnswer;
   List? answers;
   String? correctAnswer;
@@ -35,7 +35,7 @@ class _QuestionsPageState extends State<QuestionsPage>
   String? questionBody;
   Map opponentInfo;
   Timer? _timer;
-  int _start = 10;
+  int _start = TIMER_START;
   bool? firstShuffle;
 
   _QuestionsPageState(this.opponentInfo);
@@ -43,10 +43,10 @@ class _QuestionsPageState extends State<QuestionsPage>
   @override
   void initState() {
     super.initState();
-    if (widget.userNumber == 1) {
-      opponentAnswer = "user2Answer";
+    if (widget.userNumber == USER_1_NUMBER) {
+      opponentAnswer = USER_2_ANSWER;
     } else {
-      opponentAnswer = "user1Answer";
+      opponentAnswer = USER_1_ANSWER;
     }
     if (_timer != null) {
       _timer!.cancel();
@@ -88,7 +88,7 @@ class _QuestionsPageState extends State<QuestionsPage>
             answers = shuffle(answers!);
             firstShuffle = false;
           }
-          correctAnswer = questionData!["correctAnswer"];
+          correctAnswer = questionData![CORRECT_ANSWER];
 
           return Scaffold(
             appBar: PreferredSize(
@@ -129,6 +129,7 @@ class _QuestionsPageState extends State<QuestionsPage>
                 ),
               ),
             ),
+            /// TIMER:
             body: Column(
               children: [
                 SizedBox(height: SizeConfig.blockSizeVertical * 4),
@@ -163,6 +164,7 @@ class _QuestionsPageState extends State<QuestionsPage>
                   ),
                 ),
                 SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                // Check if the opponent already answered his question!
                 Container(
                   child: questionData[opponentAnswer] == ""
                       ? Center(
@@ -194,8 +196,9 @@ class _QuestionsPageState extends State<QuestionsPage>
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: SizedBox(
+                            // Print the question type:
                             child: Text(
-                              questionData["type"] + ":",
+                              questionData[TYPE] + ":",
                               style: TextStyle(
                                   fontSize: SizeConfig.blockSizeVertical * 4,
                                   fontWeight: FontWeight.bold),
@@ -204,8 +207,10 @@ class _QuestionsPageState extends State<QuestionsPage>
                         ),
                       ),
                       SizedBox(height: SizeConfig.blockSizeVertical * 2),
-                      getBodyWidget(questionData["type"], questionData["questionBody"]),
+                      // Get the question body, text or image.
+                      getBodyWidget(questionData[TYPE], questionData[QUESTION_BODY]),
                       SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                      // show the answers
                       ListView.builder(
                         shrinkWrap: true, // used to control the size of the scrollable widget
                         itemCount: answers!.length,
@@ -238,6 +243,7 @@ class _QuestionsPageState extends State<QuestionsPage>
                                 // create a list of options with a radio button for each option and handle the selection of a single option.
                                 child: RadioListTile(
                                     value: index,
+                                    // answer text
                                     title: Text(
                                       answers![index],
                                       style: TextStyle(
@@ -290,7 +296,7 @@ class _QuestionsPageState extends State<QuestionsPage>
           (Timer? timer) {
         if (!mounted) return;
         if (_start == 0) {
-          if (widget.questionNumber == 5) {
+          if (widget.questionNumber == QUESTIONS_AMOUNT) {
             finishedGame();
             Navigator.pushReplacement(
                 context,
@@ -341,8 +347,8 @@ class _QuestionsPageState extends State<QuestionsPage>
   }
 
   Map? getQuestionByNum(Map game, int num) {
-    for (var q in game["questions"]) {
-      if (q["questionNumber"] == num) {
+    for (var q in game[QUESTIONS]) {
+      if (q[QUESTION_NUM] == num) {
         return q;
       }
     }
@@ -352,16 +358,16 @@ class _QuestionsPageState extends State<QuestionsPage>
 
   void updateFirebase(Map oldData, String answer) {
     String userAnswer = "user${widget.userNumber}Answer";
-    DocumentReference documentReference = FirebaseFirestore.instance.collection("games").doc(widget.gameId);
+    DocumentReference documentReference = FirebaseFirestore.instance.collection(GAMES).doc(widget.gameId);
     FirebaseFirestore.instance.
     runTransaction((transaction) async{
       await transaction.get(documentReference).then((value) {
-        List questions = value["questions"];
+        List questions = value[QUESTIONS];
         Map oldAnswer = questions[widget.questionNumber-1];
         oldAnswer[userAnswer] = answer;
         questions[widget.questionNumber-1] = oldAnswer;
         transaction.update(documentReference, {
-          "questions" : questions
+          QUESTIONS : questions
         });
       });
     });

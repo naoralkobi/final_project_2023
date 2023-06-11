@@ -73,7 +73,7 @@ class LeaderboardListState extends State<LeaderboardList> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ViewUserProfile(
-                                                usersDocs[index].data()['UID'])));
+                                                usersDocs[index].data()[UID])));
                                   },
                                   child: CircleAvatar(
                                     backgroundImage: NetworkImage(

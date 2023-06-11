@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
           debugPrint("before adding to db");
           return db
               .collection('tokens')
-              .add({'token': token, 'UID': user!.uid}).then((value) => null);
+              .add({'token': token, UID: user!.uid}).then((value) => null);
         }
       });
     });
