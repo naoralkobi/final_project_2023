@@ -79,6 +79,15 @@ const String GENDER = "gender";
 const String DONT_CARE = "Dont Care";
 const String WORDS = "words";
 const String PHONEMES = "phonemes";
+const String SNIPPET = "snippet";
+const String TITLE = "title";
+const String THUMBNAILS = "thumbnails";
+const String DEFAULT = "default";
+const String URL = "url";
+const String ID = "id";
+const String VIDEO_ID = "videoId";
+const String ITEMS = "items";
+const String NEXT_PAGE_TOKEN = "nextPageToken";
 
 const int QUESTIONS_AMOUNT = 5;
 const int USER_1_NUMBER = 1;

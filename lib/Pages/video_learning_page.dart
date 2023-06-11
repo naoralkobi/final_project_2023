@@ -39,8 +39,8 @@ class _YouTubeVideoListPageState extends State<YouTubeVideoListPage> {
         var data = jsonDecode(response.body);
         setState(() {
           // Update the state by adding the fetched videos to the videos list
-          videos.addAll(data['items']);
-          nextPageToken = data['nextPageToken'] ?? '';
+          videos.addAll(data[ITEMS]);
+          nextPageToken = data[NEXT_PAGE_TOKEN] ?? '';
         });
       } else {
         // If the response is not successful, throw an exception with an error message
@@ -59,9 +59,9 @@ class _YouTubeVideoListPageState extends State<YouTubeVideoListPage> {
         itemCount: videos.length,
         itemBuilder: (context, index) {
           var video = videos[index];
-          var title = video['snippet']['title'];
-          var thumbnailUrl = video['snippet']['thumbnails']['default']['url'];
-          var videoId = video['id']['videoId'];
+          var title = video[SNIPPET][TITLE];
+          var thumbnailUrl = video[SNIPPET][THUMBNAILS][DEFAULT][URL];
+          var videoId = video[ID][VIDEO_ID];
 
           return ListTile(
             leading: Image.network(thumbnailUrl),
