@@ -77,6 +77,8 @@ const String AGE = "age";
 const String PREFERRED_GENDER = "preferred gender";
 const String GENDER = "gender";
 const String DONT_CARE = "Dont Care";
+const String WORDS = "words";
+const String PHONEMES = "phonemes";
 
 const int QUESTIONS_AMOUNT = 5;
 const int USER_1_NUMBER = 1;

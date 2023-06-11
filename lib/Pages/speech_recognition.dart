@@ -28,7 +28,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
   List<String> parts = [];
   late String language;
   late String languageLevel;
-  List<String> unSupportedLanguagesPhoneme = ['Arabic','Hebrew'];
+  List<String> unSupportedLanguagesPhoneme = [ARABIC,HEBREW];
 
   // Mapping of language to locale
   Map<String, String> languageToLocale = {
@@ -36,7 +36,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
     ARABIC: "ar_SA",
     FRENCH: "fr_FR",
     GERMAN: "de_DE",
-    "Hebrew": "he_IL"
+    HEBREW: "he_IL"
   };
 
   @override
@@ -50,7 +50,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
         .doc(widget.selectedLanguage)
         .get()
         .then((value) {
-      List<dynamic> wordsData = List<dynamic>.from(value.data()!['words']);
+      List<dynamic> wordsData = List<dynamic>.from(value.data()![WORDS]);
       List<Map<String, String>> words = wordsData
           .map((word) => Map<String, String>.from(word as Map<dynamic, dynamic>))
           .toList();
@@ -111,7 +111,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
 
   Future<void> _stopListening() async {
     if (!_speech!.isListening) return;
-    await Future.delayed(Duration(milliseconds: 5000));
+    await Future.delayed(const Duration(milliseconds: 5000));
     _speech!.stop();
     setState(() {
       // Perform analysis on the recorded audio (_recognizedText)
@@ -258,7 +258,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
                             const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [],
+                              children: const [],
                             ),
                           ],
                         ),
@@ -324,6 +324,9 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
       overallScore = (accuracyScore + hammingDistance) / 2;
     }
 
+  // round the score to 2 digits after the dot:
+    overallScore = double.parse(overallScore.toStringAsFixed(2));
+
     String feedback = generateFeedback(overallScore);
 
     // Provide feedback and scoring to the user
@@ -345,7 +348,7 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
           content: Text(feedback),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: const Text(OK),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -420,7 +423,7 @@ Future<String> textToPhonemes(String text, String language) async {
   if (response.statusCode == 200) {
     // If the server returns a 200 OK response,
     // then parse the JSON.
-    return jsonDecode(response.body)['phonemes'];
+    return jsonDecode(response.body)[PHONEMES];
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
