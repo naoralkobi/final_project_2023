@@ -4,8 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:final_project_2023/Pages/view_user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import '../navBarTest.dart';
+import 'navBarTest.dart';
 
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
 
