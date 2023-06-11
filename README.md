@@ -26,3 +26,10 @@ Learning a new language can be challenging and monotonous. EasyLang aims to make
 * [ ] Game summary: Review the game summary after each game to analyze your performance, identify areas for improvement, and track your progress over time.
 
 * [ ] Chat history: Access previous chats to review conversations, refer to vocabulary or grammar discussions, and track your language learning journey.
+
+
+
+
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/82988fdb-9a3e-4082-99e7-01765c43570b)
+
