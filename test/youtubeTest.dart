@@ -1,35 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
-import 'package:final_project_2023/Pages/videoLearningPage.dart'; // Import your page
+import 'package:final_project_2023/Pages/video_learning_page.dart'; // Replace with your package
 
 void main() {
-  testWidgets('YouTubeVideoListPage has a ListView', (WidgetTester tester) async {
-    // Build the YouTubeVideoListPage widget.
-    await tester.pumpWidget(MaterialApp(home: YouTubeVideoListPage(searchQuery: 'flutter tutorial')));
+  testWidgets('YouTubeVideoListPage Widget Test', (WidgetTester tester) async {
+    const searchQuery = 'Test'; // Replace with your query
 
-    // Let the responses come.
-    await tester.pumpAndSettle();
+    // Act
+    await tester.pumpWidget(
+      MaterialApp(
+        home: YouTubeVideoListPage(searchQuery: searchQuery),
+      ),
+    );
 
-    // YouTubeVideoListPage should have a ListView.
+    // Assert
+    expect(find.byType(YouTubeVideoListPage), findsOneWidget);
+    expect(find.byType(AppBar), findsOneWidget);
+    expect(find.text('YouTube Videos'), findsOneWidget);
     expect(find.byType(ListView), findsOneWidget);
   });
-  // test('fetchYouTubeVideos returns a list of videos for a valid query', () async {
-  //   // Set up
-  //   var page = YouTubeVideoListPage(searchQuery: 'flutter tutorial');
-  //
-  //   // Act
-  //   await page.fetchYouTubeVideos('flutter tutorial');
-  //
-  //   // Assert
-  //   expect(page.videos, isNotEmpty);
-  // });
-  //
-  // test('fetchYouTubeVideos throws an exception for an invalid query', () async {
-  //   // Set up
-  //   var page = YouTubeVideoListPage(searchQuery: 'invalid query');
-  //
-  //   // Assert that the function throws an Exception
-  //   expect(page.fetchYouTubeVideos('invalid query'), throwsA(isA<Exception>()));
-  // });
 }

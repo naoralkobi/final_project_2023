@@ -1,101 +1,6 @@
-// import 'dart:async';
-//
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:final_project_2023/Widgets/navBar.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:mockito/mockito.dart';
-// import 'package:provider/provider.dart';
-//
-// import '../lib/FireBase/auth_repository.dart';
-//
-// // Mock classes
-// class MockFirebaseFirestore extends Mock implements FirebaseFirestore {
-//   MockCollectionReference? collectionReference;
-//
-//   MockFirebaseFirestore() {
-//     collectionReference = MockCollectionReference();
-//   }
-//
-//   @override
-//   CollectionReference<Map<String, dynamic>> collection(String collectionPath) {
-//     return collectionReference as CollectionReference<Map<String, dynamic>>;
-//   }
-// }
-//
-// class MockAuthRepository extends Mock implements AuthRepository {}
-// class MockUser extends Mock implements User {}
-// class MockCollectionReference extends Mock implements CollectionReference {}
-// class MockDocumentReference extends Mock implements DocumentReference {}
-// class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
-// class MockStreamController extends Mock implements StreamController<List<double>> {}
-//
-//
-// void main() {
-//
-//   MockFirebaseFirestore mockFirebaseFirestore = MockFirebaseFirestore();
-//   MockCollectionReference mockCollectionReference = MockCollectionReference();
-//   MockDocumentReference mockDocumentReference = MockDocumentReference();
-//   MockDocumentSnapshot mockDocumentSnapshot = MockDocumentSnapshot();
-//   MockStreamController mockStreamController = MockStreamController();
-//
-//   // setUpAll(() async {
-//   //   await Firebase.initializeApp();
-//   // });
-//
-//   setUp(() {
-//     when(mockFirebaseFirestore.collection('users')).thenReturn(mockCollectionReference as CollectionReference<Map<String, dynamic>>);
-//     when(mockCollectionReference.doc(any)).thenReturn(mockDocumentReference);
-//     when(mockDocumentReference.snapshots()).thenAnswer((_) {
-//       return Stream<DocumentSnapshot>.fromIterable([mockDocumentSnapshot]);
-//     });
-//     when(mockDocumentSnapshot.data()).thenReturn({
-//       'username': 'Test User',
-//       'email': 'testuser@test.com',
-//       'URL': 'https://example.com/avatar.png',
-//       'UID': 'testUID',
-//       'score': 100,
-//     });
-//   });
-//
-//   testWidgets('NavBar UI Test', (WidgetTester tester) async {
-//     await tester.pumpWidget(
-//       MultiProvider(
-//         providers: [
-//           Provider<FirebaseFirestore>.value(value: mockFirebaseFirestore),
-//           Provider<AuthRepository>.value(value: MockAuthRepository()),
-//         ],
-//         child: MaterialApp(
-//           home: NavBar({}, mockStreamController),
-//         ),
-//       ),
-//     );
-//
-//     await tester.pumpAndSettle();
-//
-//     // Verifying if the avatar image, username, and email are being displayed
-//     expect(find.text('Test User'), findsOneWidget);
-//     expect(find.text('testuser@test.com'), findsOneWidget);
-//     expect(find.byType(CircleAvatar), findsOneWidget);
-//
-//     // Verifying if all the items are present in the drawer
-//     expect(find.text('Friends'), findsOneWidget);
-//     expect(find.text('Leaderboard'), findsOneWidget);
-//     expect(find.text('Learn to speak'), findsOneWidget);
-//     expect(find.text('Learn with videos'), findsOneWidget);
-//     expect(find.text('Translate'), findsOneWidget);
-//     expect(find.text('About'), findsOneWidget);
-//     expect(find.text('Logout'), findsOneWidget);
-//
-//     // Verifying if the user's score is being displayed
-//     expect(find.text('100'), findsOneWidget);
-//   });
-// }
 import 'dart:async';
 
-import 'package:final_project_2023/Widgets/navBar.dart';
+import 'package:final_project_2023/Widgets/nav_bar.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -103,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:final_project_2023/Widgets/navBar.dart'; // Your path might be different
 import 'package:final_project_2023/Pages/view_user_profile.dart'; // Your path might be different
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
