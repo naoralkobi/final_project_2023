@@ -109,8 +109,9 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
     );
   }
 
-  void _stopListening() {
+  Future<void> _stopListening() async {
     if (!_speech!.isListening) return;
+    await Future.delayed(Duration(milliseconds: 5000));
     _speech!.stop();
     setState(() {
       // Perform analysis on the recorded audio (_recognizedText)
@@ -134,7 +135,10 @@ class _SpeechRecognitionScreenState extends State<SpeechRecognitionScreen> {
         repeat: true,
         repeatPauseDuration: const Duration(milliseconds: 100),
         showTwoGlows: true,
-        child: GestureDetector(
+        child:
+
+
+        GestureDetector(
           onTapDown: (details) {
             setState(() {
               isListening = true;

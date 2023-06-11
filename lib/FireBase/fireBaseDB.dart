@@ -339,7 +339,7 @@ class FirebaseDB {
     // Update the document reference in a transaction to start the chat with the random partner
     return _db.runTransaction((transaction) async {
       transaction.update(documentReference, {
-        randomUID: userInfo["UID"],
+        randomUID: userInfo[UID],
       });
     });
   }
@@ -387,7 +387,7 @@ class FirebaseDB {
 
     // Create the waiting user information map
     Map<String, dynamic> waitingUserInfo = {
-      "UID": userInfo["UID"],
+      UID: userInfo[UID],
       "maxAge": userInfo["maxAge"],
       "minAge": userInfo["minAge"],
       "preferred gender": userInfo["preferred gender"],
@@ -424,7 +424,7 @@ class FirebaseDB {
 
     // Create the waiting user information map
     Map<String, dynamic> waitingUserInfo = {
-      "UID": userInfo["UID"],
+      UID: userInfo[UID],
       "maxAge": userInfo["maxAge"],
       "minAge": userInfo["minAge"],
       "preferred gender": userInfo["preferred gender"],
@@ -492,9 +492,9 @@ class FirebaseDB {
     // Initialize question properties and assign question numbers
     int i = 1;
     for (Map q in questions) {
-      q["user1Answer"] = "";
-      q["user2Answer"] = "";
-      q["questionNumber"] = i;
+      q[USER_1_ANSWER] = "";
+      q[USER_2_ANSWER] = "";
+      q[QUESTION_NUM] = i;
       i++;
     }
 
@@ -502,14 +502,14 @@ class FirebaseDB {
 
     // Create a new game document in the database
     await _db.collection(GAMES).add({
-      "questions": questions,
-      "uid1": uid1,
-      "uid2": uid2,
-      "language": lang,
-      "level": lvl,
+      QUESTIONS: questions,
+      UID1: uid1,
+      UID2: uid2,
+      LANGUAGE: lang,
+      LEVEL: lvl,
     }).then((value) {
       // Update the game document with the game ID
-      _db.collection(GAMES).doc(value.id).update({"gameId": value.id});
+      _db.collection(GAMES).doc(value.id).update({GAME_ID: value.id});
       gameId = value.id;
     });
 
@@ -550,19 +550,19 @@ class FirebaseDB {
     // Retrieve the document snapshot for the specified language and level
     var snapshot = await FirebaseDB()
         ._db
-        .collection("questions")
+        .collection(QUESTIONS)
         .doc("$lang-${lvl.toLowerCase()}")
         .get();
 
     // Extract the list of questions from the snapshot data
-    List questions = snapshot.data()!["questions"];
+    List questions = snapshot.data()![QUESTIONS];
 
     // Shuffle the order of the questions
     questions = shuffleList(questions);
 
-    // Pick a maximum of 5 questions
+    // Pick a maximum of QUESTIONS_AMOUNT questions
     List picked = [];
-    for (int i = 0; i < questions.length && i < 5; i++) {
+    for (int i = 0; i < questions.length && i < QUESTIONS_AMOUNT; i++) {
       picked.add(questions[i]);
     }
 

@@ -64,13 +64,14 @@ class _WinnerPageState extends State<WinnerPage> {
           if (snapshot.connectionState == ConnectionState.waiting &&
               snapshot.data == null) return const Center(child: SizedBox());
           //List questionsData = (snapshot.data!.data() as Map<dynamic, dynamic>)["questions"] as List<dynamic>;
-          if ((snapshot.data!.data() as Map<dynamic, dynamic>)["uid1"] == widget.userInfo["UID"]) {
+          if ((snapshot.data!.data() as Map<dynamic, dynamic>)[UID1] == widget.userInfo[UID]) {
             user1Info = widget.userInfo;
             user2Info = widget.opponentInfo;
           } else {
             user2Info = widget.userInfo;
             user1Info = widget.opponentInfo;
           }
+          // Find how won in this game!
           int winner = getWinner(snapshot.data!.data() as Map<dynamic, dynamic>);
           // after we know who is the winner we will show it to the screen.
           return Scaffold(
@@ -182,11 +183,11 @@ class _WinnerPageState extends State<WinnerPage> {
   int getWinner(Map game) {
     int user1Score = 0;
     int user2Score = 0;
-    for (Map q in game["questions"]) {
-      if (q["user1Answer"] == q["correctAnswer"]) {
+    for (Map q in game[QUESTIONS]) {
+      if (q[USER_1_ANSWER] == q[CORRECT_ANSWER]) {
         user1Score++;
       }
-      if (q["user2Answer"] == q["correctAnswer"]) {
+      if (q[USER_2_ANSWER] == q[CORRECT_ANSWER]) {
         user2Score++;
       }
     }
@@ -261,7 +262,7 @@ class _WinnerPageState extends State<WinnerPage> {
           ],
         ),
       ]);
-      addScore(winnerInfo["UID"]);
+      addScore(winnerInfo[UID]);
     }
 
     return Align(
@@ -275,7 +276,7 @@ class _WinnerPageState extends State<WinnerPage> {
   }
 
   void addScore(String uid){
-    if (firstWin && uid == widget.userInfo["UID"]){
+    if (firstWin && uid == widget.userInfo[UID]){
       FirebaseFirestore.instance
           .collection(USERS)
           .doc(uid)

@@ -307,7 +307,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                               gameID = await FirebaseDB.Firebase_db
                                   .makeNewGame(
                                   widget.userID,
-                                  widget.friendInfo["UID"],
+                                  widget.friendInfo[UID],
                                   widget.language,
                                   lvl);
                               updateAcceptedGame(widget.chatID,
