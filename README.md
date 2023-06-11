@@ -33,3 +33,15 @@ Learning a new language can be challenging and monotonous. EasyLang aims to make
 
 ![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/82988fdb-9a3e-4082-99e7-01765c43570b)
 
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/f8f543fe-e69a-49db-81b9-4c40c1770d3f)
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/0102b36e-ab4f-47ed-84db-effc1b156adb)
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/0861bb81-3d25-4049-9db4-be3791c3f5d1)
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/879280a7-32ad-40ed-a104-33944c611343)
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/6b8744d8-dd79-4cd7-b510-ccf1719e94dc)
+
+
+
