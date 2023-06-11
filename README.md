@@ -29,19 +29,19 @@ Learning a new language can be challenging and monotonous. EasyLang aims to make
 
 
 
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/406e640b-47c4-4910-9832-a9e021a8b600)
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/2827e6aa-6cf8-41b2-95fa-e44b0ecd12bc)
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/ce8f42c7-130a-42ea-aa10-f892d2a8bc13)
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/47af1370-6c1f-4402-a4b2-90cfd2c8e866)
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/dc797c74-ce8b-40a0-9ff7-9df3125127e1)
+
+![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/377bb007-53fe-4ebe-9e48-333280e7cb28)
 
 
-![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/82988fdb-9a3e-4082-99e7-01765c43570b)
-
-![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/f8f543fe-e69a-49db-81b9-4c40c1770d3f)
-
-![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/0102b36e-ab4f-47ed-84db-effc1b156adb)
-
-![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/0861bb81-3d25-4049-9db4-be3791c3f5d1)
-
-![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/879280a7-32ad-40ed-a104-33944c611343)
-
-![image](https://github.com/naoralkobi/final_project_2023/assets/92444113/6b8744d8-dd79-4cd7-b510-ccf1719e94dc)
 
 
 
