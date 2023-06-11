@@ -124,7 +124,7 @@ class _ChatPageState extends State<ChatPage> {
               data[UNREAD_MESSAGES][widget.currentUserID] != 0)) {
         int unreadMessages = 0;
         if (data.containsKey(UNREAD_MESSAGES)) {
-          unreadMessages = data[UNREAD_MESSAGES][widget.friendInfo["UID"]];
+          unreadMessages = data[UNREAD_MESSAGES][widget.friendInfo[UID]];
         }
 
         // Mark the unread messages as read
@@ -264,7 +264,7 @@ class _ChatPageState extends State<ChatPage> {
                                   MESSAGE_TYPE_TEXT,
                                   widget.currentUserID,
                                   widget.userInfo[USERNAME],
-                                  widget.friendInfo["UID"]);
+                                  widget.friendInfo[UID]);
                               messageController.clear();
                             },
                             backgroundColor: const Color(0xFF6D94BE),
@@ -341,7 +341,7 @@ class _ChatPageState extends State<ChatPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    ViewUserProfile(widget.friendInfo["UID"])));
+                                    ViewUserProfile(widget.friendInfo[UID])));
                       },
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(widget.friendInfo["URL"]),
@@ -479,7 +479,7 @@ class _ChatPageState extends State<ChatPage> {
         MESSAGE_TYPE_GAME,
         widget.currentUserID,
         widget.userInfo[USERNAME],
-        widget.friendInfo["UID"]);
+        widget.friendInfo[UID]);
   }
 
   _sendImage(PickedFile pickedFile) async {
@@ -493,7 +493,7 @@ class _ChatPageState extends State<ChatPage> {
         MESSAGE_TYPE_IMAGE,
         widget.currentUserID,
         widget.userInfo[USERNAME],
-        widget.friendInfo["UID"]);
+        widget.friendInfo[UID]);
   }
 
   /// Navigates to the QuestionsPage and starts a game.

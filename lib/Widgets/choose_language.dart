@@ -32,25 +32,32 @@ class ChooseLanguageState extends State<ChooseLanguage> {
 
   @override
   void initState() {
+    // Call the parent's initState() method.
     super.initState();
+
+    // Retrieve user data from the Firestore database.
     FirebaseFirestore.instance
         .collection(USERS)
-        .doc(AuthRepository.instance().user!.uid)
+        .doc(AuthRepository.instance().user!.uid) // Access the document using the user's UID.
         .get()
         .then((value) {
+      // Retrieve the 'languages' field from the document data.
       Map languages = value.data()![LANGUAGES];
-      if (widget.isFromFriendList){
+
+      // Check if the widget is loaded from the friend list.
+      if (widget.isFromFriendList) {
         setState(() {
           Map friendLanguages = widget.friendInfo[LANGUAGES];
+          // Iterate through the languages and add them to the 'languagesList' if they exist in both the user's and friend's languages.
           languages.forEach((key, value) {
             if (friendLanguages.containsKey(key)) {
               languagesList.add(key);
             }
           });
         });
-      }
-      else{
+      } else {
         setState(() {
+          // Iterate through the languages and add them to the 'languagesList'.
           languages.forEach((key, value) {
             languagesList.add(key);
           });
@@ -58,6 +65,8 @@ class ChooseLanguageState extends State<ChooseLanguage> {
       }
     });
   }
+
+
   @override
   Widget build(BuildContext context) {
     String currentUserID = AuthRepository.instance().user!.uid;
@@ -99,7 +108,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text("OK ", style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text(OK, style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ],
               ),
@@ -111,7 +120,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text("Choose a Language", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  const Text(CHOOSE_LANGUAGE, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 20.0),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -121,7 +130,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                     ),
                     child: DropdownButton<String>(
                       isExpanded: true,
-                      hint: const Text("Select Language"),
+                      hint: const Text(CHOOSE_LANGUAGE),
                       underline: Container(),
                       value: languageId,
                       items: languagesList.map((String value) {
@@ -152,7 +161,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                       : ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -169,7 +178,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                               widget.friendInfo,
                               snapshot.data!.data()! as Map<dynamic, dynamic>
                           );
-                        } else if (widget.isRandom) {
+                        } else if (widget.isRandom)      {
                           Navigator.of(context).pop();
                           showDialog(
                               barrierDismissible: false,
@@ -191,7 +200,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
                         }
                       }
                     },
-                    child: const Text("OK ", style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text(OK, style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ],
               ),
@@ -218,7 +227,7 @@ class ChooseLanguageState extends State<ChooseLanguage> {
       isLoadingChat = true;
     });
     String chatID = await FirebaseDB.Firebase_db.getChatIdOfFriend(
-        currentUserID, friendInfo["UID"], language);
+        currentUserID, friendInfo[UID], language);
     Navigator.of(context).pop();
     Navigator.of(context).pop();
     Navigator.of(context).push(

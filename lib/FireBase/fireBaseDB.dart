@@ -388,11 +388,11 @@ class FirebaseDB {
     // Create the waiting user information map
     Map<String, dynamic> waitingUserInfo = {
       UID: userInfo[UID],
-      "maxAge": userInfo["maxAge"],
-      "minAge": userInfo["minAge"],
-      "preferred gender": userInfo["preferred gender"],
-      "age": age,
-      "gender": userInfo["gender"],
+      MAX_AGE: userInfo[MAX_AGE],
+      MIN_AGE: userInfo[MIN_AGE],
+      PREFERRED_GENDER: userInfo[PREFERRED_GENDER],
+      AGE: age,
+      GENDER: userInfo[GENDER],
     };
 
     // Create a list containing the waiting user information
@@ -425,11 +425,11 @@ class FirebaseDB {
     // Create the waiting user information map
     Map<String, dynamic> waitingUserInfo = {
       UID: userInfo[UID],
-      "maxAge": userInfo["maxAge"],
-      "minAge": userInfo["minAge"],
-      "preferred gender": userInfo["preferred gender"],
-      "age": age,
-      "gender": userInfo["gender"],
+      MAX_AGE: userInfo[MAX_AGE],
+      MIN_AGE: userInfo[MIN_AGE],
+      PREFERRED_GENDER: userInfo[PREFERRED_GENDER],
+      AGE: age,
+      GENDER: userInfo[GENDER],
     };
 
     // Create a list containing the waiting user information
@@ -465,7 +465,7 @@ class FirebaseDB {
     // Run a transaction to remove the chat invite for the user
     _db.runTransaction((transaction) async {
       transaction.update(documentReference, {
-        userInfo["UID"]: FieldValue.delete(),
+        userInfo[UID]: FieldValue.delete(),
       });
     });
   }
@@ -599,7 +599,7 @@ class FirebaseDB {
   void removeUserToken(String userID) {
     _db
         .collection(TOKENS)
-        .where("UID", isEqualTo: userID)
+        .where(UID, isEqualTo: userID)
         .get()
         .then((value) {
       for (var element in value.docs) {

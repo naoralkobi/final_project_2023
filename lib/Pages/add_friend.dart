@@ -250,7 +250,7 @@ class AddFriendState extends State<AddFriend> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ViewUserProfile(userInfo.item1["UID"])));
+                      ViewUserProfile(userInfo.item1[UID])));
         },
         child: CircleAvatar(
           backgroundImage: NetworkImage(userInfo.item1["URL"]),

@@ -32,7 +32,7 @@ class _AgeDropDownState extends State<AgeDropDown> {
           if (widget.userInfo!.isNotEmpty && firstClick){
             ageVal = widget.userInfo![widget.rangeType];
             firstClick = false;
-            if (widget.rangeType == "minAge"){
+            if (widget.rangeType == MIN_AGE){
               ProfileVars.minAge = ageVal;
             } else {
               ProfileVars.maxAge = ageVal;
@@ -62,7 +62,7 @@ class _AgeDropDownState extends State<AgeDropDown> {
                 onChanged: (newVal) {
                   setState(() {
                     ageVal = newVal!;
-                    if (widget.rangeType == "minAge"){
+                    if (widget.rangeType == MIN_AGE){
                       ProfileVars.minAge = newVal;
                     } else {
                       ProfileVars.maxAge = newVal;

@@ -103,7 +103,7 @@ class LeaderboardState extends State<Leaderboard> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             ViewUserProfile(
-                                                widget.userInfo["UID"])));
+                                                widget.userInfo[UID])));
                               },
                               child: CircleAvatar(
                                 backgroundImage:

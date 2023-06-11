@@ -19,11 +19,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // Variable to track whether a button is pressed or not.
   bool pressed = false;
+  // Get the currently authenticated user using FirebaseAuth.
   var user = FirebaseAuth.instance.currentUser;
+  // Determine if the user is an admin based on their email.
+  // Only admins can add new questions to the game.
   bool isAdmin = [NAOR, AVIV, RON].contains(FirebaseAuth.instance.currentUser?.email);
   final TextEditingController _filter = TextEditingController();
+  // The current search text entered by the user.
   String _searchText = "";
+  // An Icon widget to display the search icon.
   Icon _searchIcon = const Icon(
     Icons.search,
     color: Colors.white,
@@ -34,30 +40,37 @@ class _MyHomePageState extends State<MyHomePage> {
     style: TextStyle(
         fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
   );
+  // Variable to track whether the user is currently searching.
   bool isSearching = false;
+  // A StreamController to manage a stream of blur values.
   StreamController<List<double>> blurController =
-      StreamController<List<double>>();
+  StreamController<List<double>>();
 
   @override
   void initState() {
+    // Get the instance of FirebaseMessaging for handling push notifications.
     FirebaseMessaging messaging = FirebaseMessaging.instance;
+    // Retrieve the device token for the current user.
     messaging.getToken().then((token) {
+      // Get an instance of FirebaseFirestore for accessing the Firestore database.
       final FirebaseFirestore db = FirebaseFirestore.instance;
+      // Query the 'tokens' collection to check if the token already exists.
       return db
-          .collection('tokens')
-          .where('token', isEqualTo: token)
+          .collection(TOKENS)
+          .where(TOKEN, isEqualTo: token)
           .get()
           .then((snapshot) async {
         if (snapshot.docs.isEmpty) {
-          debugPrint("before adding to db");
+          //debugPrint("before adding to db");
+          // Add the token and user UID to the 'tokens' collection.
           return db
-              .collection('tokens')
-              .add({'token': token, UID: user!.uid}).then((value) => null);
+              .collection(TOKENS)
+              .add({TOKEN: token, UID: user!.uid}).then((value) => null);
         }
       });
     });
     super.initState();
-    // listening to search box.
+    // Listen to changes in the _filter TextEditingController.
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
         setState(() {
@@ -69,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
     });
-    // get user data of the current user.
+    // Call a custom method to get user data of the current user.
     getUserData();
   }
 
@@ -182,10 +195,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               body: ChatsList(
                   _searchText,
-                  snapshot.data!.data()! as Map<dynamic, dynamic>,
+                  snapshot.data!.data()!,
                   blurController),
               floatingActionButtonLocation:
-                  FloatingActionButtonLocation.startFloat,
+              FloatingActionButtonLocation.startFloat,
               floatingActionButton: SizedBox(
                 height: SizeConfig.blockSizeVertical * 10,
                 width: SizeConfig.blockSizeHorizontal * 22,
@@ -224,13 +237,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void getUserData() async {
+    // Get an instance of FirebaseFirestore for accessing the Firestore database.
     FirebaseFirestore.instance
         .collection(USERS)
         .doc(user!.uid)
         .get()
         .then((value) => widget.userInfo = value.data()!);
+    // Update the widget's state to reflect the changes.
     setState(() {});
   }
+
 
   void _searchPressed() {
     setState(() {

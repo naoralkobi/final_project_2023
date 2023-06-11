@@ -79,8 +79,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     SizeConfig().init(context);
     // If user info is provided and it's the first time clicking, update gender values
     if (widget.userInfo!.isNotEmpty && firstClick) {
-      userGender = widget.userInfo!["gender"];
-      preferredGenderVal = widget.userInfo!["preferred gender"];
+      userGender = widget.userInfo![GENDER];
+      preferredGenderVal = widget.userInfo![PREFERRED_GENDER];
       firstClick = false;
     }
     return (ChangeNotifierProvider(
@@ -365,7 +365,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                   ),
                                 ),
                                 AgeDropDown(
-                                    "minAge", firebaseController, widget.userInfo),
+                                    MIN_AGE, firebaseController, widget.userInfo),
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(
                                       SizeConfig.blockSizeHorizontal * 2,
@@ -381,7 +381,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                   ),
                                 ),
                                 AgeDropDown(
-                                    "maxAge", firebaseController, widget.userInfo),
+                                    MAX_AGE, firebaseController, widget.userInfo),
                               ],
                             ),
                           ),
@@ -686,12 +686,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).set({
         // Set the user data in the USERS collection in Firestore
         EMAIL: user!.email,
-        "UID": user!.uid,
+        UID: user!.uid,
         "URL": imageUrl,
         "Languages": {},
         "friends": [],
-        "gender": userGender,
-        "preferred gender": preferredGenderVal,
+        GENDER: userGender,
+        PREFERRED_GENDER: preferredGenderVal,
         SCORE: 0,
       });
 
@@ -716,11 +716,11 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       });
 
       await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).update({
-        "gender": userGender,
+        GENDER: userGender,
       });
 
       await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).update({
-        "preferred gender": preferredGenderVal,
+        PREFERRED_GENDER: preferredGenderVal,
       });
 
       await FirebaseFirestore.instance.collection(USERS).doc(user!.uid).update({
