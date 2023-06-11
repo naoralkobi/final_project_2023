@@ -99,8 +99,8 @@ class ChatsListState extends State<ChatsList> {
                                       String unreadMessages = "";
                                       if((snapshots.data!.docs[index].data() as Map<String, dynamic>).containsKey(UNREAD_MESSAGES)) {
                                         Map map = snapshots.data!.docs[index][UNREAD_MESSAGES];
-                                        if(map.containsKey(widget.userInfo["UID"])){
-                                          numUnreadMessages = map[widget.userInfo["UID"]];
+                                        if(map.containsKey(widget.userInfo[UID])){
+                                          numUnreadMessages = map[widget.userInfo[UID]];
                                           unreadMessages = "$numUnreadMessages";
                                         }
                                         if (numUnreadMessages > 99) {

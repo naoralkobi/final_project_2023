@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
         FirebaseFirestore.instance
             .collection(USERS)
             .doc(user!.uid)
-            .set({EMAIL: user.email, "UID": user.uid, "Languages": {}});
+            .set({EMAIL: user.email, UID: user.uid, "Languages": {}});
       }
       return isNew;
     });
@@ -149,6 +149,6 @@ class _MyAppState extends State<MyApp> {
     FirebaseFirestore.instance
         .collection(USERS)
         .doc(newUser.user!.uid)
-        .set({EMAIL: email, "UID": newUser.user!.uid, "Languages": {}});
+        .set({EMAIL: email, UID: newUser.user!.uid, "Languages": {}});
   }
 }

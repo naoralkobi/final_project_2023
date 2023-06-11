@@ -188,7 +188,7 @@ class ListViewFriendsState extends State<ListViewFriends> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ViewUserProfile(friendInfo["UID"])));
+                  builder: (context) => ViewUserProfile(friendInfo[UID])));
         },
         child: CircleAvatar(
           backgroundImage: NetworkImage(friendInfo["URL"]),

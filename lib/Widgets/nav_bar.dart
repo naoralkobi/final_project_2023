@@ -78,7 +78,7 @@ class NavBar extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) =>
                           ViewUserProfile(
-                              (snapshot.data!.data() as Map<String, dynamic>)["UID"])));
+                              (snapshot.data!.data() as Map<String, dynamic>)[UID])));
             },
             child: CircleAvatar(
               child: ClipOval(

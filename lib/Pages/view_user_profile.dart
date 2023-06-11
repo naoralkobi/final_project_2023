@@ -70,7 +70,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                                   Navigator.pop(context);
                                 }),
                             // Show the edit button only if the current user is the owner of the profile
-                            widget.user!.uid == (userInfo.data!.data() as Map<String, dynamic>)["UID"]
+                            widget.user!.uid == (userInfo.data!.data() as Map<String, dynamic>)[UID]
                                 ? IconButton(
                                 icon: const Icon(
                                   Icons.edit,
@@ -221,7 +221,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                         padding: const EdgeInsets.fromLTRB(40, 0, 0, 6),
                         child: Row(children: [
                           Text(
-                            "Gender",
+                            GENDER,
                             style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: SizeConfig.screenWidth * 0.035),
@@ -233,7 +233,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                         child: Row(children: [
                           Text(
                             // Display the gender of the user
-                            (userInfo.data!.data() as Map<String, dynamic>)["gender"],
+                            (userInfo.data!.data() as Map<String, dynamic>)[GENDER],
                             style: TextStyle(
                                 fontSize: SizeConfig.screenWidth * 0.035),
                           ),

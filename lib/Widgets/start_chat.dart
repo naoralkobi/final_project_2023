@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:final_project_2023/screen_size_config.dart';
 import '../Widgets/choose_language.dart';
+import '../consts.dart';
 
 class StartChat extends StatefulWidget {
   StreamController<List<double>> blurController;
@@ -43,13 +43,13 @@ class StartChatState extends State<StartChat> {
                     widget.blurController.add([1.5, 1.5]);
                     return ChooseLanguage(
                       true,
-                      {},
+                      const {},
                       blurController: widget.blurController,
                     );
                   },
                 ).then((value) => widget.blurController.add([0, 0]));
               },
-              child: const Text("+ Start chat with random", style: TextStyle(fontSize: 16, color: Colors.white)),
+              child: const Text(RANDOM_USER_CHAT, style: TextStyle(fontSize: 16, color: Colors.white)),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
@@ -67,11 +67,11 @@ class StartChatState extends State<StartChat> {
                   context: context,
                   builder: (BuildContext context) {
                     widget.blurController.add([1.5, 1.5]);
-                    return ChooseLanguage(false, {});
+                    return ChooseLanguage(false, const {});
                   },
                 ).then((value) => widget.blurController.add([0, 0]));
               },
-              child: const Text("+ Start chat with a friend", style: TextStyle(fontSize: 16, color: Colors.white)),
+              child: const Text(FRIEND_CHAT, style: TextStyle(fontSize: 16, color: Colors.white)),
             ),
           ],
         ),
